@@ -1,0 +1,135 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="400" viewBox="0 0 600 400">
+  <!-- Definitions -->
+  <defs>
+    <linearGradient id="deployGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#00c8ff;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#9d4edd;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="cardGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#00c8ff;stop-opacity:0.1" />
+      <stop offset="100%" style="stop-color:#9d4edd;stop-opacity:0.1" />
+    </linearGradient>
+    <filter id="deployShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="3" />
+      <feOffset dx="0" dy="3" result="offsetblur" />
+      <feComponentTransfer>
+        <feFuncA type="linear" slope="0.3" />
+      </feComponentTransfer>
+      <feMerge>
+        <feMergeNode />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect x="0" y="0" width="600" height="400" rx="10" ry="10" fill="#1a2035" />
+
+  <!-- Header -->
+  <rect x="0" y="0" width="600" height="50" rx="10" ry="10" fill="#0a0e17" />
+  <text x="20" y="30" font-family="Arial" font-size="16" fill="#ffffff">Model Deployment Options</text>
+  
+  <!-- Model Info -->
+  <text x="300" y="30" font-family="Arial" font-size="14" fill="#ffffff" text-anchor="middle">Random Forest Classifier</text>
+  
+  <!-- Status Badge -->
+  <rect x="500" y="15" width="80" height="20" rx="10" ry="10" fill="#141a29" />
+  <circle cx="515" cy="25" r="5" fill="#00c8ff" />
+  <text x="530" y="30" font-family="Arial" font-size="12" fill="#00c8ff">Ready</text>
+  
+  <!-- Model Summary -->
+  <rect x="20" y="60" width="560" height="80" rx="5" ry="5" fill="#0a0e17" filter="url(#deployShadow)" />
+  <text x="40" y="85" font-family="Arial" font-size="14" fill="#ffffff">Model Summary</text>
+  
+  <!-- Summary Details -->
+  <text x="40" y="110" font-family="Arial" font-size="12" fill="#a0a9c0">Algorithm:</text>
+  <text x="120" y="110" font-family="Arial" font-size="12" fill="#ffffff">Random Forest Classifier</text>
+  <text x="300" y="110" font-family="Arial" font-size="12" fill="#a0a9c0">Accuracy:</text>
+  <text x="380" y="110" font-family="Arial" font-size="12" fill="#00c8ff">94.2%</text>
+  <text x="40" y="130" font-family="Arial" font-size="12" fill="#a0a9c0">Features:</text>
+  <text x="120" y="130" font-family="Arial" font-size="12" fill="#ffffff">6 features (3 numerical, 3 categorical)</text>
+  <text x="300" y="130" font-family="Arial" font-size="12" fill="#a0a9c0">Target:</text>
+  <text x="380" y="130" font-family="Arial" font-size="12" fill="#ffffff">Binary Classification</text>
+  
+  <!-- Deployment Options -->
+  <text x="300" y="170" font-family="Arial" font-size="16" fill="#ffffff" text-anchor="middle">Choose Deployment Method</text>
+  
+  <!-- Option Cards -->
+  <!-- API Endpoint -->
+  <g transform="translate(20, 190)">
+    <rect width="170" height="170" rx="5" ry="5" fill="#0a0e17" filter="url(#deployShadow)" />
+    <rect width="170" height="40" rx="5" ry="5" fill="#141a29" />
+    <text x="85" y="25" font-family="Arial" font-size="14" fill="#ffffff" text-anchor="middle">API Endpoint</text>
+    
+    <!-- Icon -->
+    <rect x="60" y="60" width="50" height="50" rx="5" ry="5" fill="#141a29" />
+    <path d="M70,85 L100,85 M85,70 L85,100 M75,75 L95,95 M75,95 L95,75" stroke="#00c8ff" stroke-width="2" />
+    
+    <!-- Description -->
+    <text x="85" y="130" font-family="Arial" font-size="10" fill="#a0a9c0" text-anchor="middle">Deploy as REST API</text>
+    <text x="85" y="145" font-family="Arial" font-size="10" fill="#a0a9c0" text-anchor="middle">for real-time predictions</text>
+    
+    <!-- Select Button -->
+    <rect x="35" y="155" width="100" height="25" rx="12.5" ry="12.5" fill="url(#deployGrad)" opacity="0.8" />
+    <text x="85" y="172" font-family="Arial" font-size="12" fill="#ffffff" text-anchor="middle">Select</text>
+  </g>
+  
+  <!-- Download Model -->
+  <g transform="translate(215, 190)">
+    <rect width="170" height="170" rx="5" ry="5" fill="#0a0e17" filter="url(#deployShadow)" />
+    <rect width="170" height="40" rx="5" ry="5" fill="#141a29" />
+    <text x="85" y="25" font-family="Arial" font-size="14" fill="#ffffff" text-anchor="middle">Download Model</text>
+    
+    <!-- Icon -->
+    <rect x="60" y="60" width="50" height="50" rx="5" ry="5" fill="#141a29" />
+    <path d="M85,70 L85,90 M75,85 L85,95 L95,85" stroke="#00c8ff" stroke-width="2" />
+    <path d="M70,100 L100,100" stroke="#00c8ff" stroke-width="2" />
+    
+    <!-- Description -->
+    <text x="85" y="130" font-family="Arial" font-size="10" fill="#a0a9c0" text-anchor="middle">Export trained model</text>
+    <text x="85" y="145" font-family="Arial" font-size="10" fill="#a0a9c0" text-anchor="middle">for local deployment</text>
+    
+    <!-- Select Button -->
+    <rect x="35" y="155" width="100" height="25" rx="12.5" ry="12.5" fill="#141a29" />
+    <text x="85" y="172" font-family="Arial" font-size="12" fill="#ffffff" text-anchor="middle">Select</text>
+  </g>
+  
+  <!-- Batch Predictions -->
+  <g transform="translate(410, 190)">
+    <rect width="170" height="170" rx="5" ry="5" fill="#0a0e17" filter="url(#deployShadow)" />
+    <rect width="170" height="40" rx="5" ry="5" fill="#141a29" />
+    <text x="85" y="25" font-family="Arial" font-size="14" fill="#ffffff" text-anchor="middle">Batch Predictions</text>
+    
+    <!-- Icon -->
+    <rect x="60" y="60" width="50" height="50" rx="5" ry="5" fill="#141a29" />
+    <path d="M70,75 L100,75 M70,85 L100,85 M70,95 L100,95" stroke="#00c8ff" stroke-width="2" />
+    
+    <!-- Description -->
+    <text x="85" y="130" font-family="Arial" font-size="10" fill="#a0a9c0" text-anchor="middle">Run predictions on</text>
+    <text x="85" y="145" font-family="Arial" font-size="10" fill="#a0a9c0" text-anchor="middle">large datasets</text>
+    
+    <!-- Select Button -->
+    <rect x="35" y="155" width="100" height="25" rx="12.5" ry="12.5" fill="#141a29" />
+    <text x="85" y="172" font-family="Arial" font-size="12" fill="#ffffff" text-anchor="middle">Select</text>
+  </g>
+  
+  <!-- Selected Option Details -->
+  <rect x="20" y="370" width="560" height="20" rx="5" ry="5" fill="#141a29" />
+  <text x="40" y="385" font-family="Arial" font-size="12" fill="#ffffff">API Endpoint Selected</text>
+  <text x="540" y="385" font-family="Arial" font-size="12" fill="#00c8ff" text-anchor="end">Continue →</text>
+  
+  <!-- Hover Effect on API Card -->
+  <rect x="20" y="190" width="170" height="170" rx="5" ry="5" fill="url(#cardGrad)" opacity="0.3">
+    <animate attributeName="opacity" values="0.3;0.5;0.3" dur="2s" repeatCount="indefinite" />
+  </rect>
+  
+  <!-- API Configuration Tooltip -->
+  <g transform="translate(200, 250)">
+    <rect x="0" y="-40" width="180" height="80" rx="5" ry="5" fill="#141a29" opacity="0.9" />
+    <text x="10" y="-20" font-family="Arial" font-size="12" fill="#ffffff">API Configuration</text>
+    <text x="10" y="0" font-family="Arial" font-size="10" fill="#a0a9c0">Endpoint: /api/v1/predict</text>
+    <text x="10" y="20" font-family="Arial" font-size="10" fill="#a0a9c0">Authentication: API Key</text>
+    <text x="10" y="35" font-family="Arial" font-size="10" fill="#00c8ff">View Documentation</text>
+    <path d="M-10,0 L0,0" stroke="#141a29" stroke-width="10" />
+  </g>
+</svg>

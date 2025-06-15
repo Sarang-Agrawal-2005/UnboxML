@@ -1,0 +1,127 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="400" viewBox="0 0 600 400">
+  <!-- Definitions -->
+  <defs>
+    <linearGradient id="featureGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#00c8ff;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#9d4edd;stop-opacity:1" />
+    </linearGradient>
+    <filter id="featureShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="3" />
+      <feOffset dx="0" dy="3" result="offsetblur" />
+      <feComponentTransfer>
+        <feFuncA type="linear" slope="0.3" />
+      </feComponentTransfer>
+      <feMerge>
+        <feMergeNode />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect x="0" y="0" width="600" height="400" rx="10" ry="10" fill="#1a2035" />
+
+  <!-- Header -->
+  <rect x="0" y="0" width="600" height="50" rx="10" ry="10" fill="#0a0e17" />
+  <text x="20" y="30" font-family="Arial" font-size="16" fill="#ffffff">Feature Importance Analysis</text>
+  
+  <!-- Model Info -->
+  <text x="300" y="30" font-family="Arial" font-size="14" fill="#ffffff" text-anchor="middle">Random Forest Classifier</text>
+  
+  <!-- Feature Importance Chart -->
+  <rect x="20" y="60" width="560" height="320" rx="5" ry="5" fill="#0a0e17" filter="url(#featureShadow)" />
+  
+  <!-- Chart Title -->
+  <text x="40" y="85" font-family="Arial" font-size="14" fill="#ffffff">Feature Importance Ranking</text>
+  
+  <!-- Chart Description -->
+  <text x="40" y="105" font-family="Arial" font-size="10" fill="#a0a9c0">Higher values indicate more influential features in the model's predictions</text>
+  
+  <!-- Chart Area -->
+  <rect x="40" y="120" width="520" height="240" rx="5" ry="5" fill="#141a29" />
+  
+  <!-- Y-Axis Labels -->
+  <text x="35" y="140" font-family="Arial" font-size="12" fill="#ffffff" text-anchor="end">Feature 3</text>
+  <text x="35" y="180" font-family="Arial" font-size="12" fill="#ffffff" text-anchor="end">Feature 1</text>
+  <text x="35" y="220" font-family="Arial" font-size="12" fill="#ffffff" text-anchor="end">Feature 5</text>
+  <text x="35" y="260" font-family="Arial" font-size="12" fill="#ffffff" text-anchor="end">Feature 2</text>
+  <text x="35" y="300" font-family="Arial" font-size="12" fill="#ffffff" text-anchor="end">Feature 4</text>
+  <text x="35" y="340" font-family="Arial" font-size="12" fill="#ffffff" text-anchor="end">Feature 6</text>
+  
+  <!-- X-Axis Labels -->
+  <text x="40" y="370" font-family="Arial" font-size="10" fill="#a0a9c0">0.0</text>
+  <text x="140" y="370" font-family="Arial" font-size="10" fill="#a0a9c0">0.2</text>
+  <text x="240" y="370" font-family="Arial" font-size="10" fill="#a0a9c0">0.4</text>
+  <text x="340" y="370" font-family="Arial" font-size="10" fill="#a0a9c0">0.6</text>
+  <text x="440" y="370" font-family="Arial" font-size="10" fill="#a0a9c0">0.8</text>
+  <text x="540" y="370" font-family="Arial" font-size="10" fill="#a0a9c0">1.0</text>
+  <text x="300" y="385" font-family="Arial" font-size="12" fill="#a0a9c0" text-anchor="middle">Importance Score</text>
+  
+  <!-- Grid Lines -->
+  <line x1="40" y1="350" x2="560" y2="350" stroke="#2a3146" stroke-width="1" />
+  <line x1="140" y1="120" x2="140" y2="350" stroke="#2a3146" stroke-width="0.5" stroke-dasharray="5,5" />
+  <line x1="240" y1="120" x2="240" y2="350" stroke="#2a3146" stroke-width="0.5" stroke-dasharray="5,5" />
+  <line x1="340" y1="120" x2="340" y2="350" stroke="#2a3146" stroke-width="0.5" stroke-dasharray="5,5" />
+  <line x1="440" y1="120" x2="440" y2="350" stroke="#2a3146" stroke-width="0.5" stroke-dasharray="5,5" />
+  <line x1="540" y1="120" x2="540" y2="350" stroke="#2a3146" stroke-width="0.5" stroke-dasharray="5,5" />
+  
+  <!-- Feature Bars -->
+  <!-- Feature 3 (90%) -->
+  <rect x="40" y="125" width="450" height="25" rx="5" ry="5" fill="url(#featureGrad)">
+    <animate attributeName="width" values="0;450" dur="1s" fill="freeze" />
+  </rect>
+  <text x="500" y="140" font-family="Arial" font-size="12" fill="#ffffff">0.90</text>
+  
+  <!-- Feature 1 (70%) -->
+  <rect x="40" y="165" width="350" height="25" rx="5" ry="5" fill="url(#featureGrad)">
+    <animate attributeName="width" values="0;350" dur="1s" fill="freeze" />
+  </rect>
+  <text x="400" y="180" font-family="Arial" font-size="12" fill="#ffffff">0.70</text>
+  
+  <!-- Feature 5 (60%) -->
+  <rect x="40" y="205" width="300" height="25" rx="5" ry="5" fill="url(#featureGrad)">
+    <animate attributeName="width" values="0;300" dur="1s" fill="freeze" />
+  </rect>
+  <text x="350" y="220" font-family="Arial" font-size="12" fill="#ffffff">0.60</text>
+  
+  <!-- Feature 2 (50%) -->
+  <rect x="40" y="245" width="250" height="25" rx="5" ry="5" fill="url(#featureGrad)">
+    <animate attributeName="width" values="0;250" dur="1s" fill="freeze" />
+  </rect>
+  <text x="300" y="260" font-family="Arial" font-size="12" fill="#ffffff">0.50</text>
+  
+  <!-- Feature 4 (35%) -->
+  <rect x="40" y="285" width="175" height="25" rx="5" ry="5" fill="url(#featureGrad)">
+    <animate attributeName="width" values="0;175" dur="1s" fill="freeze" />
+  </rect>
+  <text x="225" y="300" font-family="Arial" font-size="12" fill="#ffffff">0.35</text>
+  
+  <!-- Feature 6 (20%) -->
+  <rect x="40" y="325" width="100" height="25" rx="5" ry="5" fill="url(#featureGrad)">
+    <animate attributeName="width" values="0;100" dur="1s" fill="freeze" />
+  </rect>
+  <text x="150" y="340" font-family="Arial" font-size="12" fill="#ffffff">0.20</text>
+  
+  <!-- Hover Effect on Feature 3 -->
+  <rect x="40" y="125" width="450" height="25" rx="5" ry="5" fill="url(#featureGrad)" opacity="0.2">
+    <animate attributeName="opacity" values="0.2;0.4;0.2" dur="2s" repeatCount="indefinite" />
+  </rect>
+  
+  <!-- Tooltip for Feature 3 -->
+  <g transform="translate(300, 125)">
+    <rect x="0" y="-40" width="180" height="80" rx="5" ry="5" fill="#141a29" opacity="0.9" />
+    <text x="10" y="-20" font-family="Arial" font-size="12" fill="#ffffff">Feature 3 Details</text>
+    <text x="10" y="0" font-family="Arial" font-size="10" fill="#a0a9c0">Type: Numerical</text>
+    <text x="10" y="15" font-family="Arial" font-size="10" fill="#a0a9c0">Range: 10.5 - 95.2</text>
+    <text x="10" y="30" font-family="Arial" font-size="10" fill="#a0a9c0">Correlation with Target: 0.82</text>
+  </g>
+  
+  <!-- Feature Description -->
+  <g transform="translate(40, 60)">
+    <rect x="400" y="0" width="140" height="50" rx="5" ry="5" fill="#141a29" />
+    <text x="410" y="20" font-family="Arial" font-size="10" fill="#a0a9c0">Method:</text>
+    <text x="460" y="20" font-family="Arial" font-size="10" fill="#ffffff">Permutation</text>
+    <text x="410" y="35" font-family="Arial" font-size="10" fill="#a0a9c0">Metric:</text>
+    <text x="460" y="35" font-family="Arial" font-size="10" fill="#ffffff">Accuracy Drop</text>
+  </g>
+</svg>

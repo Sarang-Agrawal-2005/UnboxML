@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZeroML - No-Code AutoML Platform</title>
+    <link rel="stylesheet" href="main.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" href="data:,">
+
+</head>
+<body>
+    <div class="particles-container" id="particles-js"></div>
+    <!-- LANDING PAGE (Original with images) -->
+    <div id="landingPage" class="app-container">
+        <!-- Navigation Bar -->
+        <nav class="navbar">
+            <div class="logo">
+                <span>Zero<span class="highlight">ML</span></span>
+            </div>
+            <div class="nav-links">
+                <a href="#features" class="nav-link">Features</a>
+                <a href="#how-it-works" class="nav-link">How It Works</a>
+                <a href="#models" class="nav-link">Models</a>
+                <a href="#dashboard" class="nav-link">Dashboard</a>
+            </div>
+            <div class="nav-actions">
+                <button class="theme-toggle" id="themeToggle">
+                    <i class="fas fa-moon"></i>
+                </button>
+                <button id="getStartedBtn" class="btn btn-primary">Get Started</button>
+            </div>
+            <div class="mobile-menu-btn">
+                <i class="fas fa-bars"></i>
+            </div>
+        </nav>
+
+        <!-- Hero Section -->
+        <section class="hero" id="hero">
+            <div class="hero-content">
+                <h1 class="hero-title">Build ML Models <span class="highlight">Without Code</span></h1>
+                <p class="hero-subtitle">Upload your data, select a model, and get predictions in minutes. No coding required.</p>
+                <div class="hero-actions">
+                    <button id="startBuildingBtn" class="btn btn-primary btn-lg">Start Building</button>
+                    <button class="btn btn-outline btn-lg">Watch Demo</button>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- Features Section -->
+        <section class="features" id="features">
+            <div class="section-header">
+                <h2>Powerful <span class="highlight">Features</span></h2>
+                <p>Everything you need to build production-ready machine learning models</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-upload"></i>
+                    </div>
+                    <h3>Easy Data Upload</h3>
+                    <p>Drag and drop your CSV files with animated upload zones</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-table"></i>
+                    </div>
+                    <h3>Data Explorer</h3>
+                    <p>Interactive dataset preview with sortable, filterable tables</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-chart-pie"></i>
+                    </div>
+                    <h3>Visual Analytics</h3>
+                    <p>Dynamic correlation heatmaps and real-time statistics</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <h3>Model Gallery</h3>
+                    <p>12 powerful ML algorithms with smart recommendations</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-sliders-h"></i>
+                    </div>
+                    <h3>Advanced Preprocessing</h3>
+                    <p>Interactive feature selection and outlier detection</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h3>Real-time Evaluation</h3>
+                    <p>Dynamic metrics dashboard with animated visualizations</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- How It Works Section -->
+        <section class="how-it-works" id="how-it-works">
+            <div class="section-header">
+                <h2>How It <span class="highlight">Works</span></h2>
+                <p>Build your machine learning model in four simple steps</p>
+            </div>
+            <div class="steps-container">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h3>Upload Your Data</h3>
+                        <p>Drag and drop your CSV file into our interactive upload zone</p>
+                    </div>
+                    <div class="step-image">
+                        <img src="images/upload-illustration.svg" alt="Upload Data">
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h3>Explore & Preprocess</h3>
+                        <p>Visualize your data and apply automated preprocessing techniques</p>
+                    </div>
+                    <div class="step-image">
+                        <img src="images/explore-illustration.svg" alt="Explore Data">
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h3>Select & Train Models</h3>
+                        <p>Choose from our model gallery and train with optimal parameters</p>
+                    </div>
+                    <div class="step-image">
+                        <img src="images/train-illustration.svg" alt="Train Models">
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <div class="step-content">
+                        <h3>Evaluate & Deploy</h3>
+                        <p>Review performance metrics and deploy your model</p>
+                    </div>
+                    <div class="step-image">
+                        <img src="images/deploy-illustration.svg" alt="Deploy Model">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Models Gallery Section -->
+        <section class="models" id="models">
+            <div class="section-header">
+                <h2>Model <span class="highlight">Gallery</span></h2>
+                <p>Choose from 12 powerful machine learning algorithms</p>
+            </div>
+            <div class="models-grid">
+                <div class="model-card" data-type="regression classification">
+                    <div class="model-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h3>Linear/Logistic Regression</h3>
+                    <p>Simple, interpretable models for regression and classification</p>
+                    <div class="model-tags">
+                        <span class="tag">Regression</span>
+                        <span class="tag">Classification</span>
+                    </div>
+                </div>
+                <div class="model-card" data-type="regression classification">
+                    <div class="model-icon">
+                        <i class="fas fa-tree"></i>
+                    </div>
+                    <h3>Decision Tree</h3>
+                    <p>Tree-based model with easy-to-understand decision rules</p>
+                    <div class="model-tags">
+                        <span class="tag">Regression</span>
+                        <span class="tag">Classification</span>
+                    </div>
+                </div>
+                <div class="model-card" data-type="regression classification">
+                    <div class="model-icon">
+                        <i class="fas fa-trees"></i>
+                    </div>
+                    <h3>Random Forest</h3>
+                    <p>Ensemble of decision trees for improved accuracy</p>
+                    <div class="model-tags">
+                        <span class="tag">Regression</span>
+                        <span class="tag">Classification</span>
+                    </div>
+                </div>
+                <div class="model-card" data-type="regression classification">
+                    <div class="model-icon">
+                        <i class="fas fa-bolt"></i>
+                    </div>
+                    <h3>Gradient Boosting</h3>
+                    <p>Powerful boosting algorithm for complex relationships</p>
+                    <div class="model-tags">
+                        <span class="tag">Regression</span>
+                        <span class="tag">Classification</span>
+                    </div>
+                </div>
+                <div class="model-card" data-type="regression classification">
+                    <div class="model-icon">
+                        <i class="fas fa-project-diagram"></i>
+                    </div>
+                    <h3>K-Nearest Neighbors</h3>
+                    <p>Instance-based learning for local patterns</p>
+                    <div class="model-tags">
+                        <span class="tag">Regression</span>
+                        <span class="tag">Classification</span>
+                    </div>
+                </div>
+                <div class="model-card" data-type="regression classification">
+                    <div class="model-icon">
+                        <i class="fas fa-vector-square"></i>
+                    </div>
+                    <h3>Support Vector Machine</h3>
+                    <p>Powerful algorithm for linear and non-linear boundaries</p>
+                    <div class="model-tags">
+                        <span class="tag">Regression</span>
+                        <span class="tag">Classification</span>
+                    </div>
+                </div>
+                <div class="model-card" data-type="regression classification">
+                    <div class="model-icon">
+                        <i class="fas fa-rocket"></i>
+                    </div>
+                    <h3>XGBoost</h3>
+                    <p>High-performance implementation of gradient boosting</p>
+                    <div class="model-tags">
+                        <span class="tag">Regression</span>
+                        <span class="tag">Classification</span>
+                    </div>
+                </div>
+                <div class="model-card" data-type="classification">
+                    <div class="model-icon">
+                        <i class="fas fa-calculator"></i>
+                    </div>
+                    <h3>Naive Bayes</h3>
+                    <p>Probabilistic classifier based on Bayes' theorem</p>
+                    <div class="model-tags">
+                        <span class="tag">Classification</span>
+                    </div>
+                </div>
+                <div class="model-card" data-type="regression">
+                    <div class="model-icon">
+                        <i class="fas fa-compress-arrows-alt"></i>
+                    </div>
+                    <h3>Ridge Regression</h3>
+                    <p>Linear regression with L2 regularization</p>
+                    <div class="model-tags">
+                        <span class="tag">Regression</span>
+                    </div>
+                </div>
+                <div class="model-card" data-type="regression">
+                    <div class="model-icon">
+                        <i class="fas fa-compress-alt"></i>
+                    </div>
+                    <h3>Lasso Regression</h3>
+                    <p>Linear regression with L1 regularization for feature selection</p>
+                    <div class="model-tags">
+                        <span class="tag">Regression</span>
+                    </div>
+                </div>
+                <div class="model-card" data-type="regression">
+                    <div class="model-icon">
+                        <i class="fas fa-network-wired"></i>
+                    </div>
+                    <h3>ElasticNet</h3>
+                    <p>Linear regression with combined L1 and L2 regularization</p>
+                    <div class="model-tags">
+                        <span class="tag">Regression</span>
+                    </div>
+                </div>
+                <div class="model-card model-card-custom">
+                    <div class="model-icon">
+                        <i class="fas fa-plus-circle"></i>
+                    </div>
+                    <h3>Custom Model</h3>
+                    <p>Coming soon: Build your own custom model pipeline</p>
+                    <div class="model-tags">
+                        <span class="tag tag-soon">Coming Soon</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Dashboard Preview Section -->
+        <section class="dashboard-preview" id="dashboard">
+            <div class="section-header">
+                <h2>Interactive <span class="highlight">Dashboard</span></h2>
+                <p>Powerful visualization tools for your machine learning workflow</p>
+            </div>
+            <div class="dashboard-container">
+                <div class="dashboard-tabs">
+                    <button class="tab-btn active" data-tab="data-tab">Data Explorer</button>
+                    <button class="tab-btn" data-tab="preprocessing-tab">Preprocessing</button>
+                    <button class="tab-btn" data-tab="training-tab">Training</button>
+                    <button class="tab-btn" data-tab="evaluation-tab">Evaluation</button>
+                </div>
+                <div class="dashboard-content">
+                    <div class="tab-content active" id="data-tab">
+                        <div class="dashboard-card">
+                            <h3>Dataset Overview</h3>
+                            <div class="data-preview">
+                                <img src="images/data-preview.svg" alt="Data Preview">
+                            </div>
+                        </div>
+                        <div class="dashboard-card">
+                            <h3>Correlation Heatmap</h3>
+                            <div class="heatmap-preview">
+                                <img src="images/correlation-heatmap.svg" alt="Correlation Heatmap">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-content" id="preprocessing-tab">
+                        <div class="dashboard-card">
+                            <h3>Feature Selection</h3>
+                            <div class="feature-selection-preview">
+                                <img src="images/preprocessing-options.svg" alt="Feature Selection">
+                            </div>
+                        </div>
+                        <div class="dashboard-card">
+                            <h3>Outlier Detection</h3>
+                            <div class="outlier-preview">
+                                <img src="images/feature-importance.svg" alt="Feature Importance">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-content" id="training-tab">
+                        <div class="dashboard-card">
+                            <h3>Model Training</h3>
+                            <div class="training-preview">
+                                <img src="images/training-dashboard.svg" alt="Training Progress">
+                            </div>
+                        </div>
+                        <div class="dashboard-card">
+                            <h3>Hyperparameter Tuning</h3>
+                            <div class="hyperparameter-preview">
+                                <img src="images/hyperparameter-tuning.svg" alt="Hyperparameter Tuning">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-content" id="evaluation-tab">
+                        <div class="dashboard-card">
+                            <h3>Performance Metrics</h3>
+                            <div class="metrics-preview">
+                                <img src="images/evaluation-dashboard.svg" alt="Performance Metrics">
+                            </div>
+                        </div>
+                        <div class="dashboard-card">
+                            <h3>Deployment Options</h3>
+                            <div class="predictions-preview">
+                                <img src="images/deployment-options.svg" alt="Deployment Options">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Call to Action Section -->
+        <section class="cta">
+            <div class="cta-content">
+                <h2>Ready to Build Your <span class="highlight">ML Model?</span></h2>
+                <p>Get started with ZeroML today and deploy your first model in minutes</p>
+                <button id="ctaGetStartedBtn" class="btn btn-primary btn-lg">Start Building Now</button>
+            </div>
+            <div class="cta-image">
+                <img src="images/cta-illustration.svg" alt="Get Started Illustration">
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <span>Zero<span class="highlight">ML</span></span>
+                    <p>Build ML models without code</p>
+                </div>
+                <div class="footer-links">
+                    <div class="footer-links-column">
+                        <h4>Product</h4>
+                        <a href="#">Features</a>
+                        <a href="#">Models</a>
+                        <a href="#">Pricing</a>
+                        <a href="#">Documentation</a>
+                    </div>
+                    <div class="footer-links-column">
+                        <h4>Company</h4>
+                        <a href="#">About Us</a>
+                        <a href="#">Blog</a>
+                        <a href="#">Careers</a>
+                        <a href="#">Contact</a>
+                    </div>
+                    <div class="footer-links-column">
+                        <h4>Resources</h4>
+                        <a href="#">Tutorials</a>
+                        <a href="#">Case Studies</a>
+                        <a href="#">API</a>
+                        <a href="#">Support</a>
+                    </div>
+                    <div class="footer-links-column">
+                        <h4>Legal</h4>
+                        <a href="#">Privacy Policy</a>
+                        <a href="#">Terms of Service</a>
+                        <a href="#">Cookie Policy</a>
+                        <a href="#">GDPR</a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2023 ZeroML. All rights reserved.</p>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-linkedin"></i></a>
+                    <a href="#"><i class="fab fa-github"></i></a>
+                    <a href="#"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+        </footer>
+    </div>
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+    <script src="main.js"></script>
+</body>
+</html>

@@ -1,0 +1,172 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="300" viewBox="0 0 400 300">
+  <!-- Definitions -->
+  <defs>
+    <linearGradient id="trainGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#00c8ff;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#9d4edd;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#00c8ff;stop-opacity:0.1" />
+      <stop offset="100%" style="stop-color:#9d4edd;stop-opacity:0.1" />
+    </linearGradient>
+    <filter id="trainShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="5" />
+      <feOffset dx="0" dy="5" result="offsetblur" />
+      <feComponentTransfer>
+        <feFuncA type="linear" slope="0.3" />
+      </feComponentTransfer>
+      <feMerge>
+        <feMergeNode />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect x="10" y="10" width="380" height="280" rx="15" ry="15" fill="url(#bgGrad)" />
+
+  <!-- Dashboard Panel -->
+  <rect x="30" y="30" width="340" height="240" rx="10" ry="10" fill="#141a29" filter="url(#trainShadow)" />
+
+  <!-- Header -->
+  <rect x="30" y="30" width="340" height="40" rx="10" ry="10" fill="#0a0e17" />
+  <text x="60" y="55" font-family="Arial" font-size="14" fill="#ffffff">Model Training</text>
+  
+  <!-- Control Icons -->
+  <circle cx="340" cy="50" r="8" fill="#00c8ff" />
+  <circle cx="320" cy="50" r="8" fill="#9d4edd" />
+  <circle cx="300" cy="50" r="8" fill="#ffffff" opacity="0.5" />
+
+  <!-- Model Selection Area -->
+  <rect x="40" y="80" width="150" height="180" rx="5" ry="5" fill="#1a2035" />
+  <text x="115" y="100" font-family="Arial" font-size="12" fill="#ffffff" text-anchor="middle">Model Selection</text>
+  
+  <!-- Model Options -->
+  <g transform="translate(50, 110)">
+    <!-- Random Forest -->
+    <rect x="0" y="0" width="130" height="30" rx="5" ry="5" fill="url(#trainGrad)" />
+    <text x="65" y="20" font-family="Arial" font-size="10" fill="#ffffff" text-anchor="middle">Random Forest</text>
+    
+    <!-- Gradient Boosting -->
+    <rect x="0" y="40" width="130" height="30" rx="5" ry="5" fill="#1a2035" stroke="#6c7a94" stroke-width="1" />
+    <text x="65" y="60" font-family="Arial" font-size="10" fill="#6c7a94" text-anchor="middle">Gradient Boosting</text>
+    
+    <!-- Neural Network -->
+    <rect x="0" y="80" width="130" height="30" rx="5" ry="5" fill="#1a2035" stroke="#6c7a94" stroke-width="1" />
+    <text x="65" y="100" font-family="Arial" font-size="10" fill="#6c7a94" text-anchor="middle">Neural Network</text>
+    
+    <!-- SVM -->
+    <rect x="0" y="120" width="130" height="30" rx="5" ry="5" fill="#1a2035" stroke="#6c7a94" stroke-width="1" />
+    <text x="65" y="140" font-family="Arial" font-size="10" fill="#6c7a94" text-anchor="middle">SVM</text>
+  </g>
+
+  <!-- Training Progress Area -->
+  <rect x="200" y="80" width="160" height="180" rx="5" ry="5" fill="#1a2035" />
+  <text x="280" y="100" font-family="Arial" font-size="12" fill="#ffffff" text-anchor="middle">Training Progress</text>
+  
+  <!-- Progress Bar -->
+  <rect x="210" y="120" width="140" height="20" rx="10" ry="10" fill="#0a0e17" />
+  <rect x="210" y="120" width="98" height="20" rx="10" ry="10" fill="url(#trainGrad)">
+    <animate attributeName="width" from="0" to="98" dur="3s" repeatCount="indefinite" />
+  </rect>
+  <text x="280" y="134" font-family="Arial" font-size="10" fill="#ffffff" text-anchor="middle">70% Complete</text>
+  
+  <!-- Training Metrics -->
+  <text x="210" y="160" font-family="Arial" font-size="10" fill="#a0a9c0">Accuracy:</text>
+  <text x="350" y="160" font-family="Arial" font-size="10" fill="#00c8ff" text-anchor="end">0.87</text>
+  
+  <text x="210" y="180" font-family="Arial" font-size="10" fill="#a0a9c0">Precision:</text>
+  <text x="350" y="180" font-family="Arial" font-size="10" fill="#00c8ff" text-anchor="end">0.85</text>
+  
+  <text x="210" y="200" font-family="Arial" font-size="10" fill="#a0a9c0">Recall:</text>
+  <text x="350" y="200" font-family="Arial" font-size="10" fill="#00c8ff" text-anchor="end">0.89</text>
+  
+  <text x="210" y="220" font-family="Arial" font-size="10" fill="#a0a9c0">F1 Score:</text>
+  <text x="350" y="220" font-family="Arial" font-size="10" fill="#00c8ff" text-anchor="end">0.87</text>
+  
+  <text x="210" y="240" font-family="Arial" font-size="10" fill="#a0a9c0">ETA:</text>
+  <text x="350" y="240" font-family="Arial" font-size="10" fill="#00c8ff" text-anchor="end">00:01:23</text>
+
+  <!-- Neural Network Animation -->
+  <g transform="translate(115, 220)">
+    <!-- Input Layer -->
+    <circle cx="0" cy="0" r="5" fill="#00c8ff">
+      <animate attributeName="opacity" values="1;0.5;1" dur="1.5s" repeatCount="indefinite" />
+    </circle>
+    <circle cx="0" cy="15" r="5" fill="#00c8ff">
+      <animate attributeName="opacity" values="1;0.5;1" dur="1.7s" repeatCount="indefinite" />
+    </circle>
+    <circle cx="0" cy="30" r="5" fill="#00c8ff">
+      <animate attributeName="opacity" values="1;0.5;1" dur="1.3s" repeatCount="indefinite" />
+    </circle>
+    
+    <!-- Hidden Layer -->
+    <circle cx="25" cy="-7.5" r="5" fill="#ffffff" opacity="0.7">
+      <animate attributeName="opacity" values="0.7;0.3;0.7" dur="1.6s" repeatCount="indefinite" />
+    </circle>
+    <circle cx="25" cy="7.5" r="5" fill="#ffffff" opacity="0.7">
+      <animate attributeName="opacity" values="0.7;0.3;0.7" dur="1.4s" repeatCount="indefinite" />
+    </circle>
+    <circle cx="25" cy="22.5" r="5" fill="#ffffff" opacity="0.7">
+      <animate attributeName="opacity" values="0.7;0.3;0.7" dur="1.8s" repeatCount="indefinite" />
+    </circle>
+    <circle cx="25" cy="37.5" r="5" fill="#ffffff" opacity="0.7">
+      <animate attributeName="opacity" values="0.7;0.3;0.7" dur="1.5s" repeatCount="indefinite" />
+    </circle>
+    
+    <!-- Output Layer -->
+    <circle cx="50" cy="7.5" r="5" fill="#9d4edd">
+      <animate attributeName="opacity" values="1;0.5;1" dur="1.9s" repeatCount="indefinite" />
+    </circle>
+    <circle cx="50" cy="22.5" r="5" fill="#9d4edd">
+      <animate attributeName="opacity" values="1;0.5;1" dur="1.2s" repeatCount="indefinite" />
+    </circle>
+    
+    <!-- Connections -->
+    <!-- Input to Hidden -->
+    <line x1="5" y1="0" x2="20" y2="-7.5" stroke="#00c8ff" stroke-width="1" opacity="0.5" />
+    <line x1="5" y1="0" x2="20" y2="7.5" stroke="#00c8ff" stroke-width="1" opacity="0.5" />
+    <line x1="5" y1="0" x2="20" y2="22.5" stroke="#00c8ff" stroke-width="1" opacity="0.5" />
+    <line x1="5" y1="0" x2="20" y2="37.5" stroke="#00c8ff" stroke-width="1" opacity="0.5" />
+    
+    <line x1="5" y1="15" x2="20" y2="-7.5" stroke="#00c8ff" stroke-width="1" opacity="0.5" />
+    <line x1="5" y1="15" x2="20" y2="7.5" stroke="#00c8ff" stroke-width="1" opacity="0.5" />
+    <line x1="5" y1="15" x2="20" y2="22.5" stroke="#00c8ff" stroke-width="1" opacity="0.5" />
+    <line x1="5" y1="15" x2="20" y2="37.5" stroke="#00c8ff" stroke-width="1" opacity="0.5" />
+    
+    <line x1="5" y1="30" x2="20" y2="-7.5" stroke="#00c8ff" stroke-width="1" opacity="0.5" />
+    <line x1="5" y1="30" x2="20" y2="7.5" stroke="#00c8ff" stroke-width="1" opacity="0.5" />
+    <line x1="5" y1="30" x2="20" y2="22.5" stroke="#00c8ff" stroke-width="1" opacity="0.5" />
+    <line x1="5" y1="30" x2="20" y2="37.5" stroke="#00c8ff" stroke-width="1" opacity="0.5" />
+    
+    <!-- Hidden to Output -->
+    <line x1="30" y1="-7.5" x2="45" y2="7.5" stroke="#ffffff" stroke-width="1" opacity="0.5" />
+    <line x1="30" y1="-7.5" x2="45" y2="22.5" stroke="#ffffff" stroke-width="1" opacity="0.5" />
+    
+    <line x1="30" y1="7.5" x2="45" y2="7.5" stroke="#ffffff" stroke-width="1" opacity="0.5" />
+    <line x1="30" y1="7.5" x2="45" y2="22.5" stroke="#ffffff" stroke-width="1" opacity="0.5" />
+    
+    <line x1="30" y1="22.5" x2="45" y2="7.5" stroke="#ffffff" stroke-width="1" opacity="0.5" />
+    <line x1="30" y1="22.5" x2="45" y2="22.5" stroke="#ffffff" stroke-width="1" opacity="0.5" />
+    
+    <line x1="30" y1="37.5" x2="45" y2="7.5" stroke="#ffffff" stroke-width="1" opacity="0.5" />
+    <line x1="30" y1="37.5" x2="45" y2="22.5" stroke="#ffffff" stroke-width="1" opacity="0.5" />
+    
+    <!-- Data Flow Animation -->
+    <circle cx="0" cy="0" r="2" fill="#ffffff">
+      <animate attributeName="cx" values="5;20;45" dur="1.5s" repeatCount="indefinite" />
+      <animate attributeName="cy" values="0;-7.5;7.5" dur="1.5s" repeatCount="indefinite" />
+    </circle>
+    
+    <circle cx="0" cy="15" r="2" fill="#ffffff">
+      <animate attributeName="cx" values="5;20;45" dur="1.7s" repeatCount="indefinite" />
+      <animate attributeName="cy" values="15;22.5;22.5" dur="1.7s" repeatCount="indefinite" />
+    </circle>
+  </g>
+
+  <!-- Decorative Elements -->
+  <circle cx="30" cy="150" r="3" fill="#00c8ff" opacity="0.5" />
+  <circle cx="370" cy="150" r="3" fill="#9d4edd" opacity="0.5" />
+  <circle cx="200" cy="30" r="3" fill="#00c8ff" opacity="0.5" />
+  <circle cx="200" cy="270" r="3" fill="#9d4edd" opacity="0.5" />
+</svg>

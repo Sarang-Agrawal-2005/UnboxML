@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ZeroML Pipeline</title>
+  <link rel="stylesheet" href="main.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="main.js" defer></script>
+  <script defer>
+    document.addEventListener("DOMContentLoaded", () => {
+      if (typeof particlesJS !== 'undefined') {
+        particlesJS('particles-js', {
+          particles: {
+            number: { value: 80, density: { enable: true, value_area: 800 } },
+            color: { value: '#00c8ff' },
+            shape: { type: 'circle' },
+            opacity: { value: 0.5 },
+            size: { value: 3, random: true },
+            line_linked: {
+              enable: true,
+              distance: 150,
+              color: '#00c8ff',
+              opacity: 0.4,
+              width: 1
+            },
+            move: {
+              enable: true,
+              speed: 6,
+              direction: 'none',
+              random: false,
+              straight: false,
+              out_mode: 'out',
+              bounce: false
+            }
+          },
+          interactivity: {
+            detect_on: 'canvas',
+            events: {
+              onhover: { enable: true, mode: 'repulse' },
+              onclick: { enable: true, mode: 'push' },
+              resize: true
+            }
+          },
+          retina_detect: true
+        });
+      }
+      const tabs = document.querySelectorAll(".tab-btn");
+      const sections = document.querySelectorAll(".pipeline-step");
+      tabs.forEach(btn => {
+        btn.addEventListener("click", () => {
+          tabs.forEach(b => b.classList.remove("active"));
+          sections.forEach(s => s.classList.remove("active"));
+          btn.classList.add("active");
+          document.getElementById(btn.dataset.tab).classList.add("active");
+        });
+      });
+    });
+  </script>
+  <style>
+    .pipeline-section {
+      padding: 4rem 2rem;
+      background-color: transparent;
+    }
+    .tab-nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      justify-content: center;
+      margin-bottom: 3rem;
+    }
+    .tab-btn {
+      padding: 1rem 2rem;
+      border: none;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: var(--radius-md);
+      color: var(--text-primary);
+      cursor: pointer;
+      transition: background var(--transition-fast);
+    }
+    .tab-btn.active, .tab-btn:hover {
+      background: linear-gradient(90deg, var(--primary), var(--secondary));
+      color: white;
+    }
+    .pipeline-step {
+      display: none;
+    }
+    .pipeline-step.active {
+      display: block;
+    }
+    .step-card {
+      background: var(--card-bg);
+      padding: 2rem;
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border-color);
+      box-shadow: var(--shadow-md);
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    .step-card h3 {
+      margin-bottom: 1rem;
+    }
+    .step-card input, .step-card select, .step-card button {
+      width: 100%;
+      margin-bottom: 1rem;
+      padding: 0.75rem;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border-color);
+      background: transparent;
+      color: var(--text-primary);
+    }
+    .step-card button {
+      background: linear-gradient(90deg, var(--primary), var(--secondary));
+      color: white;
+      cursor: pointer;
+      font-weight: 600;
+      border: none;
+    }
+   .step-card label {
+      display: inline-flex;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 0.5rem;
+      width: 100%;
+      margin: 0.5rem 0;
+      font-size: 1rem;
+      text-align: left; /* ensures the text is aligned left inside the label */
+    }
+
+    .step-card input[type="checkbox"] {
+      margin: 0;
+      transform: scale(1.2);
+      accent-color: var(--primary);
+    }
+
+    /* Style dropdown and its options */
+    select {
+      background-color: var(--background-light);
+      color: var(--text-primary);
+      border: 1px solid var(--border-color);
+    }
+
+    select option {
+      background-color: var(--background-light);
+      color: var(--text-primary);
+    }
+    .checkbox-row {
+      display: flex;
+      gap: 0.5rem;
+      padding-bottom: 2.5%;
+      margin: 0.5rem 0;
+      font-size: 1rem;
+    }
+
+    .checkbox-row input[type="checkbox"] {
+      transform: scale(1.2);
+      margin: 0;
+      accent-color: var(--primary);
+    }
+
+    .checkbox-row label {
+      flex-grow: 1;
+      text-align: left;
+      cursor: pointer;
+    }
+    /* hyper‑parameter sliders */
+    .hyper-slider {
+      width: 100%;
+      margin: 0.5rem 0 1.2rem;
+    }
+    .hyper-slider label {
+      display:block;
+      margin-bottom:0.4rem;
+      font-size:0.9rem;
+    }
+    .hyper-slider input[type=range] {
+      width:100%;
+    }
+
+
+
+
+  </style>
+<script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+</head>
+<body style="position: relative; min-height: 100vh; overflow-x: hidden; background-color: var(--background);">
+  <div class="particles-container" id="particles-js"></div>
+  <div class="app-container" style="position: relative; z-index: 1; background-color: transparent;">
+    <nav class="navbar" style="position: relative; z-index: 1000; justify-content: center;">
+  <div class="logo" style="padding: 1.5rem 2rem; text-align: center;">Zero<span class="highlight">ML Pipeline</span></div>
+</nav>
+
+<section class="pipeline-section" style="padding-top: 0rem; background-color: transparent;">
+            <nav class="tabbar" style="position: relative; top: 0%; background: transparent; z-index: 900; display: flex; justify-content: center; gap: 2rem; flex-wrap: wrap; border-bottom: 1px solid var(--border-color); padding: 1rem 2rem;">
+  <a class="nav-link tab-btn active" data-tab="upload">Upload</a>
+  <a class="nav-link tab-btn" data-tab="analyze">Analyze Data</a>
+  <a class="nav-link tab-btn" data-tab="preprocess">Prepare Dataset</a>
+  <a class="nav-link tab-btn" data-tab="train">Train Model</a>
+  <a class="nav-link tab-btn" data-tab="evaluate">Evaluate</a>
+  <!-- <a class="nav-link tab-btn" data-tab="predict">Predict</a> -->
+  <a class="nav-link tab-btn" data-tab="deploy">Deploy</a>
+</nav>
+
+      <div id="upload" class="pipeline-step active">
+        <div class="step-card">
+          <h3>📤 Upload Your Dataset</h3>
+          <input type="file" id="fileInput" accept=".csv">
+          <div id="uploadPreview"></div>
+        </div>
+      </div>
+
+      <div id="analyze" class="pipeline-step">
+        <div class="step-card">
+          <div id="dataSummary"></div>
+        </div>
+      </div>
+
+      <div id="preprocess" class="pipeline-step">
+        <div class="step-card">
+          <h3>🧹 Preprocessing Options</h3>
+
+          <!-- Target column selector -->
+          <label for="preprocessTarget">Select Target Column</label>
+          <select id="preprocessTarget"></select>
+
+          <!-- Preprocessing checkboxes -->
+          <div class="checkbox-row"><input type="checkbox" id="dropNA"><label for="dropNA">Drop rows with missing values</label></div>
+          <div class="checkbox-row"><input type="checkbox" id="removeDuplicates"><label for="removeDuplicates">Remove duplicate rows</label></div>
+          <div class="checkbox-row"><input type="checkbox" id="removeOutliers"><label for="removeOutliers">Remove outliers (IQR method)</label></div>
+          <div class="checkbox-row"><input type="checkbox" id="dropLowCorr"><label for="dropLowCorr">Drop features with low correlation to target</label></div>
+          <div class="checkbox-row"><input type="checkbox" id="normalize"><label for="normalize">Normalize data (Min-Max)</label></div>
+          <div class="checkbox-row"><input type="checkbox" id="standardize"><label for="standardize">Standardize data (Z-score)</label></div>
+
+
+          <!-- Submit button -->
+          <button id="applyPreprocessing">Apply Preprocessing</button>
+
+          <!-- Result section -->
+          <div id="preprocessResult"></div>
+          <div id="preprocessIndicator" style="margin-top: 1rem; color: limegreen; font-weight: bold;"></div>
+
+        </div>
+      </div>
+
+
+      <div id="train" class="pipeline-step">
+        <div class="step-card">
+          <h3>🤖 Train Model</h3>
+
+          <!-- show detected problem type -->
+          <p><strong>Problem type:</strong> <span id="problemTypeLabel">–</span></p>
+
+          <!-- Model selector (filtered by problem type) -->
+          <label for="modelSelect">Select Model</label>
+          <select id="modelSelect"></select>
+
+          <!-- Hyper‑parameter controls appear here -->
+          <div id="hyperparamControls"></div>
+
+          <!-- Train button + spinner -->
+          <button id="trainModel">Train</button>
+          <div id="trainSpinner" style="display:none;margin:1rem 0;">
+            <i class="fas fa-spinner fa-spin"></i> Training…
+          </div>
+
+          <!-- Result indicator -->
+          <div id="trainingOutput"></div>
+        </div>
+      </div>
+
+
+      <div id="evaluate" class="pipeline-step">
+        <div class="step-card">
+          <h3>📈 Evaluation Metrics</h3>
+          <button id="runEvaluation">Evaluate</button>
+          <div id="evalSpinner" style="display:none;margin:1rem 0;">
+            <i class="fas fa-spinner fa-spin"></i> Evaluating…
+          </div>
+          <div id="evaluationMetrics"></div>
+        </div>
+      </div>
+
+
+      <!-- <div id="predict" class="pipeline-step">
+        <div class="step-card">
+          <h3>🔍 Predict</h3>
+          <input type="file" id="predictFile" accept=".csv">
+          <button id="predictBtn">Run Prediction</button>
+          <div id="predictionOutput"></div>
+        </div>
+      </div> -->
+
+      <div id="deploy" class="pipeline-step">
+        <div class="step-card">
+          <h3>🚀 Deployment</h3>
+          <p>Download your trained model as a .pkl file for future use or integration into other apps.</p>
+          <a id="downloadModel" href="#" class="btn btn-primary">Download Model</a>
+        </div>
+      </div>
+    </section>
+  </div>
+<style>
+  html, body {
+  height: 100%;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+}
+  .particles-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    pointer-events: none;
+    background: transparent;
+  }
+</style>
+</body>
+</html>

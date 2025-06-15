@@ -1,0 +1,131 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="500" height="400" viewBox="0 0 500 400">
+  <!-- Definitions -->
+  <defs>
+    <linearGradient id="folderGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#00c8ff;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#9d4edd;stop-opacity:1" />
+    </linearGradient>
+    <filter id="folderShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="3" />
+      <feOffset dx="0" dy="3" result="offsetblur" />
+      <feComponentTransfer>
+        <feFuncA type="linear" slope="0.3" />
+      </feComponentTransfer>
+      <feMerge>
+        <feMergeNode />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect x="0" y="0" width="500" height="400" rx="10" ry="10" fill="#1a2035" />
+
+  <!-- Header -->
+  <rect x="0" y="0" width="500" height="50" rx="10" ry="10" fill="#0a0e17" />
+  <text x="20" y="30" font-family="Arial" font-size="16" fill="#ffffff">Project Structure</text>
+  
+  <!-- Main Content -->
+  <rect x="20" y="60" width="460" height="320" rx="5" ry="5" fill="#0a0e17" filter="url(#folderShadow)" />
+  
+  <!-- Folder Tree -->
+  <!-- Root -->
+  <g transform="translate(40, 80)">
+    <rect width="20" height="20" rx="2" ry="2" fill="url(#folderGrad)" />
+    <text x="30" y="15" font-family="Arial" font-size="14" fill="#ffffff">Zero Code AutoML Platform</text>
+    
+    <!-- Level 1 Items -->
+    <!-- HTML -->
+    <g transform="translate(20, 30)">
+      <line x1="-10" y1="0" x2="-10" y2="240" stroke="#2a3146" stroke-width="1" />
+      <line x1="-10" y1="10" x2="0" y2="10" stroke="#2a3146" stroke-width="1" />
+      <rect width="20" height="20" rx="2" ry="2" fill="#00c8ff" />
+      <text x="30" y="15" font-family="Arial" font-size="12" fill="#ffffff">index.html</text>
+    </g>
+    
+    <!-- CSS -->
+    <g transform="translate(20, 60)">
+      <line x1="-10" y1="0" x2="0" y2="0" stroke="#2a3146" stroke-width="1" />
+      <rect width="20" height="20" rx="2" ry="2" fill="#00c8ff" />
+      <text x="30" y="15" font-family="Arial" font-size="12" fill="#ffffff">main.css</text>
+    </g>
+    
+    <!-- JS -->
+    <g transform="translate(20, 90)">
+      <line x1="-10" y1="0" x2="0" y2="0" stroke="#2a3146" stroke-width="1" />
+      <rect width="20" height="20" rx="2" ry="2" fill="#00c8ff" />
+      <text x="30" y="15" font-family="Arial" font-size="12" fill="#ffffff">main.js</text>
+    </g>
+    
+    <!-- Images Folder -->
+    <g transform="translate(20, 120)">
+      <line x1="-10" y1="0" x2="0" y2="0" stroke="#2a3146" stroke-width="1" />
+      <rect width="20" height="20" rx="2" ry="2" fill="url(#folderGrad)" />
+      <text x="30" y="15" font-family="Arial" font-size="12" fill="#ffffff">images/</text>
+      
+      <!-- Level 2 Items (Images) -->
+      <!-- Hero Illustration -->
+      <g transform="translate(20, 30)">
+        <line x1="-10" y1="0" x2="-10" y2="150" stroke="#2a3146" stroke-width="1" />
+        <line x1="-10" y1="10" x2="0" y2="10" stroke="#2a3146" stroke-width="1" />
+        <rect width="20" height="20" rx="2" ry="2" fill="#9d4edd" />
+        <text x="30" y="15" font-family="Arial" font-size="12" fill="#ffffff">hero-illustration.svg</text>
+      </g>
+      
+      <!-- Upload Illustration -->
+      <g transform="translate(20, 60)">
+        <line x1="-10" y1="0" x2="0" y2="0" stroke="#2a3146" stroke-width="1" />
+        <rect width="20" height="20" rx="2" ry="2" fill="#9d4edd" />
+        <text x="30" y="15" font-family="Arial" font-size="12" fill="#ffffff">upload-illustration.svg</text>
+      </g>
+      
+      <!-- Explore Illustration -->
+      <g transform="translate(20, 90)">
+        <line x1="-10" y1="0" x2="0" y2="0" stroke="#2a3146" stroke-width="1" />
+        <rect width="20" height="20" rx="2" ry="2" fill="#9d4edd" />
+        <text x="30" y="15" font-family="Arial" font-size="12" fill="#ffffff">explore-illustration.svg</text>
+      </g>
+      
+      <!-- Train Illustration -->
+      <g transform="translate(20, 120)">
+        <line x1="-10" y1="0" x2="0" y2="0" stroke="#2a3146" stroke-width="1" />
+        <rect width="20" height="20" rx="2" ry="2" fill="#9d4edd" />
+        <text x="30" y="15" font-family="Arial" font-size="12" fill="#ffffff">train-illustration.svg</text>
+      </g>
+      
+      <!-- Deploy Illustration -->
+      <g transform="translate(20, 150)">
+        <line x1="-10" y1="0" x2="0" y2="0" stroke="#2a3146" stroke-width="1" />
+        <rect width="20" height="20" rx="2" ry="2" fill="#9d4edd" />
+        <text x="30" y="15" font-family="Arial" font-size="12" fill="#ffffff">deploy-illustration.svg</text>
+      </g>
+    </g>
+    
+    <!-- Dashboard Components -->
+    <g transform="translate(20, 270)">
+      <line x1="-10" y1="0" x2="0" y2="0" stroke="#2a3146" stroke-width="1" />
+      <rect width="20" height="20" rx="2" ry="2" fill="url(#folderGrad)" />
+      <text x="30" y="15" font-family="Arial" font-size="12" fill="#ffffff">dashboard/</text>
+    </g>
+  </g>
+  
+  <!-- Legend -->
+  <g transform="translate(300, 80)">
+    <rect width="160" height="100" rx="5" ry="5" fill="#141a29" />
+    <text x="10" y="20" font-family="Arial" font-size="12" fill="#ffffff">Legend</text>
+    
+    <rect x="10" y="30" width="15" height="15" rx="2" ry="2" fill="url(#folderGrad)" />
+    <text x="35" y="42" font-family="Arial" font-size="10" fill="#ffffff">Directory</text>
+    
+    <rect x="10" y="55" width="15" height="15" rx="2" ry="2" fill="#00c8ff" />
+    <text x="35" y="67" font-family="Arial" font-size="10" fill="#ffffff">HTML/CSS/JS File</text>
+    
+    <rect x="10" y="80" width="15" height="15" rx="2" ry="2" fill="#9d4edd" />
+    <text x="35" y="92" font-family="Arial" font-size="10" fill="#ffffff">SVG Illustration</text>
+  </g>
+  
+  <!-- Hover Effect on Images Folder -->
+  <rect x="60" y="200" width="20" height="20" rx="2" ry="2" fill="url(#folderGrad)" opacity="0.5">
+    <animate attributeName="opacity" values="0.5;1;0.5" dur="2s" repeatCount="indefinite" />
+  </rect>
+</svg>

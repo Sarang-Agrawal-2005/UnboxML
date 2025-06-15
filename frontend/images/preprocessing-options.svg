@@ -1,0 +1,138 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="400" viewBox="0 0 600 400">
+  <!-- Definitions -->
+  <defs>
+    <linearGradient id="preprocGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#00c8ff;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#9d4edd;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="switchGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#00c8ff;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#9d4edd;stop-opacity:1" />
+    </linearGradient>
+    <filter id="preprocShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="3" />
+      <feOffset dx="0" dy="3" result="offsetblur" />
+      <feComponentTransfer>
+        <feFuncA type="linear" slope="0.3" />
+      </feComponentTransfer>
+      <feMerge>
+        <feMergeNode />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect x="0" y="0" width="600" height="400" rx="10" ry="10" fill="#1a2035" />
+
+  <!-- Header -->
+  <rect x="0" y="0" width="600" height="50" rx="10" ry="10" fill="#0a0e17" />
+  <text x="20" y="30" font-family="Arial" font-size="16" fill="#ffffff">Data Preprocessing Options</text>
+  
+  <!-- Dataset Info -->
+  <text x="300" y="30" font-family="Arial" font-size="14" fill="#ffffff" text-anchor="middle">customer_churn.csv</text>
+  
+  <!-- Status Badge -->
+  <rect x="500" y="15" width="80" height="20" rx="10" ry="10" fill="#141a29" />
+  <circle cx="515" cy="25" r="5" fill="#00c8ff" />
+  <text x="530" y="30" font-family="Arial" font-size="12" fill="#00c8ff">Ready</text>
+  
+  <!-- Main Layout -->
+  <!-- Left Panel: Feature Selection -->
+  <rect x="20" y="60" width="270" height="320" rx="5" ry="5" fill="#0a0e17" filter="url(#preprocShadow)" />
+  <text x="40" y="85" font-family="Arial" font-size="14" fill="#ffffff">Feature Selection</text>
+  
+  <!-- Feature List -->
+  <rect x="40" y="100" width="230" height="260" rx="5" ry="5" fill="#141a29" />
+  
+  <!-- Feature Items -->
+  <!-- Feature 1 -->
+  <rect x="50" y="110" width="210" height="30" rx="5" ry="5" fill="#0a0e17" />
+  <text x="60" y="130" font-family="Arial" font-size="12" fill="#ffffff">customer_age</text>
+  <rect x="200" y="115" width="40" height="20" rx="10" ry="10" fill="#141a29" />
+  <circle cx="220" cy="125" r="8" fill="url(#switchGrad)" />
+  
+  <!-- Feature 2 -->
+  <rect x="50" y="150" width="210" height="30" rx="5" ry="5" fill="#0a0e17" />
+  <text x="60" y="170" font-family="Arial" font-size="12" fill="#ffffff">monthly_charges</text>
+  <rect x="200" y="155" width="40" height="20" rx="10" ry="10" fill="#141a29" />
+  <circle cx="220" cy="165" r="8" fill="url(#switchGrad)" />
+  
+  <!-- Feature 3 -->
+  <rect x="50" y="190" width="210" height="30" rx="5" ry="5" fill="#0a0e17" />
+  <text x="60" y="210" font-family="Arial" font-size="12" fill="#ffffff">tenure_months</text>
+  <rect x="200" y="195" width="40" height="20" rx="10" ry="10" fill="#141a29" />
+  <circle cx="220" cy="205" r="8" fill="url(#switchGrad)" />
+  
+  <!-- Feature 4 -->
+  <rect x="50" y="230" width="210" height="30" rx="5" ry="5" fill="#0a0e17" />
+  <text x="60" y="250" font-family="Arial" font-size="12" fill="#ffffff">contract_type</text>
+  <rect x="200" y="235" width="40" height="20" rx="10" ry="10" fill="#141a29" />
+  <circle cx="220" cy="245" r="8" fill="url(#switchGrad)" />
+  
+  <!-- Feature 5 -->
+  <rect x="50" y="270" width="210" height="30" rx="5" ry="5" fill="#0a0e17" />
+  <text x="60" y="290" font-family="Arial" font-size="12" fill="#ffffff">payment_method</text>
+  <rect x="200" y="275" width="40" height="20" rx="10" ry="10" fill="#141a29" />
+  <circle cx="220" cy="285" r="8" fill="url(#switchGrad)" />
+  
+  <!-- Feature 6 -->
+  <rect x="50" y="310" width="210" height="30" rx="5" ry="5" fill="#0a0e17" />
+  <text x="60" y="330" font-family="Arial" font-size="12" fill="#ffffff">internet_service</text>
+  <rect x="200" y="315" width="40" height="20" rx="10" ry="10" fill="#141a29" />
+  <circle cx="220" cy="325" r="8" fill="url(#switchGrad)" />
+  
+  <!-- Right Panel: Preprocessing Options -->
+  <rect x="310" y="60" width="270" height="320" rx="5" ry="5" fill="#0a0e17" filter="url(#preprocShadow)" />
+  <text x="330" y="85" font-family="Arial" font-size="14" fill="#ffffff">Preprocessing Options</text>
+  
+  <!-- Options Tabs -->
+  <rect x="330" y="100" width="230" height="30" rx="5" ry="5" fill="#141a29" />
+  <rect x="330" y="100" width="76" height="30" rx="5" ry="5" fill="#0a0e17" stroke="url(#preprocGrad)" stroke-width="1" />
+  <text x="368" y="120" font-family="Arial" font-size="12" fill="#00c8ff" text-anchor="middle">Numerical</text>
+  <text x="444" y="120" font-family="Arial" font-size="12" fill="#a0a9c0" text-anchor="middle">Categorical</text>
+  <text x="520" y="120" font-family="Arial" font-size="12" fill="#a0a9c0" text-anchor="middle">Missing</text>
+  
+  <!-- Numerical Options -->
+  <rect x="330" y="140" width="230" height="220" rx="5" ry="5" fill="#141a29" />
+  
+  <!-- Scaling Method -->
+  <text x="345" y="165" font-family="Arial" font-size="12" fill="#ffffff">Scaling Method</text>
+  <rect x="345" y="175" width="200" height="30" rx="5" ry="5" fill="#0a0e17" />
+  <text x="360" y="195" font-family="Arial" font-size="12" fill="#a0a9c0">StandardScaler</text>
+  <path d="M525,190 L535,180 L535,200 Z" fill="#a0a9c0" />
+  
+  <!-- Outlier Handling -->
+  <text x="345" y="225" font-family="Arial" font-size="12" fill="#ffffff">Outlier Handling</text>
+  <rect x="345" y="235" width="200" height="30" rx="5" ry="5" fill="#0a0e17" />
+  <text x="360" y="255" font-family="Arial" font-size="12" fill="#a0a9c0">Winsorization (99%)</text>
+  <path d="M525,250 L535,240 L535,260 Z" fill="#a0a9c0" />
+  
+  <!-- Feature Engineering -->
+  <text x="345" y="285" font-family="Arial" font-size="12" fill="#ffffff">Feature Engineering</text>
+  <rect x="345" y="295" width="90" height="30" rx="5" ry="5" fill="#0a0e17" />
+  <text x="360" y="315" font-family="Arial" font-size="12" fill="#a0a9c0">Polynomial</text>
+  <rect x="345" y="295" width="90" height="30" rx="5" ry="5" fill="url(#preprocGrad)" opacity="0.1" />
+  
+  <rect x="455" y="295" width="90" height="30" rx="5" ry="5" fill="#0a0e17" />
+  <text x="470" y="315" font-family="Arial" font-size="12" fill="#a0a9c0">Log Transform</text>
+  
+  <!-- Apply Button -->
+  <rect x="400" y="335" width="90" height="30" rx="15" ry="15" fill="url(#preprocGrad)" />
+  <text x="445" y="355" font-family="Arial" font-size="12" fill="#ffffff" text-anchor="middle">Apply</text>
+  
+  <!-- Hover Effect on Feature 2 -->
+  <rect x="50" y="150" width="210" height="30" rx="5" ry="5" fill="url(#preprocGrad)" opacity="0.1">
+    <animate attributeName="opacity" values="0.1;0.2;0.1" dur="2s" repeatCount="indefinite" />
+  </rect>
+  
+  <!-- Tooltip for Feature 2 -->
+  <g transform="translate(270, 165)">
+    <rect x="0" y="-40" width="180" height="80" rx="5" ry="5" fill="#141a29" opacity="0.9" />
+    <text x="10" y="-20" font-family="Arial" font-size="12" fill="#ffffff">monthly_charges</text>
+    <text x="10" y="0" font-family="Arial" font-size="10" fill="#a0a9c0">Type: Numerical</text>
+    <text x="10" y="15" font-family="Arial" font-size="10" fill="#a0a9c0">Range: $19.95 - $118.75</text>
+    <text x="10" y="30" font-family="Arial" font-size="10" fill="#a0a9c0">Missing: 0%</text>
+    <path d="M-10,0 L0,0" stroke="#141a29" stroke-width="10" />
+  </g>
+</svg>
