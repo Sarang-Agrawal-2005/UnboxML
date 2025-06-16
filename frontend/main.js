@@ -201,34 +201,69 @@ document.getElementById('fileInput').addEventListener('change', function (e) {
     .then(res => res.json())
     .then(data => {
       const previewHTML = `
-        <p><strong>File:</strong> ${data.filename}</p>
-        <p><strong>Columns:</strong> ${data.shape[1]}</p>
-        <p><strong>Rows:</strong> ${data.shape[0]}</p>
-        <p><strong>Features:</strong> ${data.columns.join(', ')}</p>
+        <p><strong><span class="highlight">File Uploaded - </span></strong> ${data.filename}</p>
+        
+        <p><strong><span class="highlight">Features - </span></strong> ${data.shape[1]}</p>
+        <p><strong><span class="highlight">Rows - </span></strong> ${data.shape[0]}</p>
+        <p><strong><span class="highlight">Dataset Sample:</span></strong></p>
        
       `;
       document.getElementById('uploadPreview').innerHTML = previewHTML;
+      if (data.preview && data.preview.length > 0) {
+        const headers = Object.keys(data.preview[0]);
+        const rows = data.preview.map(row => {
+          return `<tr>${headers.map(h => `<td>${row[h]}</td>`).join('')}</tr>`;
+        }).join('');
+
+        const table = `
+        <div class="table-scroll">
+          <table class="upload-preview-table">
+            <thead><tr>${headers.map(h => `<th>${h}</th>`).join('')}</tr></thead>
+            <tbody>${rows}</tbody>
+          </table>
+        </div>
+      `;
+      uploadPreview.innerHTML += table;
+
+      }
       analyzeData(data.filename); // from upload response
       sessionStorage.setItem("uploadedFile", data.filename);
       populateTargetDropdown();
       refreshTrainingUI(); 
-      
-      
-
-    })
+      })
     .catch(err => {
       document.getElementById('uploadPreview').innerHTML = '<p style="color:red;">Failed to upload file</p>';
       console.error(err);
     });
 });
 
-/*<h4>Preview:</h4>
-        <table>
-          <thead><tr>${Object.keys(data.preview[0]).map(k => `<th>${k}</th>`).join('')}</tr></thead>
-          <tbody>
-            ${data.preview.map(row => `<tr>${Object.values(row).map(cell => `<td>${cell}</td>`).join('')}</tr>`).join('')}
-          </tbody>
-        </table> */
+
+
+const uploadZone = document.getElementById('uploadZone');
+const fileInput = document.getElementById('fileInput');
+const uploadSpinner = document.getElementById('uploadSpinner');
+const uploadPreview = document.getElementById('uploadPreview');
+
+uploadZone.addEventListener('click', () => fileInput.click());
+
+uploadZone.addEventListener('dragover', e => {
+  e.preventDefault();
+  uploadZone.classList.add('hovered');
+});
+uploadZone.addEventListener('dragleave', () => {
+  uploadZone.classList.remove('hovered');
+});
+uploadZone.addEventListener('drop', e => {
+  e.preventDefault();
+  uploadZone.classList.remove('hovered');
+  const file = e.dataTransfer.files[0];
+  if (file) {
+    fileInput.files = e.dataTransfer.files;
+    fileInput.dispatchEvent(new Event('change'));
+  }
+});
+
+      
 
 /* ----------  ANALYZE SECTION  ---------- */
 async function analyzeData(filename) {
@@ -330,10 +365,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
       /* success UI */
       document.getElementById("preprocessResult").innerHTML = `
-        <p><strong>Preprocessing completed!</strong></p>
-        <p><strong>Remaining Rows:</strong> ${result.shape[0]}</p>
-        <p><strong>Remaining Columns:</strong> ${result.shape[1]}</p>
-        <p><strong>Remaining Features:</strong> ${result.columns.join(", ")}</p>
+        <p><strong><span class="highlight">Preprocessing completed!</span></strong></p>
+        <p><strong><span class="highlight">Remaining Rows:</span></strong> ${result.shape[0]}</p>
+        <p><strong><span class="highlight">Remaining Columns:</span></strong> ${result.shape[1]}</p>
+        <p><strong><span class="highlight">Remaining Features:</span></strong> ${result.columns.join(", ")}</p>
       `;
       document.getElementById("preprocessIndicator").textContent =
         "✅ Preprocessing completed successfully!";

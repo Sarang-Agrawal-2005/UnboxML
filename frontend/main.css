@@ -757,44 +757,61 @@ a:hover {
 }
 
 
-
-#streamlitSection {
-    min-height: 100vh;
-    background: var(--bg-primary);
-    padding: 2rem 0;
+.dropzone {
+  border: 2px dashed var(--primary);
+  padding: 2rem;
+  text-align: center;
+  cursor: pointer;
+  border-radius: var(--radius-lg);
+  background-color: rgba(0, 200, 255, 0.05);
+  transition: background 0.3s ease;
+}
+.dropzone:hover {
+  background-color: rgba(0, 200, 255, 0.1);
+}
+.dropzone i {
+  font-size: 2rem;
+  color: var(--primary);
+}
+.upload-info-card {
+  background: var(--card-bg);
+  padding: 1.5rem;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+}
+.dropzone.hovered {
+  background-color: rgba(0, 200, 255, 0.15);
+  border-color: var(--primary-dark);
+}
+.dropzone.dragging {
+  background-color: rgba(0, 200, 255, 0.2);
+  border-color: var(--primary-dark);
 }
 
-#streamlitSection .platform-container {
-    max-width: 1400px;
-    margin: 0 auto;
-    padding: 0 2rem;
+.table-scroll {
+  overflow-x: auto;
+  margin-top: 1rem;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
 }
 
-#streamlitSection .platform-section {
-    background: rgba(255, 255, 255, 0.05);
-    backdrop-filter: blur(10px);
-    border-radius: 24px;
-    padding: 2rem;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+.upload-preview-table {
+  min-width: max-content; /* ✅ Ensures wide tables are scrollable */
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95rem;
 }
 
-#streamlitSection iframe {
-    background: rgba(255, 255, 255, 0.02);
-    transition: all 0.3s ease;
+.upload-preview-table th,
+.upload-preview-table td {
+  padding: 0.5rem;
+  border: 1px solid var(--border-color);
+  text-align: left;
+  white-space: nowrap; /* Prevents cell content from wrapping */
 }
 
-#streamlitSection iframe:hover {
-    box-shadow: 0 12px 48px rgba(0, 200, 255, 0.15);
-    transform: translateY(-2px);
-}
-
-/* Mobile responsiveness */
-@media (max-width: 768px) {
-    #streamlitSection .platform-container {
-        padding: 0 1rem;
-    }
-    
-    #streamlitSection iframe {
-        height: 600px;
-    }
+.upload-preview-table th {
+  background-color: rgba(255, 255, 255, 0.05);
 }

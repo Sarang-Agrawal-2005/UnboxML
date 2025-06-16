@@ -282,7 +282,7 @@ def evaluate_model():
     if problem_type == "regression":
   # Regression metrics
         metrics = {
-            "r2"   : float(r2_score(y_test, y_pred)),
+            "R-squared"   : float(r2_score(y_test, y_pred)),
             "MAE"  : float(mean_absolute_error(y_test, y_pred)),
             "MSE"  : float(mean_squared_error(y_test, y_pred)),
             "RMSE" : float(mean_squared_error(y_test, y_pred) ** 0.5),
@@ -290,11 +290,11 @@ def evaluate_model():
         }
     else:  # Classification metrics
         metrics = {
-            "accuracy" : float(accuracy_score(y_test, y_pred)),
-            "precision": float(precision_score(y_test, y_pred, average="macro", zero_division=0)),
-            "recall"   : float(recall_score(y_test, y_pred, average="macro", zero_division=0)),
-            "f1"       : float(f1_score(y_test, y_pred, average="macro", zero_division=0)),
-            "confusion_matrix": confusion_matrix(y_test, y_pred).tolist(),
+            "Accuracy" : float(accuracy_score(y_test, y_pred)),
+            "Precision": float(precision_score(y_test, y_pred, average="macro", zero_division=0)),
+            "Recall"   : float(recall_score(y_test, y_pred, average="macro", zero_division=0)),
+            "F1 score"       : float(f1_score(y_test, y_pred, average="macro", zero_division=0)),
+            "Confusion Matrix": confusion_matrix(y_test, y_pred).tolist(),
         }
 
     return jsonify(metrics=metrics)
