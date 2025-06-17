@@ -25,6 +25,10 @@ from sklearn.metrics import (
 )
 from sklearn.model_selection import train_test_split
 
+import io, zipfile, textwrap
+from flask import send_file
+from jinja2 import Template
+
 
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*"}})
@@ -295,6 +299,9 @@ def train_model():
     # Save model
     model_path = os.path.join(MODEL_FOLDER, f"{model_id}.pkl")
     joblib.dump(model, model_path)
+    # save column order for inference
+    with open(os.path.join(MODEL_FOLDER, f"{model_id}_features.txt"), "w") as f:
+        f.write(",".join(X.columns))
 
     return jsonify({
         "message": "Model trained successfully",
@@ -371,6 +378,140 @@ def download_model():
 
     return send_file(model_path, as_attachment=True)
 
+def build_streamlit_zip(model_path: str, feature_list: list[str]) -> io.BytesIO:
+    """
+    Creates an in‑memory .zip that contains:
+      •   model.pkl
+      •   app.py      (auto‑generated Streamlit UI)
+      •   requirements.txt
+    Returns: BytesIO ready to send with send_file().
+    """
+    # ‼️ basic Streamlit template (Jinja2)
+    st_template = Template(textwrap.dedent("""
+        import streamlit as st, pandas as pd, joblib
+
+        model = joblib.load("model.pkl")
+        st.set_page_config(page_title="ZeroML Prediction App", layout="centered")
+
+        st.title("🔮 ZeroML Prediction App")
+        st.write("Enter feature values and click **Predict**")
+
+        # gather inputs
+        inputs = {}
+        {% for f in features %}
+        inputs["{{ f }}"] = st.number_input("{{ f }}")
+        {% endfor %}
+
+        if st.button("Predict"):
+            X = pd.DataFrame([inputs])
+            pred = model.predict(X)[0]
+            st.success(f"✅ Prediction: {pred}")
+    """))
+
+    buf = io.BytesIO()
+    with zipfile.ZipFile(buf, mode="w", compression=zipfile.ZIP_DEFLATED) as z:
+        # 1) model
+        z.write(model_path, arcname="model.pkl")
+
+        # 2) app.py
+        z.writestr("app.py", st_template.render(features=feature_list))
+
+        # 3) requirements
+        z.writestr("requirements.txt",
+                   "streamlit\npandas\nscikit-learn\njoblib\n")
+
+    buf.seek(0)
+    return buf
+
+@app.route("/generate_streamlit", methods=["POST"])
+def generate_streamlit():
+    """
+    Body  → { "model_id": "RandomForestReg" }
+    Returns a .zip file the browser will download.
+    """
+    data     = request.get_json(force=True)
+    model_id = data.get("model_id")
+
+    if not model_id:
+        return jsonify(error="model_id missing"), 400
+
+    model_path = os.path.join(MODEL_FOLDER, f"{model_id}.pkl")
+    if not os.path.exists(model_path):
+        return jsonify(error="model not found – train first"), 404
+
+    # retrieve the feature list saved alongside the model during training
+    meta_path = os.path.join(MODEL_FOLDER, f"{model_id}_features.txt")
+    if not os.path.exists(meta_path):
+        return jsonify(error="feature metadata not found"), 500
+    with open(meta_path) as f:
+        feature_list = f.read().strip().split(",")
+
+    zip_buf = build_streamlit_zip(model_path, feature_list)
+
+    return send_file(zip_buf,
+                     mimetype="application/zip",
+                     as_attachment=True,
+                     download_name=f"{model_id}_streamlit_app.zip")
+
+
+def build_api_zip(model_path: str, feature_list: list[str]) -> io.BytesIO:
+    """
+    Creates a zip file in memory containing:
+      - serve_model.py (Flask API)
+      - model.pkl
+      - requirements.txt
+    """
+    flask_template = Template(textwrap.dedent("""
+        from flask import Flask, request, jsonify
+        import pandas as pd
+        import joblib
+
+        app = Flask(__name__)
+        model = joblib.load("model.pkl")
+
+        @app.route('/predict', methods=['POST'])
+        def predict():
+            data = request.get_json(force=True).get("input", [])
+            df = pd.DataFrame(data)
+            pred = model.predict(df).tolist()
+            return jsonify({"predictions": pred})
+
+        if __name__ == '__main__':
+            app.run(debug=True)
+    """))
+
+    buf = io.BytesIO()
+    with zipfile.ZipFile(buf, mode="w", compression=zipfile.ZIP_DEFLATED) as z:
+        z.write(model_path, arcname="model.pkl")
+
+        z.writestr("serve_model.py", flask_template.render(features=feature_list))
+        z.writestr("requirements.txt", "flask\npandas\nscikit-learn\njoblib\n")
+
+    buf.seek(0)
+    return buf
+@app.route("/generate_api_script", methods=["POST"])
+def generate_api_script():
+    data     = request.get_json(force=True)
+    model_id = data.get("model_id")
+
+    if not model_id:
+        return jsonify(error="model_id missing"), 400
+
+    model_path = os.path.join(MODEL_FOLDER, f"{model_id}.pkl")
+    if not os.path.exists(model_path):
+        return jsonify(error="model not found"), 404
+
+    meta_path = os.path.join(MODEL_FOLDER, f"{model_id}_features.txt")
+    if not os.path.exists(meta_path):
+        return jsonify(error="feature metadata not found"), 500
+    with open(meta_path) as f:
+        features = f.read().strip().split(",")
+
+    zip_buf = build_api_zip(model_path, features)
+    return send_file(zip_buf,
+                     mimetype="application/zip",
+                     as_attachment=True,
+                     download_name=f"{model_id}_api_script.zip")
 
 
 if __name__ == "__main__":

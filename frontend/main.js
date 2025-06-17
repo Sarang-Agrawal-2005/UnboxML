@@ -644,9 +644,13 @@ document.addEventListener("DOMContentLoaded", ()=>{
     } else {
       document.getElementById("trainingOutput").innerHTML = `
         <p><strong>✅ ${modelName} trained successfully!</strong></p>
+        
 
       `;
     }
+    sessionStorage.setItem("trainedModelId", modelMeta.id);
+    sessionStorage.setItem("trainedModelName", modelName); 
+    sessionStorage.setItem("trainedModelParams", JSON.stringify(params));
   });
 });
 
@@ -729,3 +733,77 @@ document.getElementById("downloadModel").addEventListener("click", () => {
   link.click();
   document.body.removeChild(link);
 });
+
+// ── Streamlit app download ───────────────────────────────────────────────────
+const dlBtn = document.getElementById("downloadStreamlitBtn");
+if (dlBtn) {
+  dlBtn.addEventListener("click", async () => {
+    const modelId = sessionStorage.getItem("trainedModelId");
+    if (!modelId) { alert("⚠️ Train a model first."); return; }
+
+    dlBtn.disabled = true;
+    document.getElementById("downloadStatus").textContent = "⏳ Building package…";
+
+    try {
+      const res  = await fetch("http://127.0.0.1:5000/generate_streamlit", {
+        method : "POST",
+        headers: { "Content-Type": "application/json" },
+        body   : JSON.stringify({ model_id: modelId })
+      });
+
+      if (!res.ok) throw new Error((await res.json()).error);
+
+      const blob = await res.blob();
+      const url  = window.URL.createObjectURL(blob);
+      const a    = document.createElement("a");
+      a.href = url;
+      a.download = `${modelId}_streamlit_app.zip`;
+      a.click();
+      window.URL.revokeObjectURL(url);
+
+      document.getElementById("downloadStatus")
+              .textContent = "✅ Download ready!";
+    } catch(err) {
+      document.getElementById("downloadStatus")
+              .textContent = "❌ " + err.message;
+    } finally {
+      dlBtn.disabled = false;
+    }
+  });
+}
+
+// ── API Script download ──────────────────────────────────────────────────────
+const apiBtn = document.getElementById("downloadApiBtn");
+if (apiBtn) {
+  apiBtn.addEventListener("click", async () => {
+    const modelId = sessionStorage.getItem("trainedModelId");
+    if (!modelId) { alert("⚠️ Train a model first."); return; }
+
+    apiBtn.disabled = true;
+    document.getElementById("apiDownloadStatus").textContent = "⏳ Building API package…";
+
+    try {
+      const res = await fetch("http://127.0.0.1:5000/generate_api_script", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ model_id: modelId })
+      });
+
+      if (!res.ok) throw new Error((await res.json()).error);
+
+      const blob = await res.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `${modelId}_api_script.zip`;
+      a.click();
+      window.URL.revokeObjectURL(url);
+
+      document.getElementById("apiDownloadStatus").textContent = "✅ Download ready!";
+    } catch (err) {
+      document.getElementById("apiDownloadStatus").textContent = "❌ " + err.message;
+    } finally {
+      apiBtn.disabled = false;
+    }
+  });
+}

@@ -330,9 +330,58 @@
       <div id="deploy" class="pipeline-step">
         <div class="step-card">
           <div class="logo" style="padding: 1.5rem 2rem; text-align: center;">Deploy<span class="highlight"> Model</span></div>
-          <p>Download your <span class="highlight">trained model</span> as a .pkl file for future use or integration into other apps.</p>
+          <p>Download your trained model as a <span class = "highlight">.pkl file</span> for future use or integration into other apps.</p>
           <a id="downloadModel" href="#" class="btn btn-primary">Download Model</a>
         </div>
+        <div class="step-card">
+          <div class="logo" style="padding:1.5rem 2rem;text-align:center;">
+              Streamlit<span class="highlight"> Web App</span>
+          </div>
+
+          <p style="margin-bottom:1rem;">
+              Download a Zip file containing a
+              ready‑to‑run <span class = "highlight">Streamlit web app</span>.
+          </p>
+
+          <ol style="text-align:left;font-size:0.95rem;margin-left:1rem;">
+            <li>Download your ready‑to‑run web app</li>
+            <li>Unzip the download</li>
+            <li>Open the folder in your code editor</li>
+            <li>Install dependencies → <code>pip install -r requirements.txt</code></li>
+            <li>Run → <code>streamlit run app.py</code></li>
+          </ol>
+
+          <button id="downloadStreamlitBtn"
+                  class="btn btn-primary"
+                  style="margin-top:1rem;">Download Streamlit App</button>
+
+          <div id="downloadStatus" style="margin-top:1rem;"></div>
+        </div>
+        <div class="step-card">
+          <div class="logo" style="padding:1.5rem 2rem;text-align:center;">
+              Flask<span class="highlight"> API</span> Deployment
+          </div>
+
+          <p style="margin-bottom:1rem;">
+              Get a <span class = "highlight">REST API SCRIPT</span> to deploy your trained model.
+          </p>
+
+          <ol style="text-align:left;font-size:0.95rem;margin-left:1rem;">
+            <li>Download your Flask API Script</li>
+            <li>Unzip the download</li>
+            <li>Install dependencies → <code>pip install -r requirements.txt</code></li>
+            <li>Start server → <code>python serve_model.py</code></li>
+            <li>POST data to: <code>http://localhost:5000/predict</code></li>
+          </ol>
+
+          <button id="downloadApiBtn"
+                  class="btn btn-primary"
+                  style="margin-top:1rem;">Download Flask API Script</button>
+
+          <div id="apiDownloadStatus" style="margin-top:1rem;"></div>
+        </div>
+
+
       </div>
     </section>
   </div>
