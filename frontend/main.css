@@ -323,9 +323,7 @@ a:hover {
     justify-content: center; /* Center the buttons */
 }
 
-.hero-image {
-    display: none !important; /* This will hide the SVG completely */
-}
+
 
 /* ===== Features Section ===== */
 .features {
@@ -601,6 +599,7 @@ a:hover {
 .tab-content.active {
     display: grid;
 }
+
 
 .dashboard-card {
     background: rgba(10, 14, 23, 0.5);

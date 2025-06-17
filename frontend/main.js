@@ -149,6 +149,18 @@ function initTabs() {
     const tabButtons = document.querySelectorAll('.tab-btn');
     const tabContents = document.querySelectorAll('.tab-content');
     
+    // Initialize first tab as active on page load
+    if (tabButtons.length > 0 && tabContents.length > 0) {
+        // Remove any existing active classes
+        tabButtons.forEach(btn => btn.classList.remove('active'));
+        tabContents.forEach(content => content.classList.remove('active'));
+        
+        // Set first tab as active
+        tabButtons[0].classList.add('active');
+        tabContents[0].classList.add('active');
+    }
+    
+    // Add click event listeners
     tabButtons.forEach(button => {
         button.addEventListener('click', () => {
             const targetTab = button.dataset.tab;
@@ -159,10 +171,14 @@ function initTabs() {
             
             // Add active class to clicked button and corresponding content
             button.classList.add('active');
-            document.getElementById(targetTab).classList.add('active');
+            const targetContent = document.getElementById(targetTab);
+            if (targetContent) {
+                targetContent.classList.add('active');
+            }
         });
     });
 }
+
 
 const getStartedBtn = document.getElementById("getStartedBtn");
 if (getStartedBtn) {

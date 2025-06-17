@@ -43,7 +43,7 @@
   </g>
 
   <!-- Upload Text -->
-  <text x="200" y="220" font-family="Arial" font-size="16" fill="#ffffff" text-anchor="middle">Drag &amp; Drop Your CSV File</text>
+  <!-- <text x="200" y="220" font-family="Arial" font-size="16" fill="#ffffff" text-anchor="middle">Drag &amp; Drop Your CSV File</text> -->
 
   <!-- Animated Elements -->
   <g opacity="0.7">
