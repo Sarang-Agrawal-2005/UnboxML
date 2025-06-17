@@ -183,6 +183,8 @@
 
   </style>
 <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+<script src="https://cdn.plot.ly/plotly-2.32.0.min.js"></script>
+
 </head>
 <body style="position: relative; min-height: 100vh; overflow-x: hidden; background-color: var(--background);">
   <div class="particles-container" id="particles-js"></div>
@@ -227,10 +229,28 @@
 
       <div id="analyze" class="pipeline-step">
         <div class="step-card">
-          <div class="logo" style="padding: 1.5rem 2rem; text-align: center;">Exploratory<span class="highlight"> Data Analysis</span></div>
-          <div id="dataSummary"></div>
+          <div class="logo" style="padding:1.5rem 2rem;text-align:center;">
+            Exploratory<span class="highlight"> Data Analysis</span>
+          </div>
+
+          <!-- Correlation heat‑map -->
+          <h4>Correlation <span class = "highlight">HeatMap</span></h4>
+          <div id="corrHeatmap" style="height:500px;"></div>
+
+          <!-- Data‑set‑level summary that you already showed -->
+          <div id="dataSummary" style="margin-top:1.5rem;"></div>
+
+          <!-- Column‑selector & per‑column analysis -->
+          <h4>Feature <span class = "highlight">Analysis</span></h4>
+          <label for="columnSelect" style="margin-top:2rem;">Select Column</label>
+          <select id="columnSelect"></select>
+
+          <div id="columnAnalysis" style="margin-top:1.5rem;">
+            <!-- chart + stats for the chosen column appear here -->
+          </div>
         </div>
       </div>
+
 
       <div id="preprocess" class="pipeline-step">
         <div class="step-card">

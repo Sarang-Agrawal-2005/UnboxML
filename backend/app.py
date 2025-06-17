@@ -1,6 +1,7 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 import pandas as pd
+import numpy as np
 import os
 import joblib
 from sklearn.ensemble import RandomForestClassifier
@@ -83,8 +84,65 @@ def analyze():
         "numeric_features": df.select_dtypes(include='number').columns.tolist(),
         "categorical_features": df.select_dtypes(include='object').columns.tolist()
     }
+    # Encode categorical columns for correlation
+    df_encoded = df.copy()
+    le = LabelEncoder()
+    for col in df_encoded.select_dtypes(include='object').columns:
+        try:
+            df_encoded[col] = le.fit_transform(df_encoded[col].astype(str))
+        except:
+            df_encoded[col] = -1  # fallback if encoding fails
+
+    corr = df_encoded.corr().round(2).fillna(0)
+
+    analysis["corr_matrix"]   = corr.values.tolist()      # 2‑D list  (heatmap data)
+    analysis["corr_columns"]  = corr.columns.tolist()     # column/row labels
 
     return jsonify(analysis)
+
+@app.route('/column_analysis', methods=['POST'])
+def column_analysis():
+    payload   = request.get_json(force=True)
+    filename  = payload.get("filename")
+    column    = payload.get("column")
+
+    if not filename or not column:
+        return jsonify(error="filename / column missing"), 400
+
+    path = os.path.join(UPLOAD_FOLDER, filename)
+    if not os.path.exists(path):
+        return jsonify(error="file not found"), 404
+
+    df      = pd.read_csv(path)
+    if column not in df.columns:
+        return jsonify(error="column not in dataset"), 400
+
+    s       = df[column].dropna()
+    numeric = pd.api.types.is_numeric_dtype(s)
+
+    if numeric:
+        counts, bins = np.histogram(s, bins="auto")
+        return jsonify({
+            "dtype" : "numeric",
+            "hist"  : {"bins": bins.tolist(), "counts": counts.tolist()},
+            "stats" : s.describe().round(3).to_dict()
+        })
+    else:
+        vc = s.value_counts().head(20)
+        
+        stats = {
+            "count" : int(s.count()),
+            "unique": int(s.nunique()),
+            "top"   : s.mode().iloc[0] if not s.mode().empty else None,
+            "freq"  : int(vc.iloc[0]) if not vc.empty else 0
+        }
+
+        return jsonify({
+            "dtype"   : "categorical",
+            "counts"  : vc.to_dict(),
+            "stats"   : stats
+        })
+
 
 @app.route('/preprocess', methods=['POST'])
 def preprocess():

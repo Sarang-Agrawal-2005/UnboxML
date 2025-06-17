@@ -288,12 +288,21 @@ async function analyzeData(filename) {
     // ✅ Store for use in preprocessing, training, evaluation
     sessionStorage.setItem("analysisInfo", JSON.stringify(data));
 
-    let html = `
-      <h4>Numeric Features</h4>
-      <pre>${JSON.stringify(data.describe_numeric, null, 2)}</pre>
+     buildCorrelationHeatmap(data.corr_matrix, data.corr_columns);
 
-      <h4>Categorical Features</h4>
-      <pre>${JSON.stringify(data.describe_categorical, null, 2)}</pre>
+    const select = document.getElementById("columnSelect");
+    select.innerHTML = '<option value="">-- choose column --</option>';
+    data.columns.forEach(c =>
+      select.insertAdjacentHTML("beforeend", `<option value="${c}">${c}</option>`));
+
+    select.onchange = () => {
+      if (select.value) fetchColumnAnalysis(filename, select.value)
+        .catch(err => console.error("Column analysis error:", err));
+      else document.getElementById("columnAnalysis").innerHTML = "";
+    };
+
+    let html = `
+      
     `;
 
     document.getElementById("dataSummary").innerHTML = html;
@@ -308,6 +317,100 @@ async function analyzeData(filename) {
     document.getElementById("dataSummary").innerHTML =
       `<p style="color:red;">Failed to analyze dataset: ${error.message}</p>`;
   }
+}
+
+/* ────────────  PLOT HELPERS  ─────────────────────────────────────────────── */
+
+function getCss(varName, fallback="#fff") {
+  return getComputedStyle(document.documentElement).getPropertyValue(varName).trim() || fallback;
+}
+
+/* === Heat‑map === */
+function buildCorrelationHeatmap(matrix, labels) {
+  const data = [{
+    z         : matrix,
+    x         : labels,
+    y         : labels,
+    type      : "heatmap",
+    colorscale: [
+      [0,  "rgba(0,200,255,0.2)"],
+      [1,  "rgba(157,78,221,0.9)"]
+    ],
+    hoverongaps:false
+  }];
+
+  const layout = {
+    margin        : {l:90,r:20,t:10,b:90},
+    paper_bgcolor : "rgba(0,0,0,0)",
+    plot_bgcolor  : "rgba(0,0,0,0)",
+    font          : {color: getCss("--text-primary", "#FFFFFF")},
+    xaxis         : {tickangle:-45}
+  };
+
+  Plotly.newPlot("corrHeatmap", data, layout, {responsive:true});
+}
+
+/* === Histogram === */
+function buildHistogram(bins, counts, col) {
+  const data = [{x: bins.slice(0,-1),  // last edge unused
+                 y: counts,
+                 type:"bar",
+                 marker:{line:{width:0}}}];
+
+  const layout = {
+    title         : `Distribution of ${col}`,
+    paper_bgcolor : "rgba(0,0,0,0)",
+    plot_bgcolor  : "rgba(0,0,0,0)",
+    font          : {color:getCss("--text-primary", "#fff")},
+    margin        : {t:40,l:50,r:20,b:50}
+  };
+  Plotly.newPlot("columnChart", data, layout, {responsive:true});
+}
+
+/* === Pie === */
+function buildPie(labels, values, col) {
+  const data = [{
+    labels : labels,
+    values : values,
+    type   : "pie",
+    hole   : 0.35,
+    textinfo:"label+percent"
+  }];
+  const layout = {
+    title         : `${col} – category share`,
+    paper_bgcolor : "rgba(0,0,0,0)",
+    font          : {color:getCss("--text-primary","#fff")},
+    margin        : {t:40,l:20,r:20,b:20}
+  };
+  Plotly.newPlot("columnChart", data, layout, {responsive:true});
+}
+
+/* === Column‑analysis orchestration === */
+async function fetchColumnAnalysis(filename, column) {
+  const res  = await fetch("http://127.0.0.1:5000/column_analysis", {
+                 method : "POST",
+                 headers: {"Content-Type":"application/json"},
+                 body   : JSON.stringify({filename, column})
+               });
+  if (!res.ok) throw new Error(await res.text());
+  const data = await res.json();
+
+  // Prepare container
+  const el   = document.getElementById("columnAnalysis");
+  el.innerHTML = `<div id="columnChart" style="height:400px;"></div>
+                  <pre id="columnStats" style="white-space:pre-wrap;"></pre>`;
+
+  // Draw chart
+  if (data.dtype === "numeric") {
+    buildHistogram(data.hist.bins, data.hist.counts, column);
+  } else {
+    const labels = Object.keys(data.counts);
+    const values = Object.values(data.counts);
+    buildPie(labels, values, column);
+  }
+  // Stats text
+  document.getElementById("columnStats").textContent =
+      JSON.stringify(data.stats, null, 2);
 }
 
 
