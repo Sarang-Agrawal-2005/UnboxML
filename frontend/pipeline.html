@@ -308,14 +308,34 @@
 
       <div id="evaluate" class="pipeline-step">
         <div class="step-card">
-          <div class="logo" style="padding: 1.5rem 2rem; text-align: center;">Model<span class="highlight"> Evaluation</span></div>
+          <div class="logo" style="padding: 1.5rem 2rem; text-align: center;">
+            Model<span class="highlight"> Evaluation</span>
+          </div>
           <button id="runEvaluation">Evaluate</button>
           <div id="evalSpinner" style="display:none;margin:1rem 0;">
             <i class="fas fa-spinner fa-spin"></i> Evaluating…
           </div>
+
+          <div id="evaluationSummary" style="margin-bottom: 1rem;"></div>
           <div id="evaluationMetrics"></div>
+
+          <!-- <details style="margin-top: 1rem;">
+            <summary style="cursor: pointer; font-weight: bold;">ℹ️ What do these metrics mean?</summary>
+            <ul style="padding-left: 1.5rem;">
+              <li><strong>Accuracy</strong>: % of correct predictions overall (classification).</li>
+              <li><strong>Precision</strong>: Correctness of predicted positives.</li>
+              <li><strong>Recall</strong>: Coverage of actual positives.</li>
+              <li><strong>F1 Score</strong>: Balance of Precision and Recall.</li>
+              <li><strong>R-squared</strong>: Proportion of variance explained by model (regression).</li>
+              <li><strong>MAE</strong>: Average absolute error between predicted and actual values.</li>
+              <li><strong>RMSE</strong>: Root of average squared errors.</li>
+            </ul>
+          </details> -->
+
+          <div id="evalCharts" style="margin-top: 2rem;"></div>
         </div>
       </div>
+
 
 
       <!-- <div id="predict" class="pipeline-step">
@@ -329,9 +349,18 @@
 
       <div id="deploy" class="pipeline-step">
         <div class="step-card">
-          <div class="logo" style="padding: 1.5rem 2rem; text-align: center;">Deploy<span class="highlight"> Model</span></div>
+          <div class="logo" style="padding: 1.5rem 2rem; text-align: center;">Serailized<span class="highlight"> Pickle File</span></div>
           <p>Download your trained model as a <span class = "highlight">.pkl file</span> for future use or integration into other apps.</p>
-          <a id="downloadModel" href="#" class="btn btn-primary">Download Model</a>
+          <ol style="text-align:left;font-size:0.95rem;margin-left:1rem;">
+            <li>Download the serialized pickle file containing your model</li>
+            <li>Move the file to your project folder</li>
+            <li>Install dependencies → <code class = "highlight">pip install joblib</code></li>
+            <li>Load it in your Python script → <code class = "highlight">model = joblib.load("YourModel.pkl")</code></li>
+            <li>Make predictions → <code class = "highlight">predictions = model.predict(Your_Dataframe)</code></li>
+          </ol>
+          <button id="downloadModel"
+                  class="btn btn-primary"
+                  style="margin-top:1rem;">Download Pickle File</button>
         </div>
         <div class="step-card">
           <div class="logo" style="padding:1.5rem 2rem;text-align:center;">
@@ -347,8 +376,8 @@
             <li>Download your ready‑to‑run web app</li>
             <li>Unzip the download</li>
             <li>Open the folder in your code editor</li>
-            <li>Install dependencies → <code>pip install -r requirements.txt</code></li>
-            <li>Run → <code>streamlit run app.py</code></li>
+            <li>Install dependencies → <code class = "highlight">pip install -r requirements.txt</code></li>
+            <li>Run → <code class = "highlight">streamlit run app.py</code></li>
           </ol>
 
           <button id="downloadStreamlitBtn"
@@ -369,9 +398,9 @@
           <ol style="text-align:left;font-size:0.95rem;margin-left:1rem;">
             <li>Download your Flask API Script</li>
             <li>Unzip the download</li>
-            <li>Install dependencies → <code>pip install -r requirements.txt</code></li>
-            <li>Start server → <code>python serve_model.py</code></li>
-            <li>POST data to: <code>http://localhost:5000/predict</code></li>
+            <li>Install dependencies → <code class = "highlight">>pip install -r requirements.txt</code></li>
+            <li>Start server → <code class = "highlight">>python serve_model.py</code></li>
+            <li>POST data to: <code class = "highlight">>http://localhost:5000/predict</code></li>
           </ol>
 
           <button id="downloadApiBtn"

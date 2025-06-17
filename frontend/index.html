@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ZeroML - No-Code AutoML Platform</title>
+    <title>UnboxML - No-Code AutoML Platform</title>
     <link rel="stylesheet" href="main.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -17,7 +17,7 @@
         <!-- Navigation Bar -->
         <nav class="navbar">
             <div class="logo">
-                <span>Zero<span class="highlight">ML</span></span>
+                <span>Unbox<span class="highlight">ML</span></span>
             </div>
             <div class="nav-links">
                 <a href="#features" class="nav-link">Features</a>
@@ -105,7 +105,7 @@
         <section class="how-it-works" id="how-it-works">
             <div class="section-header">
                 <h2>How It <span class="highlight">Works</span></h2>
-                <p>Build your machine learning model using our <span class="highlight">ZeroML Pipeline</span> with the following steps</p>
+                <p>Build your machine learning model using our <span class="highlight">AutoML Pipeline</span> with the following steps</p>
             </div>
             <div class="steps-container">
                 <div class="step">
@@ -293,24 +293,38 @@
         <!-- Dashboard Preview Section -->
         <section class="dashboard-preview" id="dashboard">
             <div class="section-header">
-                <h2>Zero<span class="highlight">ML Pipeline</span></h2>
-                <p>Dedicated tools for your machine learning workflow</p>
+                <h2>Interactive <span class="highlight">Dashboard</span></h2>
+                <p>Powerful visualization tools for your machine learning workflow</p>
             </div>
             <div class="dashboard-container">
                 <div class="dashboard-tabs">
-                    <button class="tab-btn" data-tab="preprocessing-tab">Upload Data</button>
+                    <button class="tab-btn active" data-tab="upload-tab">Upload Data</button>
                     <button class="tab-btn active" data-tab="data-tab">Data Explorer</button>
                     <button class="tab-btn" data-tab="preprocessing-tab">Preprocessing</button>
                     <button class="tab-btn" data-tab="training-tab">Training</button>
                     <button class="tab-btn" data-tab="evaluation-tab">Evaluation</button>
-                    <button class="tab-btn" data-tab="preprocessing-tab">Deployment</button>
+                    <button class="tab-btn active" data-tab="deploy-tab">Deploy Model</button>
                 </div>
                 <div class="dashboard-content">
-                    <div class="tab-content active" id="data-tab">
+                    <div class="tab-content active" id="upload-tab">
+                        <div class="dashboard-card">
+                            <h3>Upload Zone</h3>
+                            <div class="data-preview">
+                                <img src="images/upload-illustration.svg" alt="Data Preview">
+                            </div>
+                        </div>
                         <div class="dashboard-card">
                             <h3>Dataset Overview</h3>
+                            <div class="heatmap-preview">
+                                <img src="images/data-preview.svg" alt="Correlation Heatmap">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-content active" id="data-tab">
+                        <div class="dashboard-card">
+                            <h3>Feature Analysis</h3>
                             <div class="data-preview">
-                                <img src="images/data-preview.svg" alt="Data Preview">
+                                <img src="images/feature_distribution.svg" alt="Data Preview">
                             </div>
                         </div>
                         <div class="dashboard-card">
@@ -362,15 +376,30 @@
                             </div>
                         </div>
                     </div>
+                    <div class="tab-content" id="deploy-tab">
+                        <div class="dashboard-card">
+                            <h3>Streamlit Web App</h3>
+                            <div class="metrics-preview">
+                                <img src="images/streamlit.svg" alt="Performance Metrics">
+                            </div>
+                        </div>
+                        <div class="dashboard-card">
+                            <h3>Flask API Script</h3>
+                            <div class="predictions-preview">
+                                <img src="images/flask_api.svg" alt="Deployment Options">
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
+
 
         <!-- Call to Action Section -->
         <section class="cta">
             <div class="cta-content">
                 <h2>Ready to Build Your <span class="highlight">ML Model?</span></h2>
-                <p>Get started with ZeroML today and deploy your first model in minutes</p>
+                <p>Get started with UnboxML today and deploy your first model in minutes</p>
                 <button id="ctaGetStartedBtn" class="btn btn-primary btn-lg">Start Building Now</button>
             </div>
             <div class="cta-image">
@@ -382,7 +411,7 @@
         <footer class="footer">
             <div class="footer-content">
                 <div class="footer-logo">
-                    <span>Zero<span class="highlight">ML</span></span>
+                    <span>Unbox<span class="highlight">ML</span></span>
                     <p>Build ML models without code</p>
                 </div>
                 <!-- <div class="footer-links">
@@ -417,7 +446,7 @@
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>&copy; 2023 ZeroML. All rights reserved.</p>
+                <p>&copy; 2023 UnboxML. All rights reserved.</p>
                 <div class="social-links">
                     <!-- <a href="#"><i class="fab fa-twitter"></i></a> -->
                     <a href="#"><i class="fab fa-linkedin"></i></a>

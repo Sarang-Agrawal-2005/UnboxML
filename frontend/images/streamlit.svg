@@ -1,0 +1,55 @@
+<svg width="400" height="300" viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1a1a2e;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#16213e;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="buttonGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#00d4ff;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#8a2be2;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="400" height="300" fill="url(#bgGradient)" rx="15"/>
+  
+  <!-- Header circles -->
+  <circle cx="320" cy="25" r="6" fill="#666"/>
+  <circle cx="340" cy="25" r="6" fill="#00d4ff"/>
+  <circle cx="360" cy="25" r="6" fill="#8a2be2"/>
+  
+  <!-- Title -->
+  <text x="200" y="60" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="24" font-weight="bold">
+    Streamlit <tspan fill="#00d4ff">Web App</tspan>
+  </text>
+  
+  <!-- Subtitle -->
+  <text x="200" y="85" text-anchor="middle" fill="#ccc" font-family="Arial, sans-serif" font-size="14">
+    Download a Zip file containing a ready‑to‑run Streamlit web app.
+  </text>
+  
+  <!-- Instructions -->
+  <text x="30" y="115" fill="white" font-family="Arial, sans-serif" font-size="12">
+    1. Download your ready‑to‑run web app
+  </text>
+  <text x="30" y="135" fill="white" font-family="Arial, sans-serif" font-size="12">
+    2. Unzip the download
+  </text>
+  <text x="30" y="155" fill="white" font-family="Arial, sans-serif" font-size="12">
+    3. Open the folder in your code editor
+  </text>
+  <text x="30" y="175" fill="white" font-family="Arial, sans-serif" font-size="12">
+    4. Install dependencies → 
+    <tspan fill="#00d4ff">pip install -r requirements.txt</tspan>
+  </text>
+  <text x="30" y="195" fill="white" font-family="Arial, sans-serif" font-size="12">
+    5. Run → 
+    <tspan fill="#00d4ff">streamlit run app.py</tspan>
+  </text>
+  
+  <!-- Download Button -->
+  <rect x="50" y="230" width="300" height="40" fill="url(#buttonGradient)" rx="20"/>
+  <text x="200" y="254" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="16" font-weight="bold">
+    Download Streamlit App
+  </text>
+</svg>

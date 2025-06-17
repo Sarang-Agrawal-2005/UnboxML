@@ -1,0 +1,150 @@
+<svg width="800" height="600" viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1a1a2e;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#16213e;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="barGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#00d4ff;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#0099cc;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="800" height="600" fill="url(#bgGradient)" rx="10"/>
+  
+  <!-- Title -->
+  <text x="400" y="40" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="20" font-weight="bold">
+    Distribution of selected feature
+  </text>
+  
+  <!-- Chart Area Background -->
+  <rect x="80" y="70" width="640" height="350" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+  
+  <!-- Grid Lines -->
+  <g stroke="rgba(255,255,255,0.2)" stroke-width="0.5">
+    <!-- Horizontal grid lines -->
+    <line x1="80" y1="140" x2="720" y2="140"/>
+    <line x1="80" y1="210" x2="720" y2="210"/>
+    <line x1="80" y1="280" x2="720" y2="280"/>
+    <line x1="80" y1="350" x2="720" y2="350"/>
+    
+    <!-- Vertical grid lines -->
+    <line x1="160" y1="70" x2="160" y2="420"/>
+    <line x1="240" y1="70" x2="240" y2="420"/>
+    <line x1="320" y1="70" x2="320" y2="420"/>
+    <line x1="400" y1="70" x2="400" y2="420"/>
+    <line x1="480" y1="70" x2="480" y2="420"/>
+    <line x1="560" y1="70" x2="560" y2="420"/>
+    <line x1="640" y1="70" x2="640" y2="420"/>
+  </g>
+  
+  <!-- Y-axis labels -->
+  <text x="70" y="425" text-anchor="end" fill="white" font-family="Arial, sans-serif" font-size="12">0</text>
+  <text x="70" y="355" text-anchor="end" fill="white" font-family="Arial, sans-serif" font-size="12">500</text>
+  <text x="70" y="285" text-anchor="end" fill="white" font-family="Arial, sans-serif" font-size="12">1000</text>
+  <text x="70" y="215" text-anchor="end" fill="white" font-family="Arial, sans-serif" font-size="12">1500</text>
+  <text x="70" y="145" text-anchor="end" fill="white" font-family="Arial, sans-serif" font-size="12">2000</text>
+  <text x="70" y="75" text-anchor="end" fill="white" font-family="Arial, sans-serif" font-size="12">2500</text>
+  
+  <!-- X-axis labels -->
+  <text x="80" y="440" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="12">0</text>
+  <text x="240" y="440" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="12">20</text>
+  <text x="400" y="440" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="12">40</text>
+  <text x="560" y="440" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="12">60</text>
+  <text x="720" y="440" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="12">80</text>
+  
+  <!-- Distribution bars -->
+  <g fill="url(#barGradient)">
+    <rect x="82" y="400" width="6" height="20"/>
+    <rect x="90" y="390" width="6" height="30"/>
+    <rect x="98" y="380" width="6" height="40"/>
+    <rect x="106" y="370" width="6" height="50"/>
+    <rect x="114" y="360" width="6" height="60"/>
+    <rect x="122" y="350" width="6" height="70"/>
+    <rect x="130" y="340" width="6" height="80"/>
+    <rect x="138" y="330" width="6" height="90"/>
+    <rect x="146" y="320" width="6" height="100"/>
+    <rect x="154" y="310" width="6" height="110"/>
+    <rect x="162" y="300" width="6" height="120"/>
+    <rect x="170" y="290" width="6" height="130"/>
+    <rect x="178" y="280" width="6" height="140"/>
+    <rect x="186" y="270" width="6" height="150"/>
+    <rect x="194" y="260" width="6" height="160"/>
+    <rect x="202" y="250" width="6" height="170"/>
+    <rect x="210" y="240" width="6" height="180"/>
+    <rect x="218" y="230" width="6" height="190"/>
+    <rect x="226" y="220" width="6" height="200"/>
+    <rect x="234" y="210" width="6" height="210"/>
+    <rect x="242" y="200" width="6" height="220"/>
+    <rect x="250" y="190" width="6" height="230"/>
+    <rect x="258" y="180" width="6" height="240"/>
+    <rect x="266" y="170" width="6" height="250"/>
+    <rect x="274" y="160" width="6" height="260"/>
+    <rect x="282" y="150" width="6" height="270"/>
+    <rect x="290" y="140" width="6" height="280"/>
+    <rect x="298" y="130" width="6" height="290"/>
+    <rect x="306" y="120" width="6" height="300"/>
+    <rect x="314" y="110" width="6" height="310"/>
+    <rect x="322" y="100" width="6" height="320"/>
+    <rect x="330" y="95" width="6" height="325"/>
+    <rect x="338" y="90" width="6" height="330"/>
+    <rect x="346" y="85" width="6" height="335"/>
+    <rect x="354" y="80" width="6" height="340"/>
+    <rect x="362" y="75" width="6" height="345"/>
+    <rect x="370" y="70" width="6" height="350"/>
+    <rect x="378" y="75" width="6" height="345"/>
+    <rect x="386" y="80" width="6" height="340"/>
+    <rect x="394" y="85" width="6" height="335"/>
+    <rect x="402" y="90" width="6" height="330"/>
+    <rect x="410" y="95" width="6" height="325"/>
+    <rect x="418" y="100" width="6" height="320"/>
+    <rect x="426" y="110" width="6" height="310"/>
+    <rect x="434" y="120" width="6" height="300"/>
+    <rect x="442" y="130" width="6" height="290"/>
+    <rect x="450" y="140" width="6" height="280"/>
+    <rect x="458" y="150" width="6" height="270"/>
+    <rect x="466" y="160" width="6" height="260"/>
+    <rect x="474" y="170" width="6" height="250"/>
+    <rect x="482" y="180" width="6" height="240"/>
+    <rect x="490" y="190" width="6" height="230"/>
+    <rect x="498" y="200" width="6" height="220"/>
+    <rect x="506" y="210" width="6" height="210"/>
+    <rect x="514" y="220" width="6" height="200"/>
+    <rect x="522" y="230" width="6" height="190"/>
+    <rect x="530" y="240" width="6" height="180"/>
+    <rect x="538" y="250" width="6" height="170"/>
+    <rect x="546" y="260" width="6" height="160"/>
+    <rect x="554" y="270" width="6" height="150"/>
+    <rect x="562" y="280" width="6" height="140"/>
+    <rect x="570" y="290" width="6" height="130"/>
+    <rect x="578" y="300" width="6" height="120"/>
+    <rect x="586" y="310" width="6" height="110"/>
+    <rect x="594" y="320" width="6" height="100"/>
+    <rect x="602" y="330" width="6" height="90"/>
+    <rect x="610" y="340" width="6" height="80"/>
+    <rect x="618" y="350" width="6" height="70"/>
+    <rect x="626" y="360" width="6" height="60"/>
+    <rect x="634" y="370" width="6" height="50"/>
+    <rect x="642" y="380" width="6" height="40"/>
+    <rect x="650" y="390" width="6" height="30"/>
+    <rect x="658" y="400" width="6" height="20"/>
+    <rect x="666" y="405" width="6" height="15"/>
+    <rect x="674" y="410" width="6" height="10"/>
+    <rect x="682" y="415" width="6" height="5"/>
+    
+    <!-- Outlier bar -->
+    <rect x="710" y="70" width="8" height="350" fill="#ff6b6b"/>
+  </g>
+  
+  <!-- Statistics Box -->
+  <rect x="50" y="470" width="300" height="120" fill="rgba(0,0,0,0.7)" stroke="rgba(255,255,255,0.2)" stroke-width="1" rx="5"/>
+  <text x="60" y="490" fill="white" font-family="Courier, monospace" font-size="12">{</text>
+  <text x="70" y="510" fill="white" font-family="Courier, monospace" font-size="12">"25%": 40.85,</text>
+  <text x="70" y="525" fill="white" font-family="Courier, monospace" font-size="12">"50%": 58.36,</text>
+  <text x="70" y="540" fill="white" font-family="Courier, monospace" font-size="12">"75%": 75.89,</text>
+  <text x="70" y="555" fill="white" font-family="Courier, monospace" font-size="12">"count": 80000,</text>
+  <text x="70" y="570" fill="white" font-family="Courier, monospace" font-size="12">"max": 100,</text>
+  <text x="70" y="585" fill="white" font-family="Courier, monospace" font-size="12">"min": 0</text>
+  <text x="60" y="600" fill="white" font-family="Courier, monospace" font-size="12">}</text>
+</svg>

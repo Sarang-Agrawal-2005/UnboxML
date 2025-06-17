@@ -30,6 +30,7 @@ from flask import send_file
 from jinja2 import Template
 
 
+
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*"}})
 
@@ -311,22 +312,24 @@ def train_model():
 
 @app.route('/evaluate', methods=['POST'])
 def evaluate_model():
-    data = request.get_json()
-    filename  = data.get("filename")
-    target    = data.get("target")
-    model_id  = data.get("model_id")
-    problem_type = data.get("problem_type", "regression")  # fallback if not provided
+    from sklearn.metrics import (
+        accuracy_score, precision_score, recall_score, f1_score, confusion_matrix,
+        r2_score, mean_absolute_error, mean_squared_error
+    )
 
+    data = request.get_json()
+    filename = data.get("filename")
+    target = data.get("target")
+    model_id = data.get("model_id")
+    problem_type = data.get("problem_type", "regression")
 
     if not all([filename, target, model_id]):
         return jsonify(error="Missing parameters"), 400
 
     model_path = os.path.join(MODEL_FOLDER, f"{model_id}.pkl")
-    file_path  = os.path.join(UPLOAD_FOLDER, filename)
-    if not os.path.exists(model_path):
-        return jsonify(error="Model not found. Train first."), 404
-    if not os.path.exists(file_path):
-        return jsonify(error="Data file not found"), 404
+    file_path = os.path.join(UPLOAD_FOLDER, filename)
+    if not os.path.exists(model_path) or not os.path.exists(file_path):
+        return jsonify(error="Model or dataset not found"), 404
 
     df = pd.read_csv(file_path)
     if target not in df.columns:
@@ -334,37 +337,50 @@ def evaluate_model():
 
     X = df.drop(columns=[target])
     y = df[target]
-
-    # Reload trained model
     model = joblib.load(model_path)
 
-    # Use the same 80/20 split so metrics match training step
-    X_train, X_test, y_train, y_test = train_test_split(
-        X, y, test_size=0.2, random_state=42
-    )
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
     y_pred = model.predict(X_test)
 
+    plot_data = {}
+    metrics = {}
+
     if problem_type == "regression":
-  # Regression metrics
+        errors = y_test - y_pred
         metrics = {
-            "R-squared"   : float(r2_score(y_test, y_pred)),
-            "MAE"  : float(mean_absolute_error(y_test, y_pred)),
-            "MSE"  : float(mean_squared_error(y_test, y_pred)),
-            "RMSE" : float(mean_squared_error(y_test, y_pred) ** 0.5),
-
+            "R-squared": r2_score(y_test, y_pred),
+            "MAE": mean_absolute_error(y_test, y_pred),
+            "MSE": mean_squared_error(y_test, y_pred),
+            "RMSE": mean_squared_error(y_test, y_pred) ** 0.5,
+            "Train Score": model.score(X_train, y_train),
+            "Test Score": model.score(X_test, y_test)
         }
-    else:  # Classification metrics
+        plot_data = {
+            "actual": y_test.tolist(),
+            "predicted": y_pred.tolist(),
+            "residuals": errors.tolist()
+        }
+    else:
         metrics = {
-            "Accuracy" : float(accuracy_score(y_test, y_pred)),
-            "Precision": float(precision_score(y_test, y_pred, average="macro", zero_division=0)),
-            "Recall"   : float(recall_score(y_test, y_pred, average="macro", zero_division=0)),
-            "F1 score"       : float(f1_score(y_test, y_pred, average="macro", zero_division=0)),
-            "Confusion Matrix": confusion_matrix(y_test, y_pred).tolist(),
+            "Accuracy": accuracy_score(y_test, y_pred),
+            "Precision": precision_score(y_test, y_pred, average="macro", zero_division=0),
+            "Recall": recall_score(y_test, y_pred, average="macro", zero_division=0),
+            "F1 score": f1_score(y_test, y_pred, average="macro", zero_division=0),
+            "Train Score": model.score(X_train, y_train),
+            "Test Score": model.score(X_test, y_test),
+            "Confusion Matrix": confusion_matrix(y_test, y_pred).tolist()
+        }
+        plot_data = {
+            "confusion": metrics["Confusion Matrix"]
         }
 
-    return jsonify(metrics=metrics)
+    return jsonify(
+        metrics={k: v for k, v in metrics.items() if k != "Confusion Matrix"},
+        plots=plot_data,
+        train_score=metrics.get("Train Score"),
+        test_score=metrics.get("Test Score")
+    )
 
-from flask import send_file  # ensure this import is present at the top
 
 @app.route('/download_model', methods=['GET'])
 def download_model():

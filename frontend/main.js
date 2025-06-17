@@ -385,6 +385,19 @@ function buildPie(labels, values, col) {
   Plotly.newPlot("columnChart", data, layout, {responsive:true});
 }
 
+function plotLayout(title, xTitle="", yTitle="") {
+  return {
+    title,
+    paper_bgcolor : "rgba(0,0,0,0)",
+    plot_bgcolor  : "rgba(0,0,0,0)",
+    font          : {color: getCss("--text-primary", "#fff")},
+    xaxis         : {title: xTitle, tickfont:{color:getCss("--text-primary")}},
+    yaxis         : {title: yTitle, tickfont:{color:getCss("--text-primary")}},
+    margin        : {t:40,l:50,r:20,b:50},
+  };
+}
+
+
 /* === Column‑analysis orchestration === */
 async function fetchColumnAnalysis(filename, column) {
   const res  = await fetch("http://127.0.0.1:5000/column_analysis", {
@@ -676,8 +689,8 @@ function renderMetrics(metrics) {
   html += "</ul>";
   return html;
 }
+
 document.getElementById("runEvaluation").addEventListener("click", async () => {
-  // guard: ensure model has been trained
   if (!sessionStorage.getItem("processedFile")) {
     alert("⚠️ Train a model first.");
     return;
@@ -685,8 +698,9 @@ document.getElementById("runEvaluation").addEventListener("click", async () => {
 
   document.getElementById("evalSpinner").style.display = "block";
   document.getElementById("evaluationMetrics").innerHTML = "";
+  document.getElementById("evaluationSummary").innerHTML = "";
+  document.getElementById("evalCharts").innerHTML = "";
 
-  // detect problem type (regression/classification)
   const problemType = detectProblemType();
   const modelName = document.getElementById("modelSelect").value;
   const modelID = MODEL_MAP[problemType][modelName].id;
@@ -699,7 +713,7 @@ document.getElementById("runEvaluation").addEventListener("click", async () => {
         filename: sessionStorage.getItem("processedFile"),
         target: sessionStorage.getItem("preprocessTarget"),
         model_id: modelID,
-        problem_type: problemType 
+        problem_type: problemType
       })
     });
 
@@ -708,16 +722,89 @@ document.getElementById("runEvaluation").addEventListener("click", async () => {
 
     if (res.error) {
       document.getElementById("evaluationMetrics").innerHTML = `<p style="color:red;">${res.error}</p>`;
-    } else {
-      document.getElementById("evaluationMetrics").innerHTML = renderMetrics(res.metrics);
+      return;
+    }
+
+    // Show problem type
+    document.getElementById("evaluationSummary").innerHTML =
+      `<p>${problemType.charAt(0).toUpperCase() + problemType.slice(1)} Metrics</p>`;
+
+    // Show metrics table
+    const metricsTable = [`<table class="eval-metrics-table">`];
+    metricsTable.push();
+    Object.entries(res.metrics).forEach(([k, v]) => {
+      if (Array.isArray(v)) return; // skip confusion matrix here
+      metricsTable.push(`<tr><td>${k}</td><td>${v.toFixed ? v.toFixed(4) : v}</td></tr>`);
+    });
+    metricsTable.push("</table>");
+    document.getElementById("evaluationMetrics").innerHTML = metricsTable.join("");
+
+    // Overfitting warning (if available)
+    if (res.train_score && res.test_score && res.train_score - res.test_score > 0.1) {
+      document.getElementById("evaluationSummary").innerHTML +=
+        `<p style="color: orange;"><strong>⚠️ Possible Overfitting</strong>: Train score = ${res.train_score.toFixed(2)}, Test score = ${res.test_score.toFixed(2)}</p>`;
+    }
+
+    // Charts
+    const plots = res.plots;
+    const evalCharts = document.getElementById("evalCharts");
+    const getCss = (v, fallback = "#fff") => getComputedStyle(document.documentElement).getPropertyValue(v).trim() || fallback;
+    const layout = (title, x, y) => ({
+      title,
+      paper_bgcolor: "rgba(0,0,0,0)",
+      plot_bgcolor: "rgba(0,0,0,0)",
+      font: { color: getCss("--text-primary", "#fff") },
+      xaxis: { title: x },
+      yaxis: { title: y },
+      margin: { t: 40, l: 50, r: 20, b: 50 }
+    });
+
+    if (problemType === "regression") {
+      const sDiv = document.createElement("div");
+      sDiv.id = "scatterPlot";
+      sDiv.style.height = "400px";
+      evalCharts.appendChild(sDiv);
+
+      Plotly.newPlot("scatterPlot", [{
+        x: plots.actual,
+        y: plots.predicted,
+        mode: "markers",
+        marker: { color: getCss("--primary", "#00c8ff") }
+      }], layout("Actual vs Predicted", "Actual", "Predicted"));
+
+      const rDiv = document.createElement("div");
+      rDiv.id = "residualPlot";
+      rDiv.style.height = "400px";
+      evalCharts.appendChild(rDiv);
+
+      Plotly.newPlot("residualPlot", [{
+        x: plots.predicted,
+        y: plots.residuals,
+        mode: "markers",
+        marker: { color: getCss("--accent", "#ff6b6b") }
+      }], layout("Residuals", "Predicted", "Residual"));
+    }
+
+    if (problemType === "classification" && plots.confusion) {
+      const cDiv = document.createElement("div");
+      cDiv.id = "confMatrix";
+      cDiv.style.height = "400px";
+      evalCharts.appendChild(cDiv);
+
+      Plotly.newPlot("confMatrix", [{
+        z: plots.confusion,
+        type: "heatmap",
+        colorscale: "Viridis"
+      }], layout("Confusion Matrix", "", ""));
     }
 
   } catch (err) {
     console.error("❌ Evaluation failed:", err);
     document.getElementById("evalSpinner").style.display = "none";
-    document.getElementById("evaluationMetrics").innerHTML = `<p style="color:red;">Failed to connect to backend</p>`;
+    document.getElementById("evaluationMetrics").innerHTML = `<p style="color:red;">Backend error</p>`;
   }
 });
+
 
 /* ----------  DOWNLOAD MODEL SECTION  ---------- */
 

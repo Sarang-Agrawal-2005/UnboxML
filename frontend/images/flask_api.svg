@@ -1,0 +1,56 @@
+<svg width="400" height="320" viewBox="0 0 400 320" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1a1a2e;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#16213e;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="buttonGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#00d4ff;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#8a2be2;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="400" height="320" fill="url(#bgGradient)" rx="15"/>
+  
+  <!-- Header circles -->
+  <circle cx="320" cy="25" r="6" fill="#666"/>
+  <circle cx="340" cy="25" r="6" fill="#00d4ff"/>
+  <circle cx="360" cy="25" r="6" fill="#8a2be2"/>
+  
+  <!-- Title -->
+  <text x="200" y="60" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="24" font-weight="bold">
+    Flask <tspan fill="#00d4ff">API</tspan> Deployment
+  </text>
+  
+  <!-- Subtitle -->
+  <text x="200" y="85" text-anchor="middle" fill="#ccc" font-family="Arial, sans-serif" font-size="14">
+    Get a REST API SCRIPT to deploy your trained model.
+  </text>
+  
+  <!-- Instructions -->
+  <text x="30" y="115" fill="white" font-family="Arial, sans-serif" font-size="12">
+    1. Download your Flask API Script
+  </text>
+  <text x="30" y="135" fill="white" font-family="Arial, sans-serif" font-size="12">
+    2. Unzip the download
+  </text>
+  <text x="30" y="155" fill="white" font-family="Arial, sans-serif" font-size="12">
+    3. Install dependencies → 
+    <tspan fill="#00d4ff">pip install -r requirements.txt</tspan>
+  </text>
+  <text x="30" y="175" fill="white" font-family="Arial, sans-serif" font-size="12">
+    4. Start server → 
+    <tspan fill="#00d4ff">python serve_model.py</tspan>
+  </text>
+  <text x="30" y="195" fill="white" font-family="Arial, sans-serif" font-size="12">
+    5. POST data to: 
+    <tspan fill="#00d4ff">http://localhost:5000/predict</tspan>
+  </text>
+  
+  <!-- Download Button -->
+  <rect x="50" y="250" width="300" height="40" fill="url(#buttonGradient)" rx="20"/>
+  <text x="200" y="274" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="16" font-weight="bold">
+    Download Flask API Script
+  </text>
+</svg>
