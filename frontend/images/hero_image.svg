@@ -58,7 +58,7 @@
   <!-- Deploy Model -->
   <g transform="translate(670, 130)">
     <rect x="0" y="0" width="90" height="40" rx="20" fill="rgba(20, 26, 41, 0.7)" stroke="url(#pipelineGradient)" stroke-width="2"/>
-    <text x="45" y="25" text-anchor="middle" fill="white" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="500">Deploy</text>
+    <text x="45" y="25" text-anchor="middle" fill="white" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="500">Unbox</text>
   </g>
   
   <!-- Arrows between steps -->

@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ZeroML Pipeline</title>
+  
+  <title>UnboxML Pipeline</title>
   <link rel="stylesheet" href="main.css">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -73,16 +74,47 @@
     .tab-btn {
       padding: 1rem 2rem;
       border: none;
-      background: rgba(255, 255, 255, 0.05);
+      background: transparent;
       border-radius: var(--radius-md);
-      color: var(--text-primary);
+      color: var(--text-secondary); /* make text faded when inactive */
       cursor: pointer;
-      transition: background var(--transition-fast);
+      transition: all var(--transition-fast);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
     }
-    .tab-btn.active, .tab-btn:hover {
+
+    .tab-btn::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0;
+      height: 2px;
       background: linear-gradient(90deg, var(--primary), var(--secondary));
-      color: white;
+      transition: width var(--transition-fast);
     }
+
+    .tab-btn:hover::after {
+      width: 100%;
+    }
+
+    .tab-btn.active {
+      color: var(--text-primary);
+      background: linear-gradient(90deg, var(--primary), var(--secondary));
+    }
+
+    .tab-btn.active::after {
+      width: 100%;
+    }
+
+
+    .tab-btn:hover:not(.active) {
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--text-primary);
+    }
+
     .pipeline-step {
       display: none;
     }
@@ -188,20 +220,22 @@
 </head>
 <body style="position: relative; min-height: 100vh; overflow-x: hidden; background-color: var(--background);">
   <div class="particles-container" id="particles-js"></div>
-  <div class="app-container" style="position: relative; z-index: 1; background-color: transparent;">
+  <div class="app-container" style="position: realtive; z-index: 1; background-color: transparent;">
     <nav class="navbar" style="position: relative; z-index: 1000; justify-content: center;">
-  <div class="logo" style="padding: 1.5rem 2rem; text-align: center;">Auto<span class="highlight">ML Pipeline</span></div>
+  <div class="logo" style="padding: 1.5rem 2rem; text-align: center; position: sticky;">
+    Unbox<span class="highlight">ML Pipeline</span>
+  </div>
 </nav>
 
-<section class="pipeline-section" style="padding-top: 0rem; background-color: transparent;">
-            <nav class="tabbar" style="position: relative; top: 0%; background: transparent; z-index: 900; display: flex; justify-content: center; gap: 2rem; flex-wrap: wrap; border-bottom: 1px solid var(--border-color); padding: 1rem 2rem;">
-  <a class="nav-link tab-btn active" data-tab="upload">Upload Dataset</a>
-  <a class="nav-link tab-btn" data-tab="analyze">Analyze Data</a>
-  <a class="nav-link tab-btn" data-tab="preprocess">Prepare Dataset</a>
-  <a class="nav-link tab-btn" data-tab="train">Train Model</a>
-  <a class="nav-link tab-btn" data-tab="evaluate">Evaluate Model</a>
-  <!-- <a class="nav-link tab-btn" data-tab="predict">Predict</a> -->
-  <a class="nav-link tab-btn" data-tab="deploy">Deploy Model</a>
+
+<section class="pipeline-section" style="position: sticky; padding-top: 0rem; background-color: transparent;">
+            <nav class="tabbar" style="position: sticky; top: 0%; background: transparent; z-index: 900; display: flex; justify-content: center; gap: 2rem; flex-wrap: wrap; border-bottom: 1px solid var(--border-color); padding: 1rem 2rem;">
+  <a class="nav-link tab-btn active" data-tab="upload">Upload</a>
+  <a class="nav-link tab-btn" data-tab="analyze">Analyze</a>
+  <a class="nav-link tab-btn" data-tab="preprocess">Preprocess</a>
+  <a class="nav-link tab-btn" data-tab="train">Train</a>
+  <a class="nav-link tab-btn" data-tab="evaluate">Evaluate</a>
+  <a class="nav-link tab-btn" data-tab="deploy">Unbox</a>
 </nav>
 
       <div id="upload" class="pipeline-step active">
@@ -212,9 +246,25 @@
           <!-- Drag-and-drop upload area -->
           <div id="uploadZone" class="dropzone">
             <i class="fas fa-upload"></i>
-            <p>Drag & drop your CSV file here<br><span>or click to browse</span></p>
+            <p>Drag & drop your CSV file here or click to browse<br><br>Unbox ML Models in minutes</p>
             <input type="file" id="fileInput" accept=".csv" hidden>
           </div>
+
+          <div style="margin-top: 1rem;">
+            <label for="mockDatasetSelect" style="color: var(--text-secondary);">Don't have a dataset ready, choose one of ours instead:</label>
+            <select id="mockDatasetSelect" style="margin-top: 0.5rem;">
+              <option value="">-- Select a dataset for a trial run --</option>
+              
+              <option value="introvert_extrovert_analysis.csv">Introvert Extrovert Analysis Dataset</option>
+              <option value="House_Rent_Dataset.csv">House Rent Prediction Dataset</option>
+              <option value="seattle-weather.csv">Weather Prediction Dataset</option>
+              <option value="iris.csv">Iris Dataset</option>
+              <option value="world_population.csv">World Population Dataset</option>
+              <option value="Diabetes Dataset.csv">Diabetes Dataset</option>
+
+            </select>
+          </div>
+
 
           <!-- Upload spinner -->
           <div id="uploadSpinner" style="display:none; margin-top: 1rem;">
@@ -233,9 +283,20 @@
             Exploratory<span class="highlight"> Data Analysis</span>
           </div>
 
+          <!-- Analyze Spinner -->
+          <div id="analyzeSpinner" style="display:none; margin-top: 1rem;">
+            <i class="fas fa-spinner fa-spin"></i> Analyzing...
+          </div>
+
           <!-- Correlation heat‑map -->
-          <h4>Correlation <span class = "highlight">HeatMap</span></h4>
-          <div id="corrHeatmap" style="height:500px;"></div>
+          <h4>Correlation <span class="highlight">HeatMap</span></h4>
+          <div id="corrHeatmap" style="height:500px; display: flex; align-items: center; justify-content: center; background-color: rgba(255, 255, 255, 0.02); border: 1px dashed var(--border-color); border-radius: var(--radius-md);">
+            <div id="heatmapPlaceholder" style="text-align: center; color: var(--text-secondary);">
+              <i class="fas fa-chart-line" style="font-size: 2rem; margin-bottom: 0.5rem;"></i>
+              <p style="margin: 0;">Upload a dataset to view the Heatmap.<br>Unbox ML Models in minutes.</p>
+            </div>
+          </div>
+
 
           <!-- Data‑set‑level summary that you already showed -->
           <div id="dataSummary" style="margin-top:1.5rem;"></div>
@@ -253,31 +314,262 @@
 
 
       <div id="preprocess" class="pipeline-step">
-        <div class="step-card">
-          <div class="logo" style="padding: 1.5rem 2rem; text-align: center;">Data<span class="highlight"> Wrangling</span></div>
+          <div class="step-card">
+              <div class="logo" style="padding: 1.5rem 2rem; text-align: center;">
+                  Prepare<span class="highlight"> Dataset</span>
+              </div>
 
-          <!-- Target column selector -->
-          <label for="preprocessTarget">Select Target Column</label>
-          <select id="preprocessTarget"></select>
+              <!-- Target Column Selection -->
+              <div class="preprocessing-header">
+                  <label for="preprocessTarget">Select Target Column:</label>
+                  <select id="preprocessTarget" class="form-control">
+                      <option value="">Choose target column...</option>
+                  </select>
+              </div>
 
-          <!-- Preprocessing checkboxes -->
-          <div class="checkbox-row"><input type="checkbox" id="dropNA"><label for="dropNA">Drop rows with missing values</label></div>
-          <div class="checkbox-row"><input type="checkbox" id="removeDuplicates"><label for="removeDuplicates">Remove duplicate rows</label></div>
-          <div class="checkbox-row"><input type="checkbox" id="removeOutliers"><label for="removeOutliers">Remove outliers Select<span class="highlight">(IQR method)</span></label></div>
-          <div class="checkbox-row"><input type="checkbox" id="dropLowCorr"><label for="dropLowCorr">Drop features with low correlation to target</label></div>
-          <div class="checkbox-row"><input type="checkbox" id="normalize"><label for="normalize">Normalize data <span class="highlight">(Min-Max)</span></label></div>
-          <div class="checkbox-row"><input type="checkbox" id="standardize"><label for="standardize">Standardize data <span class="highlight">(Z-Score)</span></label></div>
+              <!-- Preprocessing Tabs -->
+              <div class="preprocessing-tabs">
+                  <div class="tab-nav" role="tablist" aria-label="Preprocessing Options">
+                      <button class="tab-btn active" data-tab="data-cleaning" role="tab" aria-selected="true" aria-controls="data-cleaning">Data Cleaning</button>
+                      <button class="tab-btn" data-tab="encoding" role="tab" aria-selected="false" aria-controls="encoding" tabindex="-1">Encoding</button>
+                      <button class="tab-btn" data-tab="feature-selection" role="tab" aria-selected="false" aria-controls="feature-selection" tabindex="-1">Feature Selection</button>
+                      <button class="tab-btn" data-tab="feature-scaling" role="tab" aria-selected="false" aria-controls="feature-scaling" tabindex="-1">Feature Scaling</button>
+                  </div>
 
+                  <!-- Data Cleaning Tab -->
+                  <div id="data-cleaning" class="tab-content active" role="tabpanel" aria-labelledby="data-cleaning-tab" tabindex="0">
+                      <div class="preprocessing-grid">
+                          <div class="preprocessing-card">
+                              <h4>Missing Value Handling</h4>
+                              <div class="form-group">
+                                  <label for="missingValueMethod">Method:</label>
+                                  <select id="missingValueMethod" class="form-control">
+                                      <option value="drop">Drop Rows with Missing Values</option>
+                                      <option value="mean">Mean/Mode Imputation</option>
+                                      <option value="median">Median Imputation</option>
+                                      <option value="most_frequent">Most Frequent Imputation</option>
+                                      <option value="constant">Fill with Constant Value</option>
+                                      <option value="knn">KNN Imputation</option>
+                                      <option value="iterative">Iterative Imputation</option>
+                                  </select>
+                              </div>
+                              <div id="constantValueGroup" class="form-group" style="display: none;">
+                                  <label for="constantValue">Constant Value:</label>
+                                  <input type="text" id="constantValue" class="form-control" placeholder="Enter constant value">
+                              </div>
+                              <div id="knnNeighborsGroup" class="form-group" style="display: none;">
+                                  <label for="knnNeighbors">Number of Neighbors: <span id="knnNeighborsValue">5</span></label>
+                                  <input type="range" id="knnNeighbors" min="1" max="20" value="5" class="slider">
+                              </div>
+                          </div>
 
-          <!-- Submit button -->
-          <button id="applyPreprocessing">Apply Preprocessing</button>
+                          <div class="preprocessing-card">
+                              <h4>Duplicate Value Handling</h4>
+                              <div class="form-group">
+                                  <label for="duplicateMethod">Method:</label>
+                                  <select id="duplicateMethod" class="form-control">
+                                      <option value="none">Keep All Duplicates</option>
+                                      <option value="drop_all">Remove All Duplicates</option>
+                                      <option value="keep_first">Keep First Occurrence</option>
+                                      <option value="keep_last">Keep Last Occurrence</option>
+                                  </select>
+                              </div>
+                          </div>
 
-          <!-- Result section -->
-          <div id="preprocessResult"></div>
-          <div id="preprocessIndicator" style="margin-top: 1rem; color: limegreen; font-weight: bold;"></div>
+                          <div class="preprocessing-card">
+                              <h4>Outlier Removal</h4>
+                              <div class="form-group">
+                                  <label for="outlierMethod">Method:</label>
+                                  <select id="outlierMethod" class="form-control">
+                                      <option value="none">No Outlier Removal</option>
+                                      <option value="iqr">IQR Method</option>
+                                      <option value="zscore">Z-Score Method</option>
+                                      <option value="isolation_forest">Isolation Forest</option>
+                                  </select>
+                              </div>
+                              <div id="outlierThresholdGroup" class="form-group">
+                                  <label for="outlierThreshold">IQR Threshold: <span id="outlierThresholdValue">1.5</span></label>
+                                  <input type="range" id="outlierThreshold" min="1" max="5" step="0.1" value="1.5" class="slider">
+                              </div>
+                              <div id="zscoreThresholdGroup" class="form-group" style="display: none;">
+                                  <label for="zscoreThreshold">Z-Score Threshold: <span id="zscoreThresholdValue">3</span></label>
+                                  <input type="range" id="zscoreThreshold" min="2" max="4" step="0.1" value="3" class="slider">
+                              </div>
+                          </div>
+                      </div>
+                  </div>
 
-        </div>
+                  <!-- Encoding Tab -->
+                  <div id="encoding" class="tab-content" role="tabpanel" aria-labelledby="encoding-tab" tabindex="0" hidden>
+                      <div class="preprocessing-grid">
+                          <div class="preprocessing-card">
+                              <h4>Categorical Encoding</h4>
+                              <div class="form-group">
+                                  <label for="encodingMethod">Encoding Method:</label>
+                                  <select id="encodingMethod" class="form-control">
+                                      <option value="label">Label Encoding</option>
+                                      <option value="onehot">One-Hot Encoding</option>
+                                      <option value="ordinal">Ordinal Encoding</option>
+                                      <option value="target">Target Encoding</option>
+                                      <option value="binary">Binary Encoding</option>
+                                  </select>
+                              </div>
+                              <div class="form-group">
+                                  <label>
+                                      <input type="checkbox" id="handleUnknown" checked> Handle Unknown Categories
+                                  </label>
+                              </div>
+                              <div id="targetEncodingOptions" class="form-group" style="display: none;">
+                                  <label for="targetEncodingSmoothing">Smoothing Factor: <span id="targetEncodingSmoothingValue">1</span></label>
+                                  <input type="range" id="targetEncodingSmoothing" min="0" max="100" value="1" class="slider">
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+
+                  <!-- Feature Selection Tab -->
+                  <div id="feature-selection" class="tab-content" role="tabpanel" aria-labelledby="feature-selection-tab" tabindex="0" hidden>
+                      <div class="preprocessing-grid">
+                          <div class="preprocessing-card">
+                              <h4>Correlation-based Selection</h4>
+                              <div class="form-group">
+                                  <label>
+                                      <input type="checkbox" id="removeMulticollinear"> Remove Multicollinear Features
+                                  </label>
+                              </div>
+                              <div class="form-group">
+                                  <label for="multicollinearThreshold">Correlation Threshold: <span id="multicollinearThresholdValue">0.95</span></label>
+                                  <input type="range" id="multicollinearThreshold" min="0.1" max="1" step="0.05" value="0.95" class="slider">
+                              </div>
+                              <div class="form-group">
+                                  <label>
+                                      <input type="checkbox" id="removeLowCorr"> Remove Low Correlation to Target
+                                  </label>
+                              </div>
+                              <div class="form-group">
+                                  <label for="lowCorrThreshold">Min Correlation to Target: <span id="lowCorrThresholdValue">0.1</span></label>
+                                  <input type="range" id="lowCorrThreshold" min="0" max="0.5" step="0.01" value="0.1" class="slider">
+                              </div>
+                          </div>
+
+                          <div class="preprocessing-card">
+                              <h4>Variance-based Selection</h4>
+                              <div class="form-group">
+                                  <label>
+                                      <input type="checkbox" id="removeConstant"> Remove Constant Features
+                                  </label>
+                              </div>
+                              <div class="form-group">
+                                  <label>
+                                      <input type="checkbox" id="removeLowVariance"> Remove Low Variance Features
+                                  </label>
+                              </div>
+                              <div class="form-group">
+                                  <label for="varianceThreshold">Variance Threshold: <span id="varianceThresholdValue">0.01</span></label>
+                                  <input type="range" id="varianceThreshold" min="0" max="1" step="0.01" value="0.01" class="slider">
+                              </div>
+                          </div>
+
+                          <div class="preprocessing-card">
+                          <h4>Statistical Selection</h4>
+                          <div class="form-group">
+                              <label>
+                                  <input type="checkbox" id="selectKBest"> Select K Best Features
+                              </label>
+                          </div>
+                          <div class="form-group">
+                              <label for="kBestFeatures">Number of Features: <span id="kBestFeaturesValue">10</span></label>
+                              <input type="range" id="kBestFeatures" min="1" max="50" value="10" class="slider">
+                          </div>
+                          <!-- Remove the scoring function dropdown completely -->
+                      </div>
+
+                          <div class="preprocessing-card">
+                            <h4>Recursive Feature Elimination</h4>
+                            <div class="form-group">
+                                <label>
+                                    <input type="checkbox" id="enableRFE"> Enable Recursive Feature Elimination
+                                </label>
+                            </div>
+                            <div class="form-group">
+                                <label for="rfeFeatures">Number of Features to Select: <span id="rfeFeaturesValue">10</span></label>
+                                <input type="range" id="rfeFeatures" min="1" max="50" value="10" class="slider">
+                            </div>
+                            <div class="form-group">
+                                <label for="rfeEstimator">Base Estimator:</label>
+                                <select id="rfeEstimator" class="form-control">
+                                    <option value="linear">Linear Model</option>
+                                    <option value="tree">Decision Tree</option>
+                                    <option value="forest">Random Forest</option>
+                                    <option value="svm">Support Vector Machine</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="rfeStep">Step Size: <span id="rfeStepValue">1</span></label>
+                                <input type="range" id="rfeStep" min="1" max="10" value="1" class="slider">
+                            </div>
+                        </div>
+
+                      </div>
+                  </div>
+
+                  <!-- Feature Scaling Tab -->
+                  <div id="feature-scaling" class="tab-content" role="tabpanel" aria-labelledby="feature-scaling-tab" tabindex="0" hidden>
+                      <div class="preprocessing-grid">
+                          <div class="preprocessing-card">
+                              <h4>Scaling Method</h4>
+                              <div class="form-group">
+                                  <label for="scalingMethod">Choose Scaling Method:</label>
+                                  <select id="scalingMethod" class="form-control">
+                                      <option value="none">No Scaling</option>
+                                      <option value="standard">Standard Scaler (Z-Score)</option>
+                                      <option value="minmax">Min-Max Scaler</option>
+                                      <option value="robust">Robust Scaler</option>
+                                      <option value="maxabs">Max Absolute Scaler</option>
+                                      <option value="quantile_uniform">Quantile Transformer (Uniform)</option>
+                                      <option value="quantile_normal">Quantile Transformer (Normal)</option>
+                                      <option value="power_yeo">Power Transformer (Yeo-Johnson)</option>
+                                      <option value="power_box">Power Transformer (Box-Cox)</option>
+                                      <option value="normalizer">Normalizer</option>
+                                  </select>
+                              </div>
+                              <div id="minmaxRangeGroup" class="form-group" style="display: none;">
+                                  <label>Feature Range:</label>
+                                  <div class="range-inputs">
+                                      <input type="number" id="minmaxMin" value="0" step="0.1" class="form-control" style="width: 45%; display: inline-block;">
+                                      <span style="margin: 0 10px;">to</span>
+                                      <input type="number" id="minmaxMax" value="1" step="0.1" class="form-control" style="width: 45%; display: inline-block;">
+                                  </div>
+                              </div>
+                              <div id="normalizerNormGroup" class="form-group" style="display: none;">
+                                  <label for="normalizerNorm">Norm:</label>
+                                  <select id="normalizerNorm" class="form-control">
+                                      <option value="l2">L2 (Euclidean)</option>
+                                      <option value="l1">L1 (Manhattan)</option>
+                                      <option value="max">Max</option>
+                                  </select>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+
+              <!-- Apply Preprocessing Button -->
+              <div class="preprocessing-actions">
+                  <button id="applyPreprocessing" class="btn btn-primary btn-lg">
+                      Apply Preprocessing
+                  </button>
+                  <div id="preprocessSpinner" class="spinner" style="display: none;">
+                      Processing...
+                  </div>
+              </div>
+
+              <!-- Preprocessing Results -->
+              <div id="preprocessResult" class="preprocessing-result"></div>
+              <div id="preprocessIndicator" style="margin-top: 1rem; color: limegreen; font-weight: bold;"></div>
+          </div>
       </div>
+
 
 
       <div id="train" class="pipeline-step">
@@ -349,11 +641,10 @@
 
       <div id="deploy" class="pipeline-step">
         <div class="step-card">
-          <div class="logo" style="padding: 1.5rem 2rem; text-align: center;">Serailized<span class="highlight"> Pickle File</span></div>
-          <p>Download your trained model as a <span class = "highlight">.pkl file</span> for future use or integration into other apps.</p>
+          <div class="logo" style="padding: 1.5rem 2rem; text-align: center;">Download<span class="highlight"> Model</span></div>
+          <p>Download your trained model as a <span class = "highlight">Pickle file</span> for future use or integration into other apps.</p>
           <ol style="text-align:left;font-size:0.95rem;margin-left:1rem;">
             <li>Download the serialized pickle file containing your model</li>
-            <li>Move the file to your project folder</li>
             <li>Install dependencies → <code class = "highlight">pip install joblib</code></li>
             <li>Load it in your Python script → <code class = "highlight">model = joblib.load("YourModel.pkl")</code></li>
             <li>Make predictions → <code class = "highlight">predictions = model.predict(Your_Dataframe)</code></li>
@@ -374,7 +665,6 @@
 
           <ol style="text-align:left;font-size:0.95rem;margin-left:1rem;">
             <li>Download your ready‑to‑run web app</li>
-            <li>Unzip the download</li>
             <li>Open the folder in your code editor</li>
             <li>Install dependencies → <code class = "highlight">pip install -r requirements.txt</code></li>
             <li>Run → <code class = "highlight">streamlit run app.py</code></li>
@@ -392,15 +682,14 @@
           </div>
 
           <p style="margin-bottom:1rem;">
-              Get a <span class = "highlight">REST API SCRIPT</span> to deploy your trained model.
+              Get a <span class = "highlight">Rest api scipt</span> to deploy your trained model.
           </p>
 
           <ol style="text-align:left;font-size:0.95rem;margin-left:1rem;">
             <li>Download your Flask API Script</li>
-            <li>Unzip the download</li>
             <li>Install dependencies → <code class = "highlight">>pip install -r requirements.txt</code></li>
             <li>Start server → <code class = "highlight">>python serve_model.py</code></li>
-            <li>POST data to: <code class = "highlight">>http://localhost:5000/predict</code></li>
+            <li>Post data to →<code class = "highlight">>http://localhost:5000/predict</code></li>
           </ol>
 
           <button id="downloadApiBtn"

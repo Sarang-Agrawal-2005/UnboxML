@@ -6,11 +6,19 @@ let currentModel = null;
 document.addEventListener('DOMContentLoaded', function() {
     initParticles();
     initPageNavigation();
-    initTabs();
+    initTabs(); // Main pipeline tabs
     initThemeToggle();
     initMobileMenu();
     initSmoothScrolling();
+    
+    // Initialize preprocessing tabs with delay to avoid conflicts
+    setTimeout(() => {
+        initPreprocessingTabs();
+        initPreprocessingControls();
+        populateTargetDropdown();
+    }, 200);
 });
+
 
 // Initialize particles background
 function initParticles() {
@@ -144,30 +152,31 @@ function initSmoothScrolling() {
     });
 }
 
-// Initialize tabs
+// Initialize tabs function - REPLACE EXISTING FUNCTION
 function initTabs() {
-    const tabButtons = document.querySelectorAll('.tab-btn');
-    const tabContents = document.querySelectorAll('.tab-content');
+    // Handle main pipeline tabs (dashboard tabs)
+    const mainTabButtons = document.querySelectorAll('.dashboard-tabs .tab-btn');
+    const mainTabContents = document.querySelectorAll('.dashboard-content .tab-content');
     
-    // Initialize first tab as active on page load
-    if (tabButtons.length > 0 && tabContents.length > 0) {
+    // Initialize first main tab as active on page load
+    if (mainTabButtons.length > 0 && mainTabContents.length > 0) {
         // Remove any existing active classes
-        tabButtons.forEach(btn => btn.classList.remove('active'));
-        tabContents.forEach(content => content.classList.remove('active'));
+        mainTabButtons.forEach(btn => btn.classList.remove('active'));
+        mainTabContents.forEach(content => content.classList.remove('active'));
         
         // Set first tab as active
-        tabButtons[0].classList.add('active');
-        tabContents[0].classList.add('active');
+        mainTabButtons[0].classList.add('active');
+        mainTabContents[0].classList.add('active');
     }
     
-    // Add click event listeners
-    tabButtons.forEach(button => {
+    // Add click event listeners for main tabs
+    mainTabButtons.forEach(button => {
         button.addEventListener('click', () => {
             const targetTab = button.dataset.tab;
             
-            // Remove active class from all buttons and contents
-            tabButtons.forEach(btn => btn.classList.remove('active'));
-            tabContents.forEach(content => content.classList.remove('active'));
+            // Remove active class from all main buttons and contents
+            mainTabButtons.forEach(btn => btn.classList.remove('active'));
+            mainTabContents.forEach(content => content.classList.remove('active'));
             
             // Add active class to clicked button and corresponding content
             button.classList.add('active');
@@ -177,7 +186,10 @@ function initTabs() {
             }
         });
     });
+    
+    // Note: Preprocessing tabs are handled separately in initPreprocessingTabs()
 }
+
 
 
 const getStartedBtn = document.getElementById("getStartedBtn");
@@ -203,137 +215,212 @@ if (ctaGetStartedBtn) {
 
 
 /* ----------  UPLOAD SECTION  ---------- */
-document.getElementById('fileInput').addEventListener('change', function (e) {
+const uploadZone     = document.getElementById('uploadZone');
+const fileInput      = document.getElementById('fileInput');
+const uploadSpinner  = document.getElementById('uploadSpinner');   // <i class="fas fa-spinner">
+const uploadPreview  = document.getElementById('uploadPreview');
+
+fileInput.addEventListener('change', async (e) => {
   const file = e.target.files[0];
   if (!file) return;
 
-  const formData = new FormData();
-  formData.append('file', file);
+  // reset UI
+  uploadPreview.innerHTML = '';
+  uploadSpinner.style.display = 'flex';          // ⬅️ SHOW spinner
 
-  fetch('http://127.0.0.1:5000/upload', {
-    method: 'POST',
-    body: formData
-  })
-    .then(res => res.json())
-    .then(data => {
-      const previewHTML = `
-        <p><strong><span class="highlight">File Uploaded - </span></strong> ${data.filename}</p>
-        
-        <p><strong><span class="highlight">Features - </span></strong> ${data.shape[1]}</p>
-        <p><strong><span class="highlight">Rows - </span></strong> ${data.shape[0]}</p>
-        <p><strong><span class="highlight">Dataset Sample:</span></strong></p>
-       
-      `;
-      document.getElementById('uploadPreview').innerHTML = previewHTML;
-      if (data.preview && data.preview.length > 0) {
-        const headers = Object.keys(data.preview[0]);
-        const rows = data.preview.map(row => {
-          return `<tr>${headers.map(h => `<td>${row[h]}</td>`).join('')}</tr>`;
-        }).join('');
+  try {
+    const formData = new FormData();
+    formData.append('file', file);
 
-        const table = `
+    const res = await fetch('https://unboxml.onrender.com/upload', {
+      method: 'POST',
+      body  : formData
+    });
+    if (!res.ok) throw new Error(`Server error ${res.status}`);
+    const data = await res.json();
+
+    uploadSpinner.style.display = 'none';        // ⬅️ HIDE spinner
+
+    /* ------- build dataset preview ------- */
+    const previewHTML = `
+      <p><strong><span class="highlight">File Uploaded – </span></strong>${data.filename}</p>
+      <p><strong><span class="highlight">Features – </span></strong>${data.shape[1]}</p>
+      <p><strong><span class="highlight">Rows – </span></strong>${data.shape[0]}</p>
+      <p><strong><span class="highlight">Dataset Sample:</span></strong></p>
+    `;
+    uploadPreview.innerHTML = previewHTML;
+
+    if (Array.isArray(data.preview) && data.preview.length) {
+      const headers = Object.keys(data.preview[0]);
+      const rows    = data.preview.map(r =>
+        `<tr>${headers.map(h => `<td>${r[h]}</td>`).join('')}</tr>`).join('');
+
+      uploadPreview.insertAdjacentHTML('beforeend', `
         <div class="table-scroll">
           <table class="upload-preview-table">
             <thead><tr>${headers.map(h => `<th>${h}</th>`).join('')}</tr></thead>
             <tbody>${rows}</tbody>
           </table>
         </div>
-      `;
-      uploadPreview.innerHTML += table;
+      `);
+    }
 
-      }
-      analyzeData(data.filename); // from upload response
-      sessionStorage.setItem("uploadedFile", data.filename);
-      populateTargetDropdown();
-      refreshTrainingUI(); 
-      })
-    .catch(err => {
-      document.getElementById('uploadPreview').innerHTML = '<p style="color:red;">Failed to upload file</p>';
-      console.error(err);
+    /* ------- kick‑off downstream stages ------- */
+    sessionStorage.setItem('uploadedFile', data.filename);
+    analyzeData(data.filename);
+    populateTargetDropdown();
+    if (typeof refreshTrainingUI === 'function') refreshTrainingUI();
+
+  } catch (err) {
+    uploadSpinner.style.display = 'none';        // ⬅️ HIDE spinner on error
+    uploadPreview.innerHTML = `<p style="color:red;">Failed to upload file: ${err.message}</p>`;
+    console.error(err);
+  }
+});
+
+document.getElementById('mockDatasetSelect').addEventListener('change', async function () {
+  const selectedFile = this.value;
+  if (!selectedFile) return;
+
+  const uploadSpinner = document.getElementById('uploadSpinner');
+  const uploadPreview = document.getElementById('uploadPreview');
+  uploadPreview.innerHTML = '';
+  uploadSpinner.style.display = 'flex';
+
+  try {
+    // Fetch the file from your mock_data directory
+    const res = await fetch(`mock_data/${selectedFile}`);
+    if (!res.ok) throw new Error(`Failed to fetch ${selectedFile}`);
+
+    const blob = await res.blob();
+    const file = new File([blob], selectedFile, { type: 'text/csv' });
+
+    const formData = new FormData();
+    formData.append('file', file);
+
+    const uploadRes = await fetch('https://unboxml.onrender.com/upload', {
+      method: 'POST',
+      body: formData
     });
+
+    if (!uploadRes.ok) throw new Error(`Upload failed: ${uploadRes.status}`);
+    const data = await uploadRes.json();
+
+    uploadSpinner.style.display = 'none';
+
+    // Reuse preview logic
+    const previewHTML = `
+      <p><strong><span class="highlight">File Uploaded – </span></strong>${data.filename}</p>
+      <p><strong><span class="highlight">Features – </span></strong>${data.shape[1]}</p>
+      <p><strong><span class="highlight">Rows – </span></strong>${data.shape[0]}</p>
+      <p><strong><span class="highlight">Dataset Sample:</span></strong></p>
+    `;
+    uploadPreview.innerHTML = previewHTML;
+
+    if (Array.isArray(data.preview) && data.preview.length) {
+      const headers = Object.keys(data.preview[0]);
+      const rows = data.preview.map(r => `<tr>${headers.map(h => `<td>${r[h]}</td>`).join('')}</tr>`).join('');
+      uploadPreview.insertAdjacentHTML('beforeend', `
+        <div class="table-scroll">
+          <table class="upload-preview-table">
+            <thead><tr>${headers.map(h => `<th>${h}</th>`).join('')}</tr></thead>
+            <tbody>${rows}</tbody>
+          </table>
+        </div>
+      `);
+    }
+
+    sessionStorage.setItem('uploadedFile', data.filename);
+    analyzeData(data.filename);
+    populateTargetDropdown();
+    if (typeof refreshTrainingUI === 'function') refreshTrainingUI();
+
+  } catch (err) {
+    uploadSpinner.style.display = 'none';
+    uploadPreview.innerHTML = `<p style="color:red;">${err.message}</p>`;
+    console.error(err);
+  }
 });
 
 
-
-const uploadZone = document.getElementById('uploadZone');
-const fileInput = document.getElementById('fileInput');
-const uploadSpinner = document.getElementById('uploadSpinner');
-const uploadPreview = document.getElementById('uploadPreview');
-
-uploadZone.addEventListener('click', () => fileInput.click());
-
-uploadZone.addEventListener('dragover', e => {
+/* drag & drop passthrough */
+uploadZone.addEventListener('click',   () => fileInput.click());
+uploadZone.addEventListener('dragover',e => { e.preventDefault(); uploadZone.classList.add('hovered'); });
+uploadZone.addEventListener('dragleave',() => uploadZone.classList.remove('hovered'));
+uploadZone.addEventListener('drop',    e => {
   e.preventDefault();
-  uploadZone.classList.add('hovered');
-});
-uploadZone.addEventListener('dragleave', () => {
   uploadZone.classList.remove('hovered');
-});
-uploadZone.addEventListener('drop', e => {
-  e.preventDefault();
-  uploadZone.classList.remove('hovered');
-  const file = e.dataTransfer.files[0];
-  if (file) {
+  if (e.dataTransfer.files[0]) {
     fileInput.files = e.dataTransfer.files;
     fileInput.dispatchEvent(new Event('change'));
   }
 });
 
+
       
 
 /* ----------  ANALYZE SECTION  ---------- */
 async function analyzeData(filename) {
-  if (!filename) {
-    alert("⚠️ No dataset uploaded!");
-    return;
-  }
+  if (!filename) { alert('⚠️ No dataset uploaded!'); return; }
+
+  const spinner        = document.getElementById('analyzeSpinner');   // <i class="fas fa-spinner">
+  const heatmapDiv     = document.getElementById('corrHeatmap');
+  const summaryDiv     = document.getElementById('dataSummary');
+  const columnAnalysis = document.getElementById('columnAnalysis');
+
+  /* reset UI & show spinner */
+  spinner.style.display = 'flex';     // ⬅️ SHOW spinner
+  heatmapDiv.innerHTML  = '';
+  summaryDiv.innerHTML  = '';
+  columnAnalysis.innerHTML = '';
 
   try {
-    const response = await fetch("http://127.0.0.1:5000/analyze", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ filename })
+    const res = await fetch('https://unboxml.onrender.com/analyze', {
+      method : 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body   : JSON.stringify({ filename })
     });
+    if (!res.ok) throw new Error(`Server error ${res.status}`);
 
-    if (!response.ok) {
-      throw new Error(`Server returned status ${response.status}`);
-    }
+    const data = await res.json();
 
-    const data = await response.json();
+    spinner.style.display = 'none';   // ⬅️ HIDE spinner
 
-    // ✅ Store for use in preprocessing, training, evaluation
-    sessionStorage.setItem("analysisInfo", JSON.stringify(data));
+    /* cache for later steps */
+    sessionStorage.setItem('analysisInfo', JSON.stringify(data));
 
-     buildCorrelationHeatmap(data.corr_matrix, data.corr_columns);
+    /* build correlation heat‑map */
+    buildCorrelationHeatmap(data.corr_matrix, data.corr_columns);
+    const placeholder = document.getElementById('heatmapPlaceholder');
+    if (placeholder) placeholder.remove();
 
-    const select = document.getElementById("columnSelect");
+
+    /* populate “Select Column” dropdown */
+    const select = document.getElementById('columnSelect');
     select.innerHTML = '<option value="">-- choose column --</option>';
     data.columns.forEach(c =>
-      select.insertAdjacentHTML("beforeend", `<option value="${c}">${c}</option>`));
+      select.insertAdjacentHTML('beforeend', `<option value="${c}">${c}</option>`));
 
     select.onchange = () => {
-      if (select.value) fetchColumnAnalysis(filename, select.value)
-        .catch(err => console.error("Column analysis error:", err));
-      else document.getElementById("columnAnalysis").innerHTML = "";
+      if (select.value)
+        fetchColumnAnalysis(filename, select.value).catch(console.error);
+      else
+        columnAnalysis.innerHTML = '';
     };
 
-    let html = `
-      
-    `;
-
-    document.getElementById("dataSummary").innerHTML = html;
-
-    // ✅ Optional: refresh UI if needed
+    /* update downstream UI */
     const ptype = detectProblemType();
-    document.getElementById("problemTypeLabel").textContent = ptype;
+    document.getElementById('problemTypeLabel').textContent = ptype;
     fillModelDropdown(ptype);
 
-  } catch (error) {
-    console.error("❌ Analyze error:", error);
-    document.getElementById("dataSummary").innerHTML =
-      `<p style="color:red;">Failed to analyze dataset: ${error.message}</p>`;
+  } catch (err) {
+    spinner.style.display = 'none';   // ⬅️ HIDE spinner on error
+    summaryDiv.innerHTML =
+      `<p style="color:red;">Failed to analyze dataset: ${err.message}</p>`;
+    console.error(err);
   }
 }
+
 
 /* ────────────  PLOT HELPERS  ─────────────────────────────────────────────── */
 
@@ -416,7 +503,7 @@ function plotLayout(title, xTitle="", yTitle="") {
 
 /* === Column‑analysis orchestration === */
 async function fetchColumnAnalysis(filename, column) {
-  const res  = await fetch("http://127.0.0.1:5000/column_analysis", {
+  const res  = await fetch("https://unboxml.onrender.com/column_analysis", {
                  method : "POST",
                  headers: {"Content-Type":"application/json"},
                  body   : JSON.stringify({filename, column})
@@ -443,79 +530,358 @@ async function fetchColumnAnalysis(filename, column) {
 }
 
 
-/* ----------  PREPROCESSING SECTION  ---------- */
+/* ---------- ENHANCED PREPROCESSING SECTION ---------- */
 
-/* helper: show error in the same box every time */
-function showPreprocessError(msg) {
-  document.getElementById("preprocessResult").innerHTML =
-    `<p style="color:red;">${msg}</p>`;
+// Initialize preprocessing functionality
+document.addEventListener("DOMContentLoaded", () => {
+    initPreprocessingTabs();
+    initPreprocessingControls();
+    populateTargetDropdown();
+});
+
+function initPreprocessingTabs() {
+    const tabButtons = document.querySelectorAll('.preprocessing-tabs .tab-btn');
+    const tabContents = document.querySelectorAll('.preprocessing-tabs .tab-content');
+
+    // Ensure we have both buttons and contents
+    if (tabButtons.length === 0 || tabContents.length === 0) {
+        console.log('Preprocessing tabs not found');
+        return;
+    }
+
+    // Clear any existing event listeners to prevent conflicts
+    tabButtons.forEach(btn => {
+        btn.replaceWith(btn.cloneNode(true));
+    });
+
+    // Get fresh references after cloning
+    const freshTabButtons = document.querySelectorAll('.preprocessing-tabs .tab-btn');
+    const freshTabContents = document.querySelectorAll('.preprocessing-tabs .tab-content');
+
+    // Initialize first tab as active
+    freshTabButtons.forEach((btn, idx) => {
+        btn.classList.remove('active');
+        btn.setAttribute('aria-selected', 'false');
+        btn.setAttribute('tabindex', '-1');
+    });
+    
+    freshTabContents.forEach(content => {
+        content.classList.remove('active');
+        content.setAttribute('hidden', '');
+        content.style.display = 'none';
+        content.style.visibility = 'hidden';
+    });
+
+    // Activate first tab
+    if (freshTabButtons[0] && freshTabContents[0]) {
+        freshTabButtons[0].classList.add('active');
+        freshTabButtons[0].setAttribute('aria-selected', 'true');
+        freshTabButtons[0].removeAttribute('tabindex');
+        
+        freshTabContents[0].classList.add('active');
+        freshTabContents[0].removeAttribute('hidden');
+        freshTabContents[0].style.display = 'block';
+        freshTabContents[0].style.visibility = 'visible';
+    }
+
+    freshTabButtons.forEach((button, index) => {
+        button.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            e.stopImmediatePropagation();
+            
+            const targetTab = button.dataset.tab;
+            
+            // Remove active class from all buttons
+            freshTabButtons.forEach((btn, idx) => {
+                btn.classList.remove('active');
+                btn.setAttribute('aria-selected', 'false');
+                btn.setAttribute('tabindex', '-1');
+            });
+            
+            // Hide all tab contents
+            freshTabContents.forEach(content => {
+                content.classList.remove('active');
+                content.setAttribute('hidden', '');
+                content.style.display = 'none';
+                content.style.visibility = 'hidden';
+            });
+            
+            // Activate clicked button and corresponding content
+            button.classList.add('active');
+            button.setAttribute('aria-selected', 'true');
+            button.removeAttribute('tabindex');
+            
+            const targetContent = document.getElementById(targetTab);
+            if (targetContent) {
+                targetContent.classList.add('active');
+                targetContent.removeAttribute('hidden');
+                targetContent.style.display = 'block';
+                targetContent.style.visibility = 'visible';
+                
+                // Force reflow to ensure display
+                targetContent.offsetHeight;
+            }
+        });
+    });
 }
 
-/*  runs after the DOM is fully parsed  */
-document.addEventListener("DOMContentLoaded", () => {
 
-  /* (re‑)populate the dropdown whenever the page loads */
-  populateTargetDropdown();
 
-  /* safe attachment – only after DOM is ready */
-  const applyBtn = document.getElementById("applyPreprocessing");
-  if (!applyBtn) return;   // guard in case markup changes
+function initPreprocessingControls() {
+    // Missing value method change handler
+    const missingValueMethod = document.getElementById('missingValueMethod');
+    const constantValueGroup = document.getElementById('constantValueGroup');
+    const knnNeighborsGroup = document.getElementById('knnNeighborsGroup');
+    
+    if (missingValueMethod) {
+        missingValueMethod.addEventListener('change', function() {
+            constantValueGroup.style.display = this.value === 'constant' ? 'block' : 'none';
+            knnNeighborsGroup.style.display = this.value === 'knn' ? 'block' : 'none';
+        });
+    }
 
-  applyBtn.addEventListener("click", async () => {
-    /* quick validations */
-    const filename = sessionStorage.getItem("uploadedFile");
-    if (!filename) { showPreprocessError("⚠️ Please upload a dataset first."); return; }
+    // Outlier method change handler
+    const outlierMethod = document.getElementById('outlierMethod');
+    const outlierThresholdGroup = document.getElementById('outlierThresholdGroup');
+    const zscoreThresholdGroup = document.getElementById('zscoreThresholdGroup');
+    
+    if (outlierMethod) {
+        outlierMethod.addEventListener('change', function() {
+            const showIQR = this.value === 'iqr';
+            const showZScore = this.value === 'zscore';
+            
+            outlierThresholdGroup.style.display = showIQR ? 'block' : 'none';
+            zscoreThresholdGroup.style.display = showZScore ? 'block' : 'none';
+        });
+    }
+
+    // Encoding method change handler
+    const encodingMethod = document.getElementById('encodingMethod');
+    const targetEncodingOptions = document.getElementById('targetEncodingOptions');
+    
+    if (encodingMethod) {
+        encodingMethod.addEventListener('change', function() {
+            targetEncodingOptions.style.display = this.value === 'target' ? 'block' : 'none';
+        });
+    }
+
+    // Scaling method change handler
+    const scalingMethod = document.getElementById('scalingMethod');
+    const minmaxRangeGroup = document.getElementById('minmaxRangeGroup');
+    const normalizerNormGroup = document.getElementById('normalizerNormGroup');
+    
+    if (scalingMethod) {
+        scalingMethod.addEventListener('change', function() {
+            minmaxRangeGroup.style.display = this.value === 'minmax' ? 'block' : 'none';
+            normalizerNormGroup.style.display = this.value === 'normalizer' ? 'block' : 'none';
+        });
+    }
+
+    // Initialize all sliders with value display
+    initSliders();
+    
+    // Apply preprocessing button handler
+    const applyBtn = document.getElementById("applyPreprocessing");
+    if (applyBtn) {
+        applyBtn.addEventListener("click", applyPreprocessing);
+    }
+}
+
+function initSliders() {
+    const sliders = [
+        { id: 'knnNeighbors', valueId: 'knnNeighborsValue' },
+        { id: 'outlierThreshold', valueId: 'outlierThresholdValue' },
+        { id: 'zscoreThreshold', valueId: 'zscoreThresholdValue' },
+        { id: 'targetEncodingSmoothing', valueId: 'targetEncodingSmoothingValue' },
+        { id: 'multicollinearThreshold', valueId: 'multicollinearThresholdValue' },
+        { id: 'lowCorrThreshold', valueId: 'lowCorrThresholdValue' },
+        { id: 'varianceThreshold', valueId: 'varianceThresholdValue' },
+        { id: 'kBestFeatures', valueId: 'kBestFeaturesValue' },
+        { id: 'rfeFeatures', valueId: 'rfeFeaturesValue' },
+        { id: 'rfeStep', valueId: 'rfeStepValue' }
+    ];
+
+    sliders.forEach(slider => {
+        const sliderElement = document.getElementById(slider.id);
+        const valueElement = document.getElementById(slider.valueId);
+        
+        if (sliderElement && valueElement) {
+            sliderElement.addEventListener('input', function() {
+                valueElement.textContent = this.value;
+            });
+        }
+    });
+}
+
+async function applyPreprocessing() {
+    const filename = sessionStorage.getItem("uploadedFile") || sessionStorage.getItem("processedFile");
+    if (!filename) {
+        showPreprocessError("⚠️ Please upload a dataset first.");
+        return;
+    }
 
     const target = document.getElementById("preprocessTarget").value;
-    sessionStorage.setItem("preprocessTarget", target);  // ✅ Set the selected target
-    refreshTrainingUI(); 
-    if (!target) { showPreprocessError("⚠️ Choose a target column."); return; }
+    if (!target) {
+        showPreprocessError("⚠️ Please select a target column.");
+        return;
+    }
 
-    /* gather options */
-    const payload = {
-      filename,
-      target,
-      dropNA:           document.getElementById("dropNA").checked,
-      removeDuplicates: document.getElementById("removeDuplicates").checked,
-      removeOutliers:   document.getElementById("removeOutliers").checked,
-      dropLowCorr:      document.getElementById("dropLowCorr").checked,
-      normalize:        document.getElementById("normalize").checked,
-      standardize:      document.getElementById("standardize").checked
-    };
+    // Show spinner
+    const spinner = document.getElementById("preprocessSpinner");
+    const applyBtn = document.getElementById("applyPreprocessing");
+    spinner.style.display = "flex";
+    applyBtn.disabled = true;
+
+    // Gather all preprocessing options
+    const preprocessingOptions = gatherPreprocessingOptions();
+    preprocessingOptions.filename = filename;
+    preprocessingOptions.target = target;
 
     try {
-      const res = await fetch("http://127.0.0.1:5000/preprocess", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload)
-      });
+        const response = await fetch("https://unboxml.onrender.com/preprocess_enhanced", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(preprocessingOptions)
+        });
 
-      if (!res.ok) throw new Error(`Server error ${res.status}`);
-      const result = await res.json();
+        if (!response.ok) {
+            throw new Error(`Server error ${response.status}`);
+        }
 
-      if (result.error) { showPreprocessError(result.error); return; }
+        const result = await response.json();
+        
+        if (result.error) {
+            showPreprocessError(result.error);
+            return;
+        }
 
-      /* success UI */
-      document.getElementById("preprocessResult").innerHTML = `
-        <p><strong><span class="highlight">Preprocessing completed!</span></strong></p>
-        <p><strong><span class="highlight">Remaining Rows:</span></strong> ${result.shape[0]}</p>
-        <p><strong><span class="highlight">Remaining Columns:</span></strong> ${result.shape[1]}</p>
-        <p><strong><span class="highlight">Remaining Features:</span></strong> ${result.columns.join(", ")}</p>
-      `;
-      document.getElementById("preprocessIndicator").textContent =
-        "✅ Preprocessing completed successfully!";
-      setTimeout(() =>
-        document.getElementById("preprocessIndicator").textContent = "", 4000);
+        // Show success results
+        showPreprocessSuccess(result);
+        
+        // Store processed file info
+        sessionStorage.setItem("processedFile", result.filename);
+        sessionStorage.setItem("preprocessTarget", target);
+        
+        // Refresh training UI if function exists
+        if (typeof refreshTrainingUI === 'function') {
+            refreshTrainingUI();
+        }
 
-      /* remember the new cleaned‑up file */
-      sessionStorage.setItem("processedFile", result.filename);
-
-    } catch (err) {
-      console.error(err);
-      showPreprocessError("Failed to preprocess dataset. Check console logs.");
+    } catch (error) {
+        console.error("Preprocessing error:", error);
+        showPreprocessError("Failed to preprocess dataset. Please check your settings and try again.");
+    } finally {
+        spinner.style.display = "none";
+        applyBtn.disabled = false;
     }
-  });
-});
+}
+
+function gatherPreprocessingOptions() {
+    return {
+        // Data Cleaning
+        missing_value_method: document.getElementById("missingValueMethod")?.value || "drop",
+        constant_value: document.getElementById("constantValue")?.value || "",
+        knn_neighbors: parseInt(document.getElementById("knnNeighbors")?.value || "5"),
+        duplicate_method: document.getElementById("duplicateMethod")?.value || "none",
+        outlier_method: document.getElementById("outlierMethod")?.value || "none",
+        outlier_threshold: parseFloat(document.getElementById("outlierThreshold")?.value || "1.5"),
+        zscore_threshold: parseFloat(document.getElementById("zscoreThreshold")?.value || "3"),
+        
+        // Encoding
+        encoding_method: document.getElementById("encodingMethod")?.value || "label",
+        handle_unknown: document.getElementById("handleUnknown")?.checked || false,
+        target_encoding_smoothing: parseFloat(document.getElementById("targetEncodingSmoothing")?.value || "1"),
+        
+        // Feature Selection
+        remove_multicollinear: document.getElementById("removeMulticollinear")?.checked || false,
+        multicollinear_threshold: parseFloat(document.getElementById("multicollinearThreshold")?.value || "0.95"),
+        remove_low_corr: document.getElementById("removeLowCorr")?.checked || false,
+        low_corr_threshold: parseFloat(document.getElementById("lowCorrThreshold")?.value || "0.1"),
+        remove_constant: document.getElementById("removeConstant")?.checked || false,
+        remove_low_variance: document.getElementById("removeLowVariance")?.checked || false,
+        variance_threshold: parseFloat(document.getElementById("varianceThreshold")?.value || "0.01"),
+        select_k_best: document.getElementById("selectKBest")?.checked || false,
+        k_best_features: parseInt(document.getElementById("kBestFeatures")?.value || "10"),
+
+
+        // Recursive Feature Elimination
+        enable_rfe: document.getElementById("enableRFE")?.checked || false,
+        rfe_features: parseInt(document.getElementById("rfeFeatures")?.value || "10"),
+        rfe_estimator: document.getElementById("rfeEstimator")?.value || "linear",
+        rfe_step: parseInt(document.getElementById("rfeStep")?.value || "1"),
+        
+        // Feature Scaling
+        scaling_method: document.getElementById("scalingMethod")?.value || "none",
+        minmax_min: parseFloat(document.getElementById("minmaxMin")?.value || "0"),
+        minmax_max: parseFloat(document.getElementById("minmaxMax")?.value || "1"),
+        normalizer_norm: document.getElementById("normalizerNorm")?.value || "l2"
+    };
+}
+
+function showPreprocessError(message) {
+    const resultDiv = document.getElementById("preprocessResult");
+    resultDiv.innerHTML = `<div class="error-message">${message}</div>`;
+    resultDiv.classList.add("show");
+}
+
+function showPreprocessSuccess(result) {
+    const resultDiv = document.getElementById("preprocessResult");
+    
+    let appliedSteps = result.applied_steps || [];
+    let stepsHtml = appliedSteps.length > 0 ? 
+        `<h4>Applied Preprocessing Steps:</h4><ul>${appliedSteps.map(step => `<li>${step}</li>`).join('')}</ul>` : 
+        '';
+    
+    resultDiv.innerHTML = `
+        <div class="success-message">
+            <h3>✅ Preprocessing Completed Successfully!</h3>
+            <div class="preprocessing-summary">
+                <p><strong>Original Shape:</strong> ${result.original_shape[0]} rows × ${result.original_shape[1]} columns</p>
+                <p><strong>Final Shape:</strong> ${result.final_shape[0]} rows × ${result.final_shape[1]} columns</p>
+                <p><strong>Rows Removed:</strong> ${result.original_shape[0] - result.final_shape[0]}</p>
+                <p><strong>Features Removed:</strong> ${result.original_shape[1] - result.final_shape[1]}</p>
+                ${stepsHtml}
+                <p><strong>Remaining Features:</strong> ${result.remaining_features.join(", ")}</p>
+            </div>
+        </div>
+    `;
+    resultDiv.classList.add("show");
+    
+    // Show temporary success indicator
+    const indicator = document.getElementById("preprocessIndicator");
+    indicator.textContent = "✅ Preprocessing completed successfully!";
+    indicator.style.color = "var(--success)";
+    setTimeout(() => {
+        indicator.textContent = "";
+    }, 4000);
+}
+
+async function populateTargetDropdown() {
+    const filename = sessionStorage.getItem("uploadedFile");
+    if (!filename) return;
+
+    try {
+        const response = await fetch("https://unboxml.onrender.com/analyze", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ filename })
+        });
+
+        if (!response.ok) throw new Error(`Server error ${response.status}`);
+
+        const data = await response.json();
+        const select = document.getElementById("preprocessTarget");
+        select.innerHTML = '<option value="">Choose target column...</option>';
+        
+        data.columns.forEach(col => {
+            select.insertAdjacentHTML("beforeend", `<option value="${col}">${col}</option>`);
+        });
+
+    } catch (error) {
+        console.error("Error populating target dropdown:", error);
+    }
+}
 
 
 /* ----------  DROPDOWN POPULATION  ---------- */
@@ -524,7 +890,7 @@ async function populateTargetDropdown() {
   if (!filename) return;
 
   try {
-    const res = await fetch("http://127.0.0.1:5000/analyze", {
+    const res = await fetch("https://unboxml.onrender.com/analyze", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ filename })
@@ -543,33 +909,51 @@ async function populateTargetDropdown() {
   }
 }
 
+function debugPreprocessingTabs() {
+    const tabButtons = document.querySelectorAll('.preprocessing-tabs .tab-btn');
+    const tabContents = document.querySelectorAll('.preprocessing-tabs .tab-content');
+    
+    console.log('Tab buttons found:', tabButtons.length);
+    console.log('Tab contents found:', tabContents.length);
+    
+    tabContents.forEach((content, index) => {
+        console.log(`Tab ${index}:`, {
+            id: content.id,
+            display: getComputedStyle(content).display,
+            visibility: getComputedStyle(content).visibility,
+            hasActiveClass: content.classList.contains('active')
+        });
+    });
+}
+
+// Call this function in browser console if issues persist
 
 /* ----------  TRAIN MODEL SECTION  ---------- */
 
 const MODEL_MAP = {
   regression : {
-    "Linear Regression"      : {id:"LinearRegression",   params:{ }},
-    "Ridge Regression"       : {id:"Ridge",             params:{alpha:[0.1,10,0.1]}},
-    "Lasso Regression"       : {id:"Lasso",             params:{alpha:[0.1,10,0.1]}},
-    "ElasticNet"             : {id:"ElasticNet",        params:{alpha:[0.1,10,0.1], l1_ratio:[0,1,0.01]}},
-    "Decision Tree"          : {id:"DecisionTreeReg",   params:{max_depth:[1,30,1]}},
-    "Random Forest"          : {id:"RandomForestReg",   params:{n_estimators:[10,300,10], max_depth:[1,30,1]}},
-    "Gradient Boosting"      : {id:"GradBoostReg",      params:{n_estimators:[50,400,25], learning_rate:[0.01,0.3,0.01]}},
-    "K‑Nearest Neighbors"    : {id:"KNNReg",            params:{n_neighbors:[1,30,1]}},
-    "Support Vector Machine" : {id:"SVMReg",            params:{C:[0.1,10,0.1]}},
-    "XGBoost"                : {id:"XGBReg",            params:{n_estimators:[50,400,25], learning_rate:[0.01,0.3,0.01]}},
-    "Neural Network"         : {id:"MLPReg",            params:{hidden_layer_sizes:[1,20,1]}},
+    "Linear Regression"      : {id:"LinearRegression",   params:{}},
+    "Ridge Regression"       : {id:"Ridge",             params:{alpha:[0.1,1,0.1]}},
+    "Lasso Regression"       : {id:"Lasso",             params:{alpha:[0.1,1,0.1]}},
+    "ElasticNet"             : {id:"ElasticNet",        params:{alpha:[0.1,1,0.1], l1_ratio:[0,0.5,0.05]}},
+    "Decision Tree"          : {id:"DecisionTreeReg",   params:{max_depth:[1,10,1]}},
+    "Random Forest"          : {id:"RandomForestReg",   params:{n_estimators:[5,50,5], max_depth:[1,5,1]}},
+    "Gradient Boosting"      : {id:"GradBoostReg",      params:{n_estimators:[5,50,5], learning_rate:[0.05,0.2,0.05]}},
+    "K‑Nearest Neighbors"    : {id:"KNNReg",            params:{n_neighbors:[1,10,1]}},
+    "Support Vector Machine" : {id:"SVMReg",            params:{C:[0.1,5,0.1]}},
+    "XGBoost"                : {id:"XGBReg",            params:{n_estimators:[5,50,5], learning_rate:[0.05,0.2,0.05]}},
+    "Neural Network"         : {id:"MLPReg",            params:{hidden_layer_sizes:[1,3,1]}},
   },
   classification : {
-    "Logistic Regression"    : {id:"LogisticRegression", params:{C:[0.1,10,0.1]}},
-    "Naive Bayes"            : {id:"NaiveBayes",        params:{ } },
-    "Decision Tree"          : {id:"DecisionTree",      params:{max_depth:[1,30,1]}},
-    "Random Forest"          : {id:"RandomForest",      params:{n_estimators:[10,300,10], max_depth:[1,30,1]}},
-    "Gradient Boosting"      : {id:"GradBoost",         params:{n_estimators:[50,400,25], learning_rate:[0.01,0.3,0.01]}},
-    "K‑Nearest Neighbors"    : {id:"KNN",               params:{n_neighbors:[1,30,1]}},
-    "Support Vector Machine" : {id:"SVM",               params:{C:[0.1,10,0.1]}},
-    "XGBoost"                : {id:"XGB",               params:{n_estimators:[50,400,25], learning_rate:[0.01,0.3,0.01]}},
-    "Neural Network"         : {id:"MLP",               params:{hidden_layer_sizes:[1,20,1]}},
+    "Logistic Regression"    : {id:"LogisticRegression", params:{C:[0.1,5,0.1]}},
+    "Naive Bayes"            : {id:"NaiveBayes",        params:{}},
+    "Decision Tree"          : {id:"DecisionTree",      params:{max_depth:[1,10,1]}},
+    "Random Forest"          : {id:"RandomForest",      params:{n_estimators:[5,50,5], max_depth:[1,5,1]}},
+    "Gradient Boosting"      : {id:"GradBoost",         params:{n_estimators:[5,50,5], learning_rate:[0.05,0.2,0.05]}},
+    "K‑Nearest Neighbors"    : {id:"KNN",               params:{n_neighbors:[1,10,1]}},
+    "Support Vector Machine" : {id:"SVM",               params:{C:[0.1,5,0.1]}},
+    "XGBoost"                : {id:"XGB",               params:{n_estimators:[5,50,5], learning_rate:[0.05,0.2,0.05]}},
+    "Neural Network"         : {id:"MLP",               params:{hidden_layer_sizes:[1,3,1]}},
   }
 };
 
@@ -655,7 +1039,7 @@ document.addEventListener("DOMContentLoaded", ()=>{
     document.getElementById("trainSpinner").style.display = "block";
     document.getElementById("trainingOutput").textContent = "";
 
-    const response = await fetch("http://127.0.0.1:5000/train",{
+    const response = await fetch("https://unboxml.onrender.com/train",{
       method:"POST",
       headers:{"Content-Type":"application/json"},
       body:JSON.stringify({
@@ -722,7 +1106,7 @@ document.getElementById("runEvaluation").addEventListener("click", async () => {
   const modelID = MODEL_MAP[problemType][modelName].id;
 
   try {
-    const response = await fetch("http://127.0.0.1:5000/evaluate", {
+    const response = await fetch("https://unboxml.onrender.com/evaluate", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -830,7 +1214,7 @@ document.getElementById("downloadModel").addEventListener("click", () => {
   const modelID = MODEL_MAP[problemType][modelName].id;
 
   const link = document.createElement("a");
-  link.href = `http://127.0.0.1:5000/download_model?model_id=${modelID}`;
+  link.href = `https://unboxml.onrender.com/download_model?model_id=${modelID}`;
   link.download = `${modelID}.pkl`;
   document.body.appendChild(link);
   link.click();
@@ -848,7 +1232,7 @@ if (dlBtn) {
     document.getElementById("downloadStatus").textContent = "⏳ Building package…";
 
     try {
-      const res  = await fetch("http://127.0.0.1:5000/generate_streamlit", {
+      const res  = await fetch("https://unboxml.onrender.com/generate_streamlit", {
         method : "POST",
         headers: { "Content-Type": "application/json" },
         body   : JSON.stringify({ model_id: modelId })
@@ -886,7 +1270,7 @@ if (apiBtn) {
     document.getElementById("apiDownloadStatus").textContent = "⏳ Building API package…";
 
     try {
-      const res = await fetch("http://127.0.0.1:5000/generate_api_script", {
+      const res = await fetch("https://unboxml.onrender.com/generate_api_script", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ model_id: modelId })
@@ -910,3 +1294,82 @@ if (apiBtn) {
     }
   });
 }
+
+
+
+// Add this function to handle mobile chart responsiveness
+function makeChartsResponsive() {
+  // Configure responsive layout for all Plotly charts
+  const responsiveConfig = {
+    responsive: true,
+    displayModeBar: false,
+    staticPlot: false
+  };
+  
+  const mobileLayout = {
+    autosize: true,
+    margin: { l: 40, r: 20, t: 40, b: 40 },
+    font: { size: 10 }
+  };
+  
+  // Apply to existing chart functions
+  window.addEventListener('resize', function() {
+    if (window.innerWidth <= 768) {
+      // Relayout existing charts for mobile
+      const charts = document.querySelectorAll('.js-plotly-plot');
+      charts.forEach(chart => {
+        if (chart.layout) {
+          Plotly.relayout(chart, mobileLayout);
+        }
+      });
+    }
+  });
+}
+
+// Update your existing chart functions
+function buildCorrelationHeatmap(matrix, labels) {
+  const data = [{
+    z: matrix,
+    x: labels,
+    y: labels,
+    type: "heatmap",
+    colorscale: [
+      [0, "rgba(0,200,255,0.2)"],
+      [1, "rgba(157,78,221,0.9)"]
+    ],
+    hoverongaps: false
+  }];
+  
+  const layout = {
+    margin: window.innerWidth <= 768 ? 
+      { l: 60, r: 10, t: 10, b: 60 } : 
+      { l: 90, r: 20, t: 10, b: 90 },
+    paper_bgcolor: "rgba(0,0,0,0)",
+    plot_bgcolor: "rgba(0,0,0,0)",
+    font: { 
+      color: getCss("--text-primary", "#FFFFFF"),
+      size: window.innerWidth <= 768 ? 8 : 12
+    },
+    xaxis: { 
+      tickangle: -45,
+      tickfont: { size: window.innerWidth <= 768 ? 8 : 10 }
+    },
+    yaxis: {
+      tickfont: { size: window.innerWidth <= 768 ? 8 : 10 }
+    },
+    autosize: true
+  };
+  
+  const config = {
+    responsive: true,
+    displayModeBar: false
+  };
+  
+  Plotly.newPlot("corrHeatmap", data, layout, config);
+}
+
+// Call this function when the page loads
+document.addEventListener('DOMContentLoaded', function() {
+  makeChartsResponsive();
+  // ... your existing initialization code
+});
