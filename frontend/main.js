@@ -242,27 +242,54 @@ fileInput.addEventListener('change', async (e) => {
     uploadSpinner.style.display = 'none';        // ⬅️ HIDE spinner
 
     /* ------- build dataset preview ------- */
-    const previewHTML = `
-      <p><strong><span class="highlight">File Uploaded – </span></strong>${data.filename}</p>
-      <p><strong><span class="highlight">Features – </span></strong>${data.shape[1]}</p>
-      <p><strong><span class="highlight">Rows – </span></strong>${data.shape[0]}</p>
-      <p><strong><span class="highlight">Dataset Sample:</span></strong></p>
+     const previewHTML = `
+      <div class="upload-success-badge" style = "justify-content : center">
+        <i class="fas fa-check-circle" style = "justify-content : center"></i>
+        Upload Successful
+      </div>
+      
+      <div class="dataset-info-grid">
+        <div class="info-stat-card">
+          <span class="stat-value">${data.shape[0].toLocaleString()}</span>
+          <div class="stat-label">Rows</div>
+        </div>
+        <div class="info-stat-card">
+          <span class="stat-value">${data.shape[1]}</span>
+          <div class="stat-label">Features</div>
+        </div>
+        <div class="info-stat-card">
+          <span class="stat-value">${(data.size / 1024).toFixed(1)}KB</span>
+          <div class="stat-label">File Size</div>
+        </div>
+      </div>
+      
+      <div class="dataset-preview-section">
+        <div class="preview-header" style = "justify-content : center">
+          <div class="logo" style="text-align: center;">Dataset <span class="highlight">Preview</span></div>
+        </div>
     `;
+
     uploadPreview.innerHTML = previewHTML;
 
+    // Enhanced table generation
     if (Array.isArray(data.preview) && data.preview.length) {
       const headers = Object.keys(data.preview[0]);
-      const rows    = data.preview.map(r =>
+      const rows = data.preview.map(r =>
         `<tr>${headers.map(h => `<td>${r[h]}</td>`).join('')}</tr>`).join('');
 
       uploadPreview.insertAdjacentHTML('beforeend', `
         <div class="table-scroll">
           <table class="upload-preview-table">
-            <thead><tr>${headers.map(h => `<th>${h}</th>`).join('')}</tr></thead>
+            <thead>
+              <tr>${headers.map(h => `<th><i class="fas fa-column"></i> ${h}</th>`).join('')}</tr>
+            </thead>
             <tbody>${rows}</tbody>
           </table>
         </div>
+        </div>
       `);
+    } else {
+      uploadPreview.insertAdjacentHTML('beforeend', '</div>');
     }
 
     /* ------- kick‑off downstream stages ------- */
@@ -308,27 +335,57 @@ document.getElementById('mockDatasetSelect').addEventListener('change', async fu
 
     uploadSpinner.style.display = 'none';
 
-    // Reuse preview logic
+    // Enhanced preview generation in your upload handler
     const previewHTML = `
-      <p><strong><span class="highlight">File Uploaded – </span></strong>${data.filename}</p>
-      <p><strong><span class="highlight">Features – </span></strong>${data.shape[1]}</p>
-      <p><strong><span class="highlight">Rows – </span></strong>${data.shape[0]}</p>
-      <p><strong><span class="highlight">Dataset Sample:</span></strong></p>
+      <div class="upload-success-badge" style = "justify-content : center">
+        <i class="fas fa-check-circle" style = "justify-content : center"></i>
+        Upload Successful
+      </div>
+      
+      <div class="dataset-info-grid">
+        <div class="info-stat-card">
+          <span class="stat-value">${data.shape[0].toLocaleString()}</span>
+          <div class="stat-label">Rows</div>
+        </div>
+        <div class="info-stat-card">
+          <span class="stat-value">${data.shape[1]}</span>
+          <div class="stat-label">Features</div>
+        </div>
+        <div class="info-stat-card">
+          <span class="stat-value">${(data.size / 1024).toFixed(1)}KB</span>
+          <div class="stat-label">File Size</div>
+        </div>
+      </div>
+      
+      <div class="dataset-preview-section">
+        <div class="preview-header" style = "justify-content : center">
+          <div class="logo" style="text-align: center;">Dataset <span class="highlight">Preview</span></div>
+        </div>
     `;
+
     uploadPreview.innerHTML = previewHTML;
 
+    // Enhanced table generation
     if (Array.isArray(data.preview) && data.preview.length) {
       const headers = Object.keys(data.preview[0]);
-      const rows = data.preview.map(r => `<tr>${headers.map(h => `<td>${r[h]}</td>`).join('')}</tr>`).join('');
+      const rows = data.preview.map(r =>
+        `<tr>${headers.map(h => `<td>${r[h]}</td>`).join('')}</tr>`).join('');
+
       uploadPreview.insertAdjacentHTML('beforeend', `
         <div class="table-scroll">
           <table class="upload-preview-table">
-            <thead><tr>${headers.map(h => `<th>${h}</th>`).join('')}</tr></thead>
+            <thead>
+              <tr>${headers.map(h => `<th><i class="fas fa-column"></i> ${h}</th>`).join('')}</tr>
+            </thead>
             <tbody>${rows}</tbody>
           </table>
         </div>
+        </div>
       `);
+    } else {
+      uploadPreview.insertAdjacentHTML('beforeend', '</div>');
     }
+
 
     sessionStorage.setItem('uploadedFile', data.filename);
     analyzeData(data.filename);
@@ -397,7 +454,7 @@ async function analyzeData(filename) {
 
     /* populate “Select Column” dropdown */
     const select = document.getElementById('columnSelect');
-    select.innerHTML = '<option value="">-- choose column --</option>';
+    select.innerHTML = '<option value="">Select a Feature for Analysis</option>';
     data.columns.forEach(c =>
       select.insertAdjacentHTML('beforeend', `<option value="${c}">${c}</option>`));
 
@@ -410,7 +467,8 @@ async function analyzeData(filename) {
 
     /* update downstream UI */
     const ptype = detectProblemType();
-    document.getElementById('problemTypeLabel').textContent = ptype;
+    document.getElementById('problemTypeLabel').textContent = capitalizeFirstLetter(ptype);
+
     fillModelDropdown(ptype);
 
   } catch (err) {
@@ -872,11 +930,24 @@ async function populateTargetDropdown() {
 
         const data = await response.json();
         const select = document.getElementById("preprocessTarget");
-        select.innerHTML = '<option value="">Choose target column...</option>';
-        
+
+        // Create placeholder option with proper attributes
+        const placeholderOption = '<option value="" disabled selected hidden>Choose Target Feature</option>';
+
+        // Build complete options list
+        let optionsHTML = placeholderOption;
         data.columns.forEach(col => {
-            select.insertAdjacentHTML("beforeend", `<option value="${col}">${col}</option>`);
+            optionsHTML += `<option value="${col}">${col}</option>`;
         });
+
+        // Set all options at once
+        select.innerHTML = optionsHTML;
+
+        // Force placeholder to be selected
+        select.selectedIndex = 0;
+
+
+
 
     } catch (error) {
         console.error("Error populating target dropdown:", error);
@@ -885,46 +956,46 @@ async function populateTargetDropdown() {
 
 
 /* ----------  DROPDOWN POPULATION  ---------- */
-async function populateTargetDropdown() {
-  const filename = sessionStorage.getItem("uploadedFile");
-  if (!filename) return;
+// async function populateTargetDropdown() {
+//   const filename = sessionStorage.getItem("uploadedFile");
+//   if (!filename) return;
 
-  try {
-    const res = await fetch("https://unboxml.onrender.com/analyze", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ filename })
-    });
-    if (!res.ok) throw new Error(`Server error ${res.status}`);
-    const data = await res.json();
+//   try {
+//     const res = await fetch("https://unboxml.onrender.com/analyze", {
+//       method: "POST",
+//       headers: { "Content-Type": "application/json" },
+//       body: JSON.stringify({ filename })
+//     });
+//     if (!res.ok) throw new Error(`Server error ${res.status}`);
+//     const data = await res.json();
 
-    const select = document.getElementById("preprocessTarget");
-    select.innerHTML = "";
-    data.columns.forEach(col => {
-      select.insertAdjacentHTML("beforeend",
-        `<option value="${col}">${col}</option>`);
-    });
-  } catch (err) {
-    console.error(err);
-  }
-}
+//     const select = document.getElementById("preprocessTarget");
+//     select.innerHTML = "";
+//     data.columns.forEach(col => {
+//       select.insertAdjacentHTML("beforeend",
+//         `<option value="${col}">${col}</option>`);
+//     });
+//   } catch (err) {
+//     console.error(err);
+//   }
+// }
 
-function debugPreprocessingTabs() {
-    const tabButtons = document.querySelectorAll('.preprocessing-tabs .tab-btn');
-    const tabContents = document.querySelectorAll('.preprocessing-tabs .tab-content');
+// function debugPreprocessingTabs() {
+//     const tabButtons = document.querySelectorAll('.preprocessing-tabs .tab-btn');
+//     const tabContents = document.querySelectorAll('.preprocessing-tabs .tab-content');
     
-    console.log('Tab buttons found:', tabButtons.length);
-    console.log('Tab contents found:', tabContents.length);
+//     console.log('Tab buttons found:', tabButtons.length);
+//     console.log('Tab contents found:', tabContents.length);
     
-    tabContents.forEach((content, index) => {
-        console.log(`Tab ${index}:`, {
-            id: content.id,
-            display: getComputedStyle(content).display,
-            visibility: getComputedStyle(content).visibility,
-            hasActiveClass: content.classList.contains('active')
-        });
-    });
-}
+//     tabContents.forEach((content, index) => {
+//         console.log(`Tab ${index}:`, {
+//             id: content.id,
+//             display: getComputedStyle(content).display,
+//             visibility: getComputedStyle(content).visibility,
+//             hasActiveClass: content.classList.contains('active')
+//         });
+//     });
+// }
 
 // Call this function in browser console if issues persist
 
@@ -1012,8 +1083,8 @@ document.addEventListener("DOMContentLoaded", ()=>{
 
   /* update on tab load / dataset change */
   const ptype = detectProblemType();
-  document.getElementById("problemTypeLabel").textContent = ptype;
-  fillModelDropdown(ptype);
+  document.getElementById("problemTypeLabel").textContent = capitalizeFirstLetter(ptype);
+  //fillModelDropdown(ptype);
   document.getElementById("modelSelect").addEventListener("change", buildHyperSliders);
 
   /* TRAIN BUTTON */
@@ -1069,7 +1140,8 @@ document.addEventListener("DOMContentLoaded", ()=>{
 
 function refreshTrainingUI() {
   const ptype = detectProblemType();
-  document.getElementById("problemTypeLabel").textContent = ptype;
+  document.getElementById("problemTypeLabel").textContent = capitalizeFirstLetter(ptype);
+
   fillModelDropdown(ptype); // also builds the first model's sliders
 }
 
@@ -1126,8 +1198,8 @@ document.getElementById("runEvaluation").addEventListener("click", async () => {
     }
 
     // Show problem type
-    document.getElementById("evaluationSummary").innerHTML =
-      `<p>${problemType.charAt(0).toUpperCase() + problemType.slice(1)} Metrics</p>`;
+    document.getElementById("evaluationSummary").innerHTML = `<p>${capitalizeFirstLetter(problemType)} Metrics</p>`;
+
 
     // Show metrics table
     const metricsTable = [`<table class="eval-metrics-table">`];
@@ -1373,3 +1445,7 @@ document.addEventListener('DOMContentLoaded', function() {
   makeChartsResponsive();
   // ... your existing initialization code
 });
+
+function capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+}

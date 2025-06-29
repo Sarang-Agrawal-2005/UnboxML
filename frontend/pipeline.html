@@ -221,7 +221,7 @@
 <body style="position: relative; min-height: 100vh; overflow-x: hidden; background-color: var(--background);">
   <div class="particles-container" id="particles-js"></div>
   <div class="app-container" style="position: realtive; z-index: 1; background-color: transparent;">
-    <nav class="navbar" style="position: relative; z-index: 1000; justify-content: center;">
+    <nav class="navbar" style="position: relative; z-index: 1000; justify-content: center; background-color: transparent;">
   <div class="logo" style="padding: 1.5rem 2rem; text-align: center; position: sticky;">
     Unbox<span class="highlight">ML Pipeline</span>
   </div>
@@ -229,31 +229,31 @@
 
 
 <section class="pipeline-section" style="position: sticky; padding-top: 0rem; background-color: transparent;">
-            <nav class="tabbar" style="position: sticky; top: 0%; background: transparent; z-index: 900; display: flex; justify-content: center; gap: 2rem; flex-wrap: wrap; border-bottom: 1px solid var(--border-color); padding: 1rem 2rem;">
-  <a class="nav-link tab-btn active" data-tab="upload">Upload</a>
-  <a class="nav-link tab-btn" data-tab="analyze">Analyze</a>
-  <a class="nav-link tab-btn" data-tab="preprocess">Preprocess</a>
-  <a class="nav-link tab-btn" data-tab="train">Train</a>
-  <a class="nav-link tab-btn" data-tab="evaluate">Evaluate</a>
-  <a class="nav-link tab-btn" data-tab="deploy">Unbox</a>
-</nav>
+  <nav class="tabbar" style="position: sticky; top: 0%; background: black; backdrop-filter: blur(10px); z-index: 900; display: flex; justify-content: center; gap: 2rem; flex-wrap: wrap; border-bottom: 1px solid var(--border-color); padding: 1rem 2rem;">
+    <a class="nav-link tab-btn active" data-tab="upload">1&#x29; Upload</a>
+    <a class="nav-link tab-btn" data-tab="analyze">2&#x29; Analyze</a>
+    <a class="nav-link tab-btn" data-tab="preprocess">3&#x29; Preprocess</a>
+    <a class="nav-link tab-btn" data-tab="train">4&#x29; Train</a>
+    <a class="nav-link tab-btn" data-tab="evaluate">5&#x29; Evaluate</a>
+    <a class="nav-link tab-btn" data-tab="deploy">6&#x29; Unbox</a>
+  </nav>
 
       <div id="upload" class="pipeline-step active">
-        <div class="step-card">
+        <div class="step-card" style = "background: transparent;">
           <div class="logo" style="padding: 1.5rem 2rem; text-align: center;">Upload<span class="highlight"> Your Dataset</span></div>
           <!-- <h3>📤 Upload Your Dataset</h3> -->
 
           <!-- Drag-and-drop upload area -->
           <div id="uploadZone" class="dropzone">
             <i class="fas fa-upload"></i>
-            <p>Drag & drop your CSV file here or click to browse<br><br>Unbox ML Models in minutes</p>
+            <p>Drag & Drop your CSV File here<br>or Click to Browse</p>
             <input type="file" id="fileInput" accept=".csv" hidden>
           </div>
 
           <div style="margin-top: 1rem;">
-            <label for="mockDatasetSelect" style="color: var(--text-secondary);">Don't have a dataset ready, choose one of ours instead:</label>
-            <select id="mockDatasetSelect" style="margin-top: 0.5rem;">
-              <option value="">-- Select a dataset for a trial run --</option>
+            <div class="logo" style="padding: 1.5rem 2rem; text-align: center;">No Data? <span class="highlight">Use Built-in DataSets</span></div>
+            <select id="mockDatasetSelect" style="margin-top: 0.5rem; height: 50px; border: 1px solid white; border-radius: 8px; padding: 0 1rem; background: transparent">
+              <option value="" aria-setsize="#00c8ff">Select from  our Curated Datasets</option>
               
               <option value="introvert_extrovert_analysis.csv">Introvert Extrovert Analysis Dataset</option>
               <option value="House_Rent_Dataset.csv">House Rent Prediction Dataset</option>
@@ -272,13 +272,13 @@
           </div>
 
           <!-- Preview after upload -->
-          <div id="uploadPreview" class="upload-info-card" style="margin-top: 1rem;"></div>
+          <div id="uploadPreview" class="upload-info-card" style="margin-top: 1rem; background: transparent;"></div>
         </div>
       </div>
 
 
       <div id="analyze" class="pipeline-step">
-        <div class="step-card">
+        <div class="step-card" style = "background: transparent;">
           <div class="logo" style="padding:1.5rem 2rem;text-align:center;">
             Exploratory<span class="highlight"> Data Analysis</span>
           </div>
@@ -288,8 +288,19 @@
             <i class="fas fa-spinner fa-spin"></i> Analyzing...
           </div>
 
+          <!-- Column‑selector & per‑column analysis -->
+          <!-- <h4>Feature <span class = "highlight">Analysis</span></h4> -->
+          <!-- <label for="columnSelect" style="margin-top:2rem;">Select Column</label> -->
+          <select id="columnSelect" style="margin-top: 0.5rem; height: 50px; border: 1px solid white; border-radius: 8px; padding: 0 1rem; background: transparent"><option value="" aria-setsize="#00c8ff">Select a Feature for Analysis</option></select>
+
+          <div id="columnAnalysis" style="margin-top:1.5rem;">
+            <!-- chart + stats for the chosen column appear here -->
+          </div>
+
           <!-- Correlation heat‑map -->
-          <h4>Correlation <span class="highlight">HeatMap</span></h4>
+          <div class="logo" style="padding:1.5rem 2rem;text-align:center;">
+            Correlation<span class="highlight"> Heatmap</span>
+          </div>
           <div id="corrHeatmap" style="height:500px; display: flex; align-items: center; justify-content: center; background-color: rgba(255, 255, 255, 0.02); border: 1px dashed var(--border-color); border-radius: var(--radius-md);">
             <div id="heatmapPlaceholder" style="text-align: center; color: var(--text-secondary);">
               <i class="fas fa-chart-line" style="font-size: 2rem; margin-bottom: 0.5rem;"></i>
@@ -300,50 +311,45 @@
 
           <!-- Data‑set‑level summary that you already showed -->
           <div id="dataSummary" style="margin-top:1.5rem;"></div>
-
-          <!-- Column‑selector & per‑column analysis -->
-          <h4>Feature <span class = "highlight">Analysis</span></h4>
-          <label for="columnSelect" style="margin-top:2rem;">Select Column</label>
-          <select id="columnSelect"></select>
-
-          <div id="columnAnalysis" style="margin-top:1.5rem;">
-            <!-- chart + stats for the chosen column appear here -->
-          </div>
         </div>
       </div>
 
 
       <div id="preprocess" class="pipeline-step">
-          <div class="step-card">
+          <div class="step-card" style = "background: transparent;">
               <div class="logo" style="padding: 1.5rem 2rem; text-align: center;">
-                  Prepare<span class="highlight"> Dataset</span>
+                  Select<span class="highlight"> Target Column</span>
               </div>
 
               <!-- Target Column Selection -->
               <div class="preprocessing-header">
-                  <label for="preprocessTarget">Select Target Column:</label>
-                  <select id="preprocessTarget" class="form-control">
-                      <option value="">Choose target column...</option>
+                  <!-- <label for="preprocessTarget">Select Target Column:</label> -->
+                  <select id="preprocessTarget" class="form-control" style="margin-top: 0.5rem; height: 50px; border: 1px solid white; border-radius: 8px; padding: 0 1rem; background: transparent">
+                       <option value="" disabled selected>Choose Target Feature</option>
                   </select>
               </div>
 
+              <div class="logo" style="padding: 1.5rem 2rem; text-align: center;">
+                  Dataset <span class="highlight">Preprocessing Pipeline</span>
+              </div>
+
               <!-- Preprocessing Tabs -->
-              <div class="preprocessing-tabs">
-                  <div class="tab-nav" role="tablist" aria-label="Preprocessing Options">
-                      <button class="tab-btn active" data-tab="data-cleaning" role="tab" aria-selected="true" aria-controls="data-cleaning">Data Cleaning</button>
-                      <button class="tab-btn" data-tab="encoding" role="tab" aria-selected="false" aria-controls="encoding" tabindex="-1">Encoding</button>
-                      <button class="tab-btn" data-tab="feature-selection" role="tab" aria-selected="false" aria-controls="feature-selection" tabindex="-1">Feature Selection</button>
-                      <button class="tab-btn" data-tab="feature-scaling" role="tab" aria-selected="false" aria-controls="feature-scaling" tabindex="-1">Feature Scaling</button>
+              <div class="preprocessing-tabs" style = "position: sticky; background: transparent;">
+                  <div class="tab-nav" role="tablist" aria-label="Preprocessing Options" style = "position: sticky; background: transparent;">
+                      <button class="tab-btn active" data-tab="data-cleaning" role="tab" aria-selected="true" aria-controls="data-cleaning" >1&#x29; Data Cleaning</button>
+                      <button class="tab-btn" data-tab="encoding" role="tab" aria-selected="false" aria-controls="encoding" tabindex="-1">2&#x29; Encoding</button>
+                      <button class="tab-btn" data-tab="feature-selection" role="tab" aria-selected="false" aria-controls="feature-selection" tabindex="-1">3&#x29; Feature Selection</button>
+                      <button class="tab-btn" data-tab="feature-scaling" role="tab" aria-selected="false" aria-controls="feature-scaling" tabindex="-1">4&#x29; Feature Scaling</button>
                   </div>
 
                   <!-- Data Cleaning Tab -->
-                  <div id="data-cleaning" class="tab-content active" role="tabpanel" aria-labelledby="data-cleaning-tab" tabindex="0">
+                  <div id="data-cleaning" class="tab-content active" role="tabpanel" aria-labelledby="data-cleaning-tab" tabindex="0" style = "background: transparent;">
                       <div class="preprocessing-grid">
-                          <div class="preprocessing-card">
+                          <div class="preprocessing-card" style = "background: transparent;">
                               <h4>Missing Value Handling</h4>
-                              <div class="form-group">
+                              <div class="form-group" style = "background: transparent;">
                                   <label for="missingValueMethod">Method:</label>
-                                  <select id="missingValueMethod" class="form-control">
+                                  <select id="missingValueMethod" class="form-control" style="margin-top: 0.5rem; height: 50px; border: 1px solid white; border-radius: 8px; padding: 0 1rem; background: transparent">
                                       <option value="drop">Drop Rows with Missing Values</option>
                                       <option value="mean">Mean/Mode Imputation</option>
                                       <option value="median">Median Imputation</option>
@@ -363,11 +369,11 @@
                               </div>
                           </div>
 
-                          <div class="preprocessing-card">
+                          <div class="preprocessing-card" style = "background: transparent;">
                               <h4>Duplicate Value Handling</h4>
                               <div class="form-group">
                                   <label for="duplicateMethod">Method:</label>
-                                  <select id="duplicateMethod" class="form-control">
+                                  <select id="duplicateMethod" class="form-control" style="margin-top: 0.5rem; height: 50px; border: 1px solid white; border-radius: 8px; padding: 0 1rem; background: transparent">
                                       <option value="none">Keep All Duplicates</option>
                                       <option value="drop_all">Remove All Duplicates</option>
                                       <option value="keep_first">Keep First Occurrence</option>
@@ -376,11 +382,11 @@
                               </div>
                           </div>
 
-                          <div class="preprocessing-card">
+                          <div class="preprocessing-card" style = "background: transparent;">
                               <h4>Outlier Removal</h4>
                               <div class="form-group">
                                   <label for="outlierMethod">Method:</label>
-                                  <select id="outlierMethod" class="form-control">
+                                  <select id="outlierMethod" class="form-control" style="margin-top: 0.5rem; height: 50px; border: 1px solid white; border-radius: 8px; padding: 0 1rem; background: transparent">
                                       <option value="none">No Outlier Removal</option>
                                       <option value="iqr">IQR Method</option>
                                       <option value="zscore">Z-Score Method</option>
@@ -402,11 +408,11 @@
                   <!-- Encoding Tab -->
                   <div id="encoding" class="tab-content" role="tabpanel" aria-labelledby="encoding-tab" tabindex="0" hidden>
                       <div class="preprocessing-grid">
-                          <div class="preprocessing-card">
+                          <div class="preprocessing-card" style = "background: transparent;">
                               <h4>Categorical Encoding</h4>
                               <div class="form-group">
                                   <label for="encodingMethod">Encoding Method:</label>
-                                  <select id="encodingMethod" class="form-control">
+                                  <select id="encodingMethod" class="form-control" style="margin-top: 0.5rem; height: 50px; border: 1px solid white; border-radius: 8px; padding: 0 1rem; background: transparent">
                                       <option value="label">Label Encoding</option>
                                       <option value="onehot">One-Hot Encoding</option>
                                       <option value="ordinal">Ordinal Encoding</option>
@@ -430,7 +436,7 @@
                   <!-- Feature Selection Tab -->
                   <div id="feature-selection" class="tab-content" role="tabpanel" aria-labelledby="feature-selection-tab" tabindex="0" hidden>
                       <div class="preprocessing-grid">
-                          <div class="preprocessing-card">
+                          <div class="preprocessing-card" style = "background: transparent;">
                               <h4>Correlation-based Selection</h4>
                               <div class="form-group">
                                   <label>
@@ -452,7 +458,7 @@
                               </div>
                           </div>
 
-                          <div class="preprocessing-card">
+                          <div class="preprocessing-card" style = "background: transparent;">
                               <h4>Variance-based Selection</h4>
                               <div class="form-group">
                                   <label>
@@ -470,7 +476,7 @@
                               </div>
                           </div>
 
-                          <div class="preprocessing-card">
+                          <div class="preprocessing-card" style = "background: transparent;">
                           <h4>Statistical Selection</h4>
                           <div class="form-group">
                               <label>
@@ -484,7 +490,7 @@
                           <!-- Remove the scoring function dropdown completely -->
                       </div>
 
-                          <div class="preprocessing-card">
+                          <div class="preprocessing-card" style = "background: transparent;">
                             <h4>Recursive Feature Elimination</h4>
                             <div class="form-group">
                                 <label>
@@ -497,7 +503,7 @@
                             </div>
                             <div class="form-group">
                                 <label for="rfeEstimator">Base Estimator:</label>
-                                <select id="rfeEstimator" class="form-control">
+                                <select id="rfeEstimator" class="form-control" style="margin-top: 0.5rem; height: 50px; border: 1px solid white; border-radius: 8px; padding: 0 1rem; background: transparent">
                                     <option value="linear">Linear Model</option>
                                     <option value="tree">Decision Tree</option>
                                     <option value="forest">Random Forest</option>
@@ -516,11 +522,11 @@
                   <!-- Feature Scaling Tab -->
                   <div id="feature-scaling" class="tab-content" role="tabpanel" aria-labelledby="feature-scaling-tab" tabindex="0" hidden>
                       <div class="preprocessing-grid">
-                          <div class="preprocessing-card">
+                          <div class="preprocessing-card" style = "background: transparent;">
                               <h4>Scaling Method</h4>
                               <div class="form-group">
                                   <label for="scalingMethod">Choose Scaling Method:</label>
-                                  <select id="scalingMethod" class="form-control">
+                                  <select id="scalingMethod" class="form-control" style="margin-top: 0.5rem; height: 50px; border: 1px solid white; border-radius: 8px; padding: 0 1rem; background: transparent">
                                       <option value="none">No Scaling</option>
                                       <option value="standard">Standard Scaler (Z-Score)</option>
                                       <option value="minmax">Min-Max Scaler</option>
@@ -543,7 +549,7 @@
                               </div>
                               <div id="normalizerNormGroup" class="form-group" style="display: none;">
                                   <label for="normalizerNorm">Norm:</label>
-                                  <select id="normalizerNorm" class="form-control">
+                                  <select id="normalizerNorm" class="form-control" style="margin-top: 0.5rem; height: 50px; border: 1px solid white; border-radius: 8px; padding: 0 1rem; background: transparent">
                                       <option value="l2">L2 (Euclidean)</option>
                                       <option value="l1">L1 (Manhattan)</option>
                                       <option value="max">Max</option>
@@ -573,15 +579,18 @@
 
 
       <div id="train" class="pipeline-step">
-        <div class="step-card">
+        <div class="step-card" style = "background: transparent;">
           <div class="logo" style="padding: 1.5rem 2rem; text-align: center;"><span class="highlight">Training </span>&<span class="highlight"> Tuning</span></div>
 
           <!-- show detected problem type -->
-          <p><strong><span class="highlight">Problem type:</span></strong> <span id="problemTypeLabel">–</span></p>
+          <p><strong><span class="highlight">Problem Type Detected:</span></strong> <span id="problemTypeLabel">–</span></p>
+          <p class="problem-type-help" style = "font-size: 0.85rem;color: var(--text-secondary);margin-top: 0.5rem;">Upload a dataset and select a target column, you will be offered either Regression or Classification Models based on the detected Problem Type.</p>
 
           <!-- Model selector (filtered by problem type) -->
           <label for="modelSelect">Select Model</label>
-          <select id="modelSelect"></select>
+          <select id="modelSelect" style="margin-top: 0.5rem; height: 50px; border: 1px solid white; border-radius: 8px; padding: 0 1rem; background: transparent">
+            <option value="" disabled selected>Choose a Model to Train</option>
+          </select>
 
           <!-- Hyper‑parameter controls appear here -->
           <div id="hyperparamControls"></div>
@@ -599,7 +608,7 @@
 
 
       <div id="evaluate" class="pipeline-step">
-        <div class="step-card">
+        <div class="step-card" style = "background: transparent;">
           <div class="logo" style="padding: 1.5rem 2rem; text-align: center;">
             Model<span class="highlight"> Evaluation</span>
           </div>
@@ -640,7 +649,7 @@
       </div> -->
 
       <div id="deploy" class="pipeline-step">
-        <div class="step-card">
+        <div class="step-card" style = "background: transparent;">
           <div class="logo" style="padding: 1.5rem 2rem; text-align: center;">Download<span class="highlight"> Model</span></div>
           <p>Download your trained model as a <span class = "highlight">Pickle file</span> for future use or integration into other apps.</p>
           <ol style="text-align:left;font-size:0.95rem;margin-left:1rem;">
@@ -653,7 +662,7 @@
                   class="btn btn-primary"
                   style="margin-top:1rem;">Download Pickle File</button>
         </div>
-        <div class="step-card">
+        <div class="step-card" style = "background: transparent;">
           <div class="logo" style="padding:1.5rem 2rem;text-align:center;">
               Streamlit<span class="highlight"> Web App</span>
           </div>
@@ -676,7 +685,7 @@
 
           <div id="downloadStatus" style="margin-top:1rem;"></div>
         </div>
-        <div class="step-card">
+        <div class="step-card" style = "background: transparent;">
           <div class="logo" style="padding:1.5rem 2rem;text-align:center;">
               Flask<span class="highlight"> API</span> Deployment
           </div>

@@ -202,9 +202,9 @@ top: 0;
 left: 0;
 right: 0;
 z-index: 1000;
-background: rgba(10, 14, 23, 0.8);
-backdrop-filter: blur(10px);
--webkit-backdrop-filter: blur(10px);
+background: transparent;
+/* backdrop-filter: blur(10px);
+-webkit-backdrop-filter: blur(10px); */
 border-bottom: 1px solid var(--border-color);
 transition: all var(--transition-normal);
 }
@@ -219,7 +219,7 @@ letter-spacing: -0.5px;
 
 .navbar.scrolled {
 padding: 0.75rem 2rem;
-background: rgba(10, 14, 23, 0.95);
+background: transparent;
 }
 
 
@@ -772,12 +772,94 @@ color: var(--primary);
 }
 
 .upload-info-card {
-background: var(--card-bg);
-padding: 1.5rem;
-border-radius: var(--radius-md);
-box-shadow: var(--shadow-md);
-border: 1px solid var(--border-color);
-color: var(--text-primary);
+  background: transparent !important;
+  padding: 0;
+  border: none;
+  box-shadow: none;
+  color: var(--text-primary);
+  margin-top: 2rem;
+}
+
+.dataset-info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.info-stat-card {
+  background: transparent;
+  border: 1px solid rgba(0, 200, 255, 0.2);
+  border-radius: var(--radius-md);
+  padding: 1.5rem;
+  text-align: center;
+  transition: all var(--transition-fast);
+  /* backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px); */
+}
+
+.info-stat-card:hover {
+  border-color: rgba(0, 200, 255, 0.4);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 20px rgba(0, 200, 255, 0.1);
+}
+
+.stat-value {
+  font-size: 2rem;
+  font-weight: 700;
+  font-family: var(--font-secondary);
+  background: linear-gradient(90deg, var(--primary) 0%, var(--secondary) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  margin-bottom: 0.5rem;
+  display: block;
+}
+
+.stat-label {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.dataset-preview-section {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-lg);
+  /* padding: 1.5rem; */
+  margin-top: 1.5rem;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.preview-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.preview-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-md);
+  background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 1.1rem;
+}
+
+.preview-title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0;
 }
 
 .dropzone.hovered {
@@ -790,30 +872,117 @@ background-color: rgba(0, 200, 255, 0.2);
 border-color: var(--primary-dark);
 }
 
+/* Enhanced Table Styling */
 .table-scroll {
-overflow-x: auto;
-margin-top: 1rem;
-border: 1px solid var(--border-color);
-border-radius: var(--radius-sm);
+  overflow-x: auto;
+  margin-top: 1rem;
+  border: 1px solid rgba(0, 200, 255, 0.2);
+  border-radius: var(--radius-md);
+  background: transparent;
+  /* backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px); */
 }
 
 .upload-preview-table {
-min-width: max-content;
-width: 100%;
-border-collapse: collapse;
-font-size: 0.95rem;
-}
-
-.upload-preview-table th,
-.upload-preview-table td {
-padding: 0.5rem;
-border: 1px solid var(--border-color);
-text-align: left;
-white-space: nowrap;
+  min-width: max-content;
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+  background: transparent;
 }
 
 .upload-preview-table th {
-background-color: rgba(255, 255, 255, 0.05);
+  background: transparent;
+  color: var(--primary);
+  font-weight: 600;
+  padding: 1rem 0.75rem;
+  text-align: left;
+  border-bottom: 2px solid rgba(0, 200, 255, 0.3);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.upload-preview-table td {
+  padding: 0.75rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  color: var(--text-primary);
+  white-space: nowrap;
+}
+
+.upload-preview-table tr:hover td {
+  background: transparent;
+}
+
+.upload-preview-table tr:nth-child(even) td {
+  background: transparent}
+
+.upload-preview-table tr:nth-child(even):hover td {
+  background: transparent;
+}
+
+/* Success indicator styling */
+.upload-success-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: transparent;
+  color: var(--success);
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius-full);
+  font-size: 0.9rem;
+  font-weight: 500;
+  border: 1px solid rgba(0, 230, 118, 0.3);
+  margin-bottom: 1.5rem;
+}
+
+.upload-success-badge i {
+  font-size: 1rem;
+}
+
+/* Mobile responsive improvements */
+@media (max-width: 768px) {
+  .dataset-info-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+  }
+  
+  .info-stat-card {
+    padding: 1rem;
+  }
+  
+  .stat-value {
+    font-size: 1.5rem;
+  }
+  
+  .stat-label {
+    font-size: 0.8rem;
+  }
+  
+  .upload-preview-table {
+    font-size: 0.8rem;
+  }
+  
+  .upload-preview-table th,
+  .upload-preview-table td {
+    padding: 0.5rem;
+  }
+  
+  .dataset-preview-section {
+    padding: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .dataset-info-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .preview-header {
+    flex-direction: column;
+    text-align: center;
+    gap: 0.5rem;
+  }
 }
 
 /* Enhanced Preprocessing Styles */
@@ -892,13 +1061,14 @@ display: block;
 }
 
 .preprocessing-grid {
+background: transparent;
 display: grid;
 grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
 gap: 1.5rem;
 }
 
 .preprocessing-card {
-background: rgba(10, 14, 23, 0.5);
+background: transparent;
 border-radius: var(--radius-md);
 padding: 1.5rem;
 border: 1px solid var(--border-color);
@@ -907,10 +1077,10 @@ transition: transform var(--transition-normal);
 
 .preprocessing-card:hover {
 transform: translateY(-2px);
-border-color: rgba(255, 255, 255, 0.2);
 }
 
 .preprocessing-card h4 {
+background: transparent;    
 margin-bottom: 1rem;
 color: var(--primary);
 font-size: 1.1rem;
@@ -1552,4 +1722,108 @@ min-height: 80vh;
 font-size: 2.5rem;
 }
 }
+
+
+/* Target only background properties, preserve text and button colors */
+.preprocessing-tabs,
+.tab-nav,
+.tab-content,
+.preprocessing-grid,
+.preprocessing-card,
+.preprocessing-header,
+.preprocessing-actions,
+.preprocessing-result,
+#preprocess,
+#preprocess .step-card {
+  background: transparent !important;
+  background-color: transparent !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  box-shadow: none !important;
+}
+
+/* Preserve your existing highlight styling - gradient text effect */
+.highlight,
+span.highlight,
+.logo .highlight {
+  background: linear-gradient(90deg, var(--primary) 0%, var(--secondary) 100%) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  color: transparent !important;
+  display: inline !important;
+}
+
+/* Preserve your existing preprocessing tab styling */
+.preprocessing-tabs .tab-btn {
+  background: transparent !important;
+  color: var(--text-secondary) !important;
+  border: none !important;
+}
+
+.preprocessing-tabs .tab-btn.active {
+  background: linear-gradient(90deg, var(--primary), var(--secondary)) !important;
+  color: white !important;
+}
+
+.preprocessing-tabs .tab-btn::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0%;
+  height: 3px;
+  background: linear-gradient(90deg, var(--primary), var(--secondary));
+  transition: width var(--transition-fast);
+}
+
+.preprocessing-tabs .tab-btn.active::after {
+  width: 100%;
+}
+
+/* Preserve regular button styling */
+button,
+.btn,
+input[type="button"],
+input[type="submit"] {
+  background: linear-gradient(90deg, var(--primary) 0%, var(--secondary) 100%) !important;
+  color: white !important;
+  border: none !important;
+  padding: 0.75rem 1.5rem !important;
+  border-radius: var(--radius-md) !important;
+}
+
+/* Preserve your existing button hover effects */
+button:hover,
+.btn:hover {
+  box-shadow: 0 6px 20px rgba(0, 200, 255, 0.4) !important;
+  transform: translateY(-2px) !important;
+}
+
+/* Keep form element backgrounds slightly visible */
+input, select, textarea {
+  background: rgba(255, 255, 255, 0.05) !important;
+  border: 1px solid white; 
+  border-radius: 8px;
+  color: var(--text-primary) !important;
+  border: 1px solid var(--border-color) !important;
+}
+
+/* Make preprocessing dropdowns match other sections */
+/* #preprocess select,
+.preprocessing-card select,
+.form-control {
+  border: 1px solid white !important;
+  border-radius: 8px !important;
+  background: transparent !important;
+  color: var(--text-primary) !important;
+} */
+
+select{
+  border: 1px solid var(--primary-dark) !important;
+  border-radius: 8px !important;
+  background: transparent !important;
+  color: linear-gradient(90deg, var(--primary) 0%, var(--secondary) 100%) !important;
+}
+
+
 

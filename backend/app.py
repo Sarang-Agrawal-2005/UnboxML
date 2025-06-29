@@ -48,7 +48,7 @@ os.makedirs(MODEL_FOLDER, exist_ok=True)
 
 @app.route('/')
 def index():
-    return "✅ Backend is running! Use the API endpoints like /upload, /train, etc."
+    return ":D UnboxML Backend is running"
 
 @app.route('/upload', methods=['POST'])
 def upload_file():
@@ -65,14 +65,20 @@ def upload_file():
     file_path = os.path.join(UPLOAD_FOLDER, file.filename)
     file.save(file_path)
 
+    # Get file size from the saved file
+    file_size = os.path.getsize(file_path)
+    
     df = pd.read_csv(file_path)
     preview = df.head(5).to_dict(orient='records')
+    
     return jsonify({
         'filename': file.filename,
         'shape': df.shape,
         'columns': df.columns.tolist(),
-        'preview': preview
+        'preview': preview,
+        'size': file_size  # Add this line
     })
+
 
 @app.route('/analyze', methods=['POST'])
 def analyze():
