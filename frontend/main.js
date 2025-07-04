@@ -25,7 +25,7 @@ function initParticles() {
     if (typeof particlesJS !== 'undefined') {
         particlesJS('particles-js', {
             particles: {
-                number: { value: 80, density: { enable: true, value_area: 800 } },
+                number: { value: 150, density: { enable: true, value_area: 500 } },
                 color: { value: '#00c8ff' },
                 shape: { type: 'circle' },
                 opacity: { value: 0.5, random: false },
@@ -34,14 +34,14 @@ function initParticles() {
                     enable: true,
                     distance: 150,
                     color: '#00c8ff',
-                    opacity: 0.4,
+                    opacity: 0.2,
                     width: 1
                 },
                 move: {
                     enable: true,
-                    speed: 6,
+                    speed: 5,
                     direction: 'none',
-                    random: false,
+                    random: true,
                     straight: false,
                     out_mode: 'out',
                     bounce: false

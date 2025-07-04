@@ -202,7 +202,7 @@ top: 0;
 left: 0;
 right: 0;
 z-index: 1000;
-background: transparent;
+background: black;
 /* backdrop-filter: blur(10px);
 -webkit-backdrop-filter: blur(10px); */
 border-bottom: 1px solid var(--border-color);
@@ -219,7 +219,7 @@ letter-spacing: -0.5px;
 
 .navbar.scrolled {
 padding: 0.75rem 2rem;
-background: transparent;
+background: black;
 }
 
 
@@ -229,6 +229,7 @@ gap: 2rem;
 }
 
 .nav-link {
+  background-color: transparent;
 color: var(--text-primary);
 font-weight: 500;
 position: relative;
@@ -280,7 +281,7 @@ position: relative;
 display: flex;
 align-items: center;
 justify-content: space-between;
-padding: 8rem 5% 4rem;
+padding: 0% 5% 4rem;
 min-height: 100vh;
 overflow: hidden;
 }
@@ -545,7 +546,7 @@ backdrop-filter: blur(10px);
 .dashboard-tabs {
 display: flex;
 border-bottom: 1px solid var(--border-color);
-background-color: rgba(20, 26, 41, 0.9);
+background-color: transparent;
 }
 
 .tab-btn {
@@ -563,20 +564,23 @@ min-height: 48px;
 .tab-btn::after {
 content: '';
 position: absolute;
+background: transparent;
 bottom: 0;
 left: 0;
 width: 0;
 height: 3px;
-background: linear-gradient(90deg, var(--primary) 0%, var(--secondary) 100%);
+/* background: linear-gradient(90deg, var(--primary) 0%, var(--secondary) 100%); */
 transition: width var(--transition-normal);
 }
 
 .tab-btn.active {
 color: var(--text-primary);
+background: transparent;
 }
 
 .tab-btn.active::after {
 width: 100%;
+background: transparent;
 }
 
 .dashboard-content {
@@ -1032,7 +1036,7 @@ bottom: 0;
 left: 0;
 width: 0;
 height: 3px;
-background: linear-gradient(90deg, var(--primary) 0%, var(--secondary) 100%);
+background: transparent;
 transition: width var(--transition-normal);
 }
 
